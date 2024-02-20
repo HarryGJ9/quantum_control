@@ -46,6 +46,7 @@ for _ in range(max_iterations):
     ax.clear()
 
 plt.show()
+
     
     
 
