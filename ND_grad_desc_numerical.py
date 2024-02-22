@@ -2,8 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-
-
 def calculate_gradient(func, *args, h=1e-6):
 
     """
@@ -38,30 +36,32 @@ def gradient_descent(func, num_args, min_val, max_val, max_iterations=1000, lear
     # Initialise parameter values e.g. x, y, ... values
     
     # args = np.array(args, dtype=float) # Convert arguments into a numpy array
-    # num_params = np.size(args) # Number of arguments in the function
+    # num_args = np.size(args) # Number of arguments in the function
     param_vals = np.arange(min_val, max_val, 0.1) # Array of values for each parameter
-    arg_vals = np.tile(param_vals, (num_args,1)).T # Construct a 2D array with each column containing the parameter values for each argument
+    arg_vals = np.tile(param_vals, (num_args,1)) # Construct a 2D array with each column containing the parameter values for each argument
 
-    print(arg_vals)
+    print(f"Initial values to be passed into function are: {arg_vals}")
 
     ################
-    # SO FAR, FUNCTION IS ABLE TO PRINT OUT AN N X M ARRAY OF PARAMETER VALUES
-    # N = NUMBER OF COLUMNS : SPECIFIES HOW MANY PARAMETERS IN THE FUNCTION
-    # M = NUMBER OF ROWS : SPECIFIES VALUES OF EACH PARAMETER THAT DEFINE THE PLANE
-    # E.G. FOR N = 2 (X, Y) AND M = (-1, 1, 0.1) SPECIFIES A 3D GRID WITH 
+    # SO FAR, FUNCTION IS ABLE TO PRINT OUT AN N X M ARRAY OF PARAMETER VALUES 
+    # N = NUMBER OF ROWS : SPECIFIES VALUES OF EACH PARAMETER THAT DEFINE THE PLANE
+    # M = NUMBER OF COLUMNS : SPECIFIES HOW MANY PARAMETERS IN THE FUNCTION
+    # E.G. FOR N = 2, (X, Y) AND M = (-1, 1, 0.1) SPECIFIES A 3D GRID WITH 
     # X & Y VALUES GOING FROM -1 TO 1 WIHT 0.1 STEP SIZE
     # FROM HERE WE CAN PLUG VALUES INTO A FUNCTION WHICH DEFINES THE LANDSCAPE
     ###############
     
 
-    # initialise function values e.g. f(x,y, ...) values
-    # func_vals =  np.apply_along_axis(lambda params : func(*params), axis=1,  )
-
-
-
-
+    # initialise function values e.g. f(x,y, ...) values that generate landscape
+    func_vals = func(*arg_vals)
+    print(f"Landscape values: {func_vals}")
 
     # initialise position e.g. current_pos = (x_position, y_position, ...)
+    initial_parameter_vals = np.random.uniform(min_val, max_val, num_args) # Initial parameter values, to be define initial position
+    print(f"Current position: {initial_parameter_vals}")
+    initial_function_val = func(*initial_parameter_vals) # Function evaluated at the initial parameter values
+    current_pos = np.array([*initial_parameter_vals, initial_function_val]) # Current position (coordinates) to be updated with grad descent
+    print(f"Initial coordinates are: {current_pos}")
 
     # for _ in range(max_iterations):
 
@@ -69,10 +69,17 @@ def gradient_descent(func, num_args, min_val, max_val, max_iterations=1000, lear
     #   calculate new positions with e.g. X_new, ... = current_pos[0] - learning_rate * X_derivative, ...
     #   update current positions using X_new, ... e.g. current_pos = (X_new, ..., f(X_new, ...))
 
-def func(x, y):
-    return x**2 + y**2
+    for _ in range(max_iterations):
 
-optimised_vals = gradient_descent(func, 2, min_val=-1, max_val=1)
+        gradients = calculate_gradient(func, current_pos[:-1])
+        
+
+
+
+def func(x):
+    return x**2
+
+optimised_vals = gradient_descent(func, 1, min_val=0, max_val=1)
 
 
 
