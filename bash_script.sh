@@ -29,14 +29,25 @@
 # For gradient descent
 ############################################
 
+
+# Genome input used in gradient descent, output of the GA
 output_directory="/home/hgjones9/spinchain/output-latest"
 genome_input=$(grep "best genome:" "$output_directory/genetic.out" | cut -d':' -f2)
 echo "$genome_input"
 
+# Define threshold to determine when to cancel the while loop based on how good the fidelity is
+threshold = 0.1
 
-# threshold = threshold to determine when to cancel while loop based on how close the genome is to the final state
+# Fidelities of the input and output genomes
+fidelity_input = # fidelity of the input genome at a time T? 
+fidelity_output = # fidelity of the output genome at the same time T?
 
-# while |Fidelity_input_output - Fidelity_output_genome| > threshold:
+# Absolute difference between input and output fidelities
+absolute_diff = $(( (fidelity_input - fidelity_output) < 0 ? -(fidelity_input - fidelity_output) : (fidelity_input - fidelity_output) ))
+
+
+
+while |absolute_diff > threshold:
 
 #   Fidelity_input_genome = calculate fidelity (at a specific time) for the input genome
 #   call gradient descent code on the input genome; output genome_optimised
