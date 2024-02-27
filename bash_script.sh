@@ -29,7 +29,10 @@
 # For gradient descent
 ############################################
 
-genome_input = $(grep "best genome:" genetic.out | cut -d':' -f2)
+output_directory="/home/hgjones9/spinchain/output-latest"
+genome_input=$(grep "best genome:" "$output_directory/genetic.out" | cut -d':' -f2)
+echo "$genome_input"
+
 
 # threshold = threshold to determine when to cancel while loop based on how close the genome is to the final state
 
