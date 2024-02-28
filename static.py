@@ -1,11 +1,14 @@
 import numpy as np
-
+import re
+import sys
+from pylab import *
+import cmath
 
 # Specify path to dynamics_formatted.data
 dynamics_path = r'/home/hgjones9/spinchain/output-latest/data/dynamics_formatted.data'
 
 # Create empty dictionary in which to add fidelity at a specified time
-data = {}
+fidelities = {}
 
 # Open and read file
 with open(dynamics_path, 'r') as file:
@@ -21,7 +24,8 @@ with open(dynamics_path, 'r') as file:
         # Append the dictionary to include the fidelity value at a specific time
         if values:
             time = round(float(values[0]), 2)
-            data[time] = np.linalg.norm(values[1])
+            fidelity_value = complex(values[2])
+            fidelities[time] = np.linalg.norm(fidelity_value)
 
 
 # Specify time at which to calculate fidelity
@@ -32,7 +36,7 @@ if target_time > 20 or target_time < 0:
     raise Exception("Time must be between 0 and 20")
 
 # Return fidelity at the target time
-fidelity = data[target_time]
+fidelity = fidelities[target_time]
 print(f"Fidelity wrt to target state at t={target_time} is {fidelity}")
 
 
