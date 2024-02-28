@@ -12,7 +12,7 @@ with open(dynamics_path, 'r') as file:
 
     # For each row of data, strip edge whitespace and separate by one whitespace
     for row in file:
-        values = row.strip.split()
+        values = row.strip().split()
 
         # If there are values in the row (i.e. not blank space):
         # Return the time, rounded to 2 d.p.
