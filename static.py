@@ -23,7 +23,7 @@ with open(dynamics_path, 'r') as file:
 
 
 # Specify time at which to calculate fidelity
-target_time = input("Input time (to 2 d.p. to calculate fidelity: ")
+target_time = float(input("Input time (to 2 d.p. to calculate fidelity: "))
 
 # Check that the time given is in the given data range
 if target_time > 20 or target_time < 0:
