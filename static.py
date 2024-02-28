@@ -37,7 +37,7 @@ if target_time > 20 or target_time < 0:
 
 # Return fidelity at the target time
 fidelity = fidelities[target_time]
-print(f"Fidelity wrt to target state at t={target_time} is {fidelity}")
+print(f"Fidelity wrt to target state at t={target_time} is {fidelity:.2f}")
 
 
 
