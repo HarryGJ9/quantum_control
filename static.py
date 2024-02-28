@@ -1,3 +1,5 @@
+import numpy as np
+
 
 # Specify path to dynamics_formatted.data
 dynamics_path = r'/home/hgjones9/spinchain/output-latest/data/dynamics_formatted.data'
@@ -19,11 +21,11 @@ with open(dynamics_path, 'r') as file:
         # Append the dictionary to include the fidelity value at a specific time
         if values:
             time = round(float(values[0]), 2)
-            data[time] = values[1]
+            data[time] = np.linalg.norm(values[1])
 
 
 # Specify time at which to calculate fidelity
-target_time = float(input("Input time (to 2 d.p. to calculate fidelity: "))
+target_time = float(input("Input time (to 2 d.p.) to calculate fidelity: "))
 
 # Check that the time given is in the given data range
 if target_time > 20 or target_time < 0:
