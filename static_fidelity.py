@@ -24,7 +24,6 @@ with open(dynamics_path, 'r') as file:
             fidelity_value = complex(values[2])
             fidelities[time] = np.linalg.norm(fidelity_value)
 
-
 # Specify time at which to calculate fidelity
 target_time = float(input("Input time (to 1 d.p.) to calculate fidelity: "))
 
