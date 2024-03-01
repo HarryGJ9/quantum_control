@@ -73,10 +73,10 @@ print(f"Fidelity wrt to target state at t={target_time} is {fidelity:.2f}")
 # # CALCULATE FITNESS OF OUTPUT GENOME 
 # #####################################
 
-# def fitness(a=10, b=-0.001, Jmax=1, fidelity, time):
-#     return 100 * np.exp(a(fidelity - 1)) * np.exp(b * time * Jmax)
+def fitness(a=10, b=-0.001, Jmax=1, fidelity, time):
+    return 100 * np.exp(a(fidelity - 1)) * np.exp(b * time * Jmax)
 
-# initial_fitness = fitness(fidelity, target_time)
+initial_fitness = fitness(fidelity, target_time)
 
 # ###################################################
 # # DO GRADIENT DESCENT, STARTING WITH INITIAL GENOME
