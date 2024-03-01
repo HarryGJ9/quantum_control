@@ -85,10 +85,11 @@ initial_fitness = fitness(fidelity, target_time)
 # # Define maximum number of iterations before GD terminates
 # max_iterations = 100
 
-# # Obtain the coupling values to calculate gradient of fitness
-# genome_split = genome.split('#')[0] # Remove any digit after the '#'
-# couplings = re.findall(r'\d+', genome_split) # Find all couplings, return them as a list of strings
-# couplings = [int(couplings) for coupling in couplings] # Convert each coupling to an integer
+# Obtain the coupling values to calculate gradient of fitness
+genome_split = genome.split('#')[0] # Remove any digit after the '#'
+couplings = re.findall(r'\d+', genome_split) # Find all couplings, return them as a list of strings
+couplings = [int(couplings) for coupling in couplings] # Convert each coupling to an integer
+print(couplings)
 
 # # Define parameters
 # h = 0.01 # Define gradient step size
