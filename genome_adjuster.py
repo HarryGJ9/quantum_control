@@ -23,7 +23,7 @@ with open(output_path, 'r') as file:
 ##################
             
 # Obtain couplings from the genome
-genome = genome_full.split('#')[0] # Remove any digit after the '#'
+genome = genome_full.split('#')[0].split('>')[1] # Remove the <i|f> directive and any digit after the '#' 
 couplings = re.findall(r'\d+', genome) # Find all couplings
 couplings = [int(coupling) for coupling in couplings] # Convert each coupling to an integer and return as a list
 print(f"Couplings = {couplings}")
