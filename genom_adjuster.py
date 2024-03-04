@@ -7,18 +7,18 @@ import re
 # OBTAIN OUTPUTTED GENOME
 #########################
 
-# # Directory of the output genome
-# output_path = r'/home/hgjones9/spinchain/output-latest/genetic.out'
+# Directory of the output genome
+output_path = r'/home/hgjones9/spinchain/output-latest/genetic.out'
 
-# # Open genetic.out and find the genome
-# with open(output_path, 'r') as file:
-#     for line in file:
-#         if "best genome" in line:
-#             genome = line.split(':')[1].strip()
-#             print(f'GA output genome: {genome}')
+# Open genetic.out and find the genome
+with open(output_path, 'r') as file:
+    for line in file:
+        if "best genome" in line:
+            genome = line.split(':')[1].strip()
+            print(f'GA output genome: {genome}')
 
-# Test genome
-genome_full = "AB500BC450#00"
+# # Test genome
+# genome_full = "AB500BC450#00"
 
 
 ##################
@@ -29,50 +29,49 @@ genome_full = "AB500BC450#00"
 genome = genome_full.split('#')[0] # Remove any digit after the '#'
 couplings = re.findall(r'\d+', genome) # Find all couplings, return them as a list of strings
 couplings = [int(coupling) for coupling in couplings] # Convert each coupling to an integer
-print(couplings)
+print(f"Couplings = {couplings}")
 
-
-# Adjust couplings by +/- h and store them in a list
-couplings_plus_h = [] # Initialise empty list to store J + h values
-couplings_minus_h = [] # Initialise empty list to store J - h values
+# For each coupling, calculate (coupling + h) and (coupling - h) and store them in a lsit
 h = 5 # Derivative stepsize
+couplings_plus_h = [coupling + h for coupling in couplings]
+couplings_minus_h = [coupling - h for coupling in couplings]
 
-# For each coupling, calculate (coupling + h) and (coupling - h) and append to relevant list
-for coupling in couplings:
-    couplings_plus_h.append(coupling + h)
-    couplings_minus_h.append(coupling - h)
-
-print(couplings_plus_h)
-print(couplings_minus_h)
+print(f"Couplings + h = {couplings_plus_h}")
+print(f"Couplings - h = {couplings_minus_h}")
 
 
-##################################################
-# GENERATE NEW GENOMES BASED ON ADJUSTED COUPLINGS
-##################################################
+# ##################################################
+# # GENERATE NEW GENOMES BASED ON ADJUSTED COUPLINGS
+# ##################################################
 
-# Split genome into letters and numbers
-genome_split = re.split(r'\d+', genome)
-print(genome_split)
+# Split genome into a list of characters and couplings
+genome_split = re.split(r'([A-Za-z]+|\d+)', genome)
+genome_list = [index for index in genome_split if index]
+print(f"Genomes split into characters and couplings = {genome_list}")
 
-# Obtain the letter characters from the genome 
-letters = [substring for substring in genome_split if substring]
-print(letters)
 
 # Compile a new genome based on adjusted couplings and letter characters of previous 
 
+# Compile new genomes based on adjusted couplings and letter characters of previous genome
 adjusted_genomes = []
-for index, letter_pair in enumerate(genome_split):
-    
-    # Identify adjusted couplings
-    plus_h = couplings_plus_h[index]
-    minus_h = couplings_minus_h[index]
 
-    # Construct new genomes
-    genome_plus_h = letter_pair + str(plus_h) + "BC" + str(couplings[index+1]%len(genome_split)[1])
-    genome_minus_h = letter_pair + str(plus_h) + "BC" + str(minus_h)
-    adjusted_genomes.extend([genome_plus_h, genome_minus_h])
+# Iterate over genome_split and construct new genomes
+for index, item in enumerate(genome_split):
+    if item.isdigit(): # Checks if the item is a coupling
+        plus_h = str(couplings_plus_h.pop(0)) # Remove the first element from the list couplings_plus_h and save it
+        #print(plus_h)
+        minus_h = str(couplings_minus_h.pop(0)) # Same again with coupling_minus_h
+        
+        # Construct new genomes by joining the previous characters up to the current index, with the new coupling
+        # Then add the rest of the genome onto it
+        genome_plus_h = ''.join(genome_split[:index]) + plus_h + ''.join(genome_split[index + 1:])
+        genome_minus_h = ''.join(genome_split[:index]) + minus_h + ''.join(genome_split[index + 1:])
+        
+        # Add adjusted genomes to a single list
+        adjusted_genomes.extend([genome_plus_h, genome_minus_h])
 
-print(adjusted_genomes) 
+print(f"Adjusted genomes: {adjusted_genomes}")
+
 
 
 
