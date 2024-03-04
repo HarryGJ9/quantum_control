@@ -73,8 +73,8 @@ print(f"Adjusted genomes: {adjusted_genomes}")
 # Write all relevant data to an output .txt file
 with open('output.txt', 'w') as file:
     # Write content to the file
-    file.write(f"GA optimised genome = {genome}")
-    file.write(f"Adjusted genomes = {adjusted_genomes}")
+    file.write(f"GA optimised genome = {genome}\n")
+    file.write(f"Adjusted genomes = {adjusted_genomes}\n")
 
     
 
