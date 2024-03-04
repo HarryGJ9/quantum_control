@@ -1,6 +1,3 @@
-
-import numpy as np
-import cmath
 import re
 
 #########################
@@ -14,8 +11,8 @@ output_path = r'/home/hgjones9/spinchain/output-latest/genetic.out'
 with open(output_path, 'r') as file:
     for line in file:
         if "best genome" in line:
-            genome = line.split(':')[1].strip()
-            print(f'GA output genome: {genome}')
+            genome_full = line.split(':')[1].strip()
+            print(f'GA output genome: {genome_full}')
 
 # # Test genome
 # genome_full = "AB500BC450#00"
