@@ -24,8 +24,8 @@ with open(output_path, 'r') as file:
             
 # Obtain couplings from the genome
 genome = genome_full.split('#')[0] # Remove any digit after the '#'
-couplings = re.findall(r'\d+', genome) # Find all couplings, return them as a list of strings
-couplings = [int(coupling) for coupling in couplings] # Convert each coupling to an integer
+couplings = re.findall(r'\d+', genome) # Find all couplings
+couplings = [int(coupling) for coupling in couplings] # Convert each coupling to an integer and return as a list
 print(f"Couplings = {couplings}")
 
 # For each coupling, calculate (coupling + h) and (coupling - h) and store them in a lsit
@@ -37,17 +37,15 @@ print(f"Couplings + h = {couplings_plus_h}")
 print(f"Couplings - h = {couplings_minus_h}")
 
 
-# ##################################################
-# # GENERATE NEW GENOMES BASED ON ADJUSTED COUPLINGS
-# ##################################################
+##################################################
+# GENERATE NEW GENOMES BASED ON ADJUSTED COUPLINGS
+##################################################
 
 # Split genome into a list of characters and couplings
 genome_split = re.split(r'([A-Za-z]+|\d+)', genome)
 genome_list = [index for index in genome_split if index]
 print(f"Genomes split into characters and couplings = {genome_list}")
 
-
-# Compile a new genome based on adjusted couplings and letter characters of previous 
 
 # Compile new genomes based on adjusted couplings and letter characters of previous genome
 adjusted_genomes = []
