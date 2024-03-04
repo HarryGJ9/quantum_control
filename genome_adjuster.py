@@ -1,5 +1,8 @@
 import re
 
+# This script takes in the optimised genome found by the GA as an input and returns a list of 
+# genomes that have had their individual couplings altered by the derivative step size
+
 #########################
 # OBTAIN OUTPUTTED GENOME
 #########################
@@ -16,7 +19,6 @@ with open(output_path, 'r') as file:
 
 # # Test genome
 # genome_full = "AB500BC450#00"
-
 
 ##################
 # ADJUST COUPLINGS 
@@ -68,7 +70,11 @@ for index, item in enumerate(genome_split):
 print(f"Adjusted genomes: {adjusted_genomes}")
 
 
-
+# Write all relevant data to an output .txt file
+with open('output.txt', 'w') as file:
+    # Write content to the file
+    file.write(f"GA optimised genome = {genome}")
+    file.write(f"Adjusted genomes = {adjusted_genomes}")
 
     
 
