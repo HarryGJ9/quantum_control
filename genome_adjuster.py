@@ -67,7 +67,7 @@ for index, item in enumerate(genome_split):
         # Add adjusted genomes to a single list
         adjusted_genomes.extend([genome_plus_h, genome_minus_h])
 
-print(f"Adjusted genomes: {adjusted_genomes}")
+# print(f"Adjusted genomes: {adjusted_genomes}")
 
 
 # Write all relevant data to an output .txt file
