@@ -12,8 +12,11 @@ read initial_genome
 # Run spinnet -o on an initial genome 
 /home/hgjones9/spinchain/bin/spinnet -o "$initial_genome"
 
-# # Obtain the optimised output genome and make changes using genome_adjuster.py
-# python3 /home/hgjones9/quantum_control/genome_adjuster.py
+# At this point, there is an output file located at /home/hgjones9/quantum_control/output_latest/genetic.out"
+# This file contains the optimised genome "<i|f>AB...BC..."
+
+# Obtain the optimised output genome and make changes using genome_adjuster.py
+python3 /home/hgjones9/quantum_control/genome_adjuster.py
 
 # # Specify output file of adjusted genomes
 # output_file='/home/hgjones9/quantum_control/output.txt'
