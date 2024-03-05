@@ -32,8 +32,9 @@ echo "$adjusted_genomes"
 
 # Test on first genome
 test_genome=$(echo "$adjusted_genomes" | cut -d',' -f1)
+genome=$(echo "$string" | tr -d "'")
 
-echo "<A|C>$test_genome"
+echo "<A|C>$genome"
 
 cd /home/hgjones9/spinchain
 
