@@ -31,11 +31,11 @@ adjusted_genomes=$(grep -oP "Adjusted genomes = \[\K.*(?=\])" "$output_file")
 echo "$adjusted_genomes"
 
 # Test on first genome
-test_genome=$(echo "$adjusted_genomes" | cut -d',' -f1)
+test_genome=$(echo "$string" | sed "s/'//g")
 
 echo "$test_genome"
 
-genome=$(echo "$string" | cut -d"'" -f2)
+genome=$(echo "$test_genome" | cut -d"'" -f2)
 
 echo "<A|C>$genome"
 
