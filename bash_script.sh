@@ -35,12 +35,10 @@ echo "$adjusted_genomes"
 # Loop over the list and run spinnet on each genome
 for string in $adjusted_genomes
 do
-
     genome=$(echo "$string" | tr -d "'")
     # Call spinnet for each genome
-    # /home/hgjones9/spinchain/bin/spinnet "<A|C>$genome"
+    /home/hgjones9/spinchain/bin/spinnet "<A|C>$genome"
     echo "<A|C>$genome"
-
 done
 
 
