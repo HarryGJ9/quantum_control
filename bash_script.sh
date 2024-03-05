@@ -35,9 +35,9 @@ test_genome=$(echo "$adjusted_genomes" | cut -d',' -f1)
 
 echo "<A|C>$test_genome"
 
-/home/hgjones9/spinchain/bin/spinnet "<A|C>$test_genome"
+cd /home/hgjones9/spinchain
 
-
+/bin/spinnet "<A|C>$test_genome"
 
 
 
