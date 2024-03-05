@@ -35,9 +35,7 @@ test_genome=$(echo "$string" | sed "s/'//g")
 
 echo "$test_genome"
 
-genome=$(echo "$test_genome" | cut -d"'" -f2)
-
-echo "<A|C>$genome"
+echo "<A|C>$test_genome"
 
 cd /home/hgjones9/spinchain
 
