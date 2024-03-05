@@ -30,28 +30,28 @@ adjusted_genomes=$(grep -oP "Adjusted genomes = \[\K.*(?=\])" "$output_file")
 # Print the list of adjusted genomes
 echo "$adjusted_genomes"
 
-# Test on first genome
-test_genome=$(echo "$string" | sed "s/'//g")
+# # Test on first genome
+# test_genome=$(echo "$string" | sed "s/'//g")
 
-echo "$test_genome"
+# echo "$test_genome"
 
-echo "<A|C>$test_genome"
+# echo "<A|C>$test_genome"
 
 cd /home/hgjones9/spinchain
 
 pwd
 
-/bin/spinnet "<A|C>$test_genome"
+# bin/spinnet "<A|C>$test_genome"
 
 
-# # Loop over the list and run spinnet on each genome
-# for string in $adjusted_genomes
-# do
-#     genome=$(echo "$string" | sed "s/'//g")
-#     # Call spinnet for each genome
-#     bin/spinnet "<A|C>$genome"
-#     echo "<A|C>$genome"
-# done
+# Loop over the list and run spinnet on each genome
+for string in $adjusted_genomes
+do
+    genome=$(echo "$string" | sed "s/'//g")
+    # Call spinnet for each genome
+    bin/spinnet "<A|C>$genome"
+    echo "<A|C>$genome"
+done
 
 
 
