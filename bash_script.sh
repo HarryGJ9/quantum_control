@@ -8,6 +8,9 @@
 echo "Please enter a genome to be optimised":
 read initial_genome
 
+# Extract initial and target state to be used later
+initial=
+
 
 # Run spinnet -o on an initial genome 
 /home/hgjones9/spinchain/bin/spinnet -o "$initial_genome"
@@ -29,13 +32,14 @@ echo "$adjusted_genomes"
 
 
 
-# # Loop over the list and run spinnet on each genome
-# for genome in $adjusted_genomes
-# do
-#     # Call spinnet for each genome
-#     /home/hgjones9/spinchain/bin/spinnet "<A|C>$genome"
+# Loop over the list and run spinnet on each genome
+for genome in $adjusted_genomes
+do
+    # Call spinnet for each genome
+    /home/hgjones9/spinchain/bin/spinnet "<A|C>$genome"
+    echo "<A|C>$genome"
 
-# done
+done
 
 
 
