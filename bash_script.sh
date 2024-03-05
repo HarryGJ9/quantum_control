@@ -24,7 +24,7 @@ adjusted_genomes=$(grep -oP "Adjusted genomes = \['K[^']+" "$output_file")
 for genome in $adjusted_genomes
 do
     # Call spinnet for each genome
-    /home/hgjones9/spinchain/bin/spinnet "<A|C>$genome#00"
+    /home/hgjones9/spinchain/bin/spinnet "<A|C>$genome"
 
 done
 
