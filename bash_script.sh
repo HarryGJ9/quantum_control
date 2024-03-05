@@ -35,7 +35,7 @@ test_genome=$(echo "$adjusted_genomes" | cut -d',' -f1)
 
 echo "$test_genome"
 
-genome=$(echo "$string" | sed "s/^'//;s/'$//")
+genome=$(echo "$string" | sed "s/^'//; s/'$//")
 
 echo "<A|C>$genome"
 
