@@ -27,13 +27,13 @@ adjusted_genomes=$(grep -oP "Adjusted genomes = \['[^']+" "$output_file" | sed "
 # Print the list of adjusted genomes
 echo "$adjusted_genomes"
 
-# Loop over the list and run spinnet on each genome
-for genome in $adjusted_genomes
-do
-    # Call spinnet for each genome
-    /home/hgjones9/spinchain/bin/spinnet "<A|C>$genome"
+# # Loop over the list and run spinnet on each genome
+# for genome in $adjusted_genomes
+# do
+#     # Call spinnet for each genome
+#     /home/hgjones9/spinchain/bin/spinnet "<A|C>$genome"
 
-done
+# done
 
 
 
