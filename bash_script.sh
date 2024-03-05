@@ -36,7 +36,7 @@ echo "$adjusted_genomes"
 for genome in $adjusted_genomes
 do
     # Call spinnet for each genome
-    /home/hgjones9/spinchain/bin/spinnet "<A|C>$genome"
+    # /home/hgjones9/spinchain/bin/spinnet "<A|C>$genome"
     echo "<A|C>$genome"
 
 done
