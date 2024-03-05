@@ -18,7 +18,7 @@ with open(output_path, 'r') as file:
             print(f'GA output genome: {genome_full}')
 
 # # Test genome
-# genome_full = "AB500BC450#00"
+# genome_full = "<A|C>AB500BC450#00"
 
 ##################
 # ADJUST COUPLINGS 
@@ -70,11 +70,11 @@ for index, item in enumerate(genome_split):
 print(f"Adjusted genomes: {adjusted_genomes}")
 
 
-# Write all relevant data to an output .txt file
-with open('output.txt', 'w') as file:
-    # Write content to the file
-    file.write(f"GA optimised genome = {genome}\n")
-    file.write(f"Adjusted genomes = {adjusted_genomes}\n")
+# # Write all relevant data to an output .txt file
+# with open('output.txt', 'w') as file:
+#     # Write content to the file
+#     file.write(f"GA optimised genome = {genome}\n")
+#     file.write(f"Adjusted genomes = {adjusted_genomes}\n")
 
     
 
