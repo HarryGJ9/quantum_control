@@ -33,9 +33,9 @@ echo "$adjusted_genomes"
 # Test on first genome
 test_genome=$(echo "$adjusted_genomes" | cut -d',' -f1)
 
-echo"$test_genome"
+echo "$test_genome"
 
-/home/hgjones/spinchain/bin/spinnet "<A|C>$test_genome"
+/home/hgjones9/spinchain/bin/spinnet "<A|C>$test_genome"
 
 
 
