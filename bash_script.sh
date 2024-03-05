@@ -44,14 +44,12 @@ pwd
 # /bin/spinnet "<A|C>$test_genome"
 
 
-
-
 # Loop over the list and run spinnet on each genome
 for string in $adjusted_genomes
 do
     genome=$(echo "$string" | sed "s/'//g")
     # Call spinnet for each genome
-    # /home/hgjones9/spinchain/bin/spinnet "<A|C>$genome"
+    bin/spinnet "<A|C>$genome"
     echo "<A|C>$genome"
 done
 
