@@ -25,7 +25,7 @@ output_file='/home/hgjones9/quantum_control/output.txt'
 adjusted_genomes=$(grep -oP "Adjusted genomes = \['[^']+" "$output_file" | sed "s/Adjusted genomes = //; s/'//g")
 
 # Print the list of adjusted genomes
-echo "$adjusted_genomes"
+# echo "$adjusted_genomes"
 
 # # Loop over the list and run spinnet on each genome
 # for genome in $adjusted_genomes
