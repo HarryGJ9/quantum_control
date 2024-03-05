@@ -8,7 +8,7 @@ import re
 #########################
 
 # Directory of the output genome
-output_path = r'/home/hgjones9/spinchain/output-latest/genetic.out'
+output_path = r'/home/hgjones9/quantum_control/output-latest/genetic.out'
 
 # Open genetic.out and find the genome
 with open(output_path, 'r') as file:
