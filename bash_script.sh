@@ -37,7 +37,9 @@ echo "<A|C>$test_genome"
 
 cd /home/hgjones9/spinchain
 
-/bin/spinnet "<A|C>$test_genome"
+pwd
+
+# /bin/spinnet "<A|C>$test_genome"
 
 
 
