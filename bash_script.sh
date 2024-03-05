@@ -32,7 +32,7 @@ echo "$adjusted_genomes"
 
 # Test on first genome
 test_genome=$(echo "$adjusted_genomes" | cut -d',' -f1)
-genome=$(echo "$string" | tr -d "'")
+genome=$(echo "$string" | sed "s/^'//;s/'$//")
 
 echo "<A|C>$genome"
 
