@@ -21,9 +21,10 @@ python3 /home/hgjones9/quantum_control/genome_adjuster.py
 # Specify output file of adjusted genomes
 output_file='/home/hgjones9/quantum_control/output.txt'
 
-# Search output.txt for the list of adjusted genomes, return the list
-adjusted_genomes=$(grep -oP "Adjusted genomes = \['K[^']+" "$output_file")
+# Search output.txt for the list of adjusted genomes and print them as a list
+adjusted_genomes=$(grep -oP "Adjusted genomes = \['[^']+" "$output_file" | sed "s/Adjusted genomes = //; s/'//g")
 
+# Print the list of adjusted genomes
 echo "$adjusted_genomes"
 
 # Loop over the list and run spinnet on each genome
