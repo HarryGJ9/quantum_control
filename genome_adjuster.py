@@ -7,18 +7,18 @@ import re
 # OBTAIN OUTPUTTED GENOME
 #########################
 
-# # Directory of the output genome
-# output_path = r'/home/hgjones9/quantum_control/output-latest/genetic.out'
+# Directory of the output genome
+output_path = r'/home/hgjones9/quantum_control/output-latest/genetic.out'
 
-# # Open genetic.out and find the genome
-# with open(output_path, 'r') as file:
-#     for line in file:
-#         if "best genome" in line:
-#             genome_full = line.split(':')[1].strip()
-#             print(f'GA output genome: {genome_full}')
+# Open genetic.out and find the genome
+with open(output_path, 'r') as file:
+    for line in file:
+        if "best genome" in line:
+            genome_full = line.split(':')[1].strip()
+            print(f'GA output genome: {genome_full}')
 
-# Test genome
-genome_full = "<A|C>AB500BC450#00"
+# # Test genome
+# genome_full = "<A|C>AB500BC450#00"
 
 ##################
 # ADJUST COUPLINGS 
