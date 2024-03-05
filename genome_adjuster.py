@@ -7,18 +7,18 @@ import re
 # OBTAIN OUTPUTTED GENOME
 #########################
 
-# Directory of the output genome
-output_path = r'/home/hgjones9/quantum_control/output-latest/genetic.out'
+# # Directory of the output genome
+# output_path = r'/home/hgjones9/quantum_control/output-latest/genetic.out'
 
-# Open genetic.out and find the genome
-with open(output_path, 'r') as file:
-    for line in file:
-        if "best genome" in line:
-            genome_full = line.split(':')[1].strip()
-            print(f'GA output genome: {genome_full}')
+# # Open genetic.out and find the genome
+# with open(output_path, 'r') as file:
+#     for line in file:
+#         if "best genome" in line:
+#             genome_full = line.split(':')[1].strip()
+#             print(f'GA output genome: {genome_full}')
 
-# # Test genome
-# genome_full = "<A|C>AB500BC450#00"
+# Test genome
+genome_full = "<A|C>AB500BC450#00"
 
 ##################
 # ADJUST COUPLINGS 
@@ -67,14 +67,14 @@ for index, item in enumerate(genome_split):
         # Add adjusted genomes to a single list
         adjusted_genomes.extend([genome_plus_h, genome_minus_h])
 
-# print(f"Adjusted genomes: {adjusted_genomes}")
+print(f"Adjusted genomes: {adjusted_genomes}")
 
 
-# Write all relevant data to an output .txt file
-with open('output.txt', 'w') as file:
-    # Write content to the file
-    file.write(f"GA optimised genome = {genome}\n")
-    file.write(f"Adjusted genomes = {adjusted_genomes}\n")
+# # Write all relevant data to an output .txt file
+# with open('output.txt', 'w') as file:
+#     # Write content to the file
+#     file.write(f"GA optimised genome = {genome}\n")
+#     file.write(f"Adjusted genomes = {adjusted_genomes}\n")
 
     
 

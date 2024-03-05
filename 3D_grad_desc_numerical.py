@@ -17,7 +17,7 @@ def calculate_gradient(x, y, h=1e-6):
 
     return df_dx, df_dy
 
-def grad_descent(max_iterations=1000, learning_rate=0.01, gradient_threshold=1e-3):
+def grad_descent(max_iterations=10, learning_rate=0.1, gradient_threshold=1e-3):
     
     # Define x and y values
     x = np.arange(-1, 1, 0.01)
@@ -35,6 +35,7 @@ def grad_descent(max_iterations=1000, learning_rate=0.01, gradient_threshold=1e-
     for _ in range(max_iterations):
         
         gradients = calculate_gradient(current_pos[0], current_pos[1])
+        print(gradients)
         gradient_norm = np.linalg.norm(gradients)
 
         if gradient_norm < gradient_threshold:
@@ -43,14 +44,15 @@ def grad_descent(max_iterations=1000, learning_rate=0.01, gradient_threshold=1e-
         X_derivative, Y_derivative = gradients[0], gradients[1]
         X_new, Y_new = current_pos[0] - learning_rate * X_derivative, current_pos[1] - learning_rate * Y_derivative
         current_pos = (X_new, Y_new, func1(X_new, Y_new))
+        print(current_pos)
 
-        ax.plot_surface(X, Y, Z, cmap='viridis', zorder=0)
-        ax.scatter(current_pos[0], current_pos[1], current_pos[2], cmap='magenta', zorder=1)
-        plt.pause(0.001)
-        ax.clear()
+        # ax.plot_surface(X, Y, Z, cmap='viridis', zorder=0)
+        # ax.scatter(current_pos[0], current_pos[1], current_pos[2], cmap='magenta', zorder=1)
+        # plt.pause(0.001)
+        # ax.clear()
 
     print(f"Calculated minimum = {current_pos[0]:.3f}, {current_pos[1]:.3f}, {current_pos[2]:.3f}")   
-    plt.show()
+    # plt.show()
     
 
 

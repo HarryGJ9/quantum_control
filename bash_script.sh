@@ -53,7 +53,7 @@ do
     echo "<A|C>$genome"
 done
 
-
+# EVERYTHING CURRENTLY WORKS APART FROM RUNNING SPINNET ON EACH GENOME
 
 
 

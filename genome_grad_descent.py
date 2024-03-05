@@ -69,14 +69,14 @@ fidelity = fidelities[target_time]
 print(f"Fidelity wrt to target state at t={target_time} is {fidelity:.2f}")
 
 
-# #####################################
-# # CALCULATE FITNESS OF OUTPUT GENOME 
-# #####################################
+# # #####################################
+# # # CALCULATE FITNESS OF OUTPUT GENOME 
+# # #####################################
 
-def fitness(fidelity, time, a=10, b=-0.001, Jmax=1):
-    return 100 * np.exp(a * (fidelity - 1)) * np.exp(b * time * Jmax)
+# def fitness(fidelity, time, a=10, b=-0.001, Jmax=1):
+#     return 100 * np.exp(a * (fidelity - 1)) * np.exp(b * time * Jmax)
 
-initial_fitness = fitness(fidelity, target_time)
+# initial_fitness = fitness(fidelity, target_time)
 
 # ###################################################
 # # DO GRADIENT DESCENT, STARTING WITH INITIAL GENOME
@@ -91,25 +91,25 @@ couplings = re.findall(r'\d+', genome_split) # Find all couplings, return them a
 couplings = [int(coupling) for coupling in couplings] # Convert each coupling to an integer
 print(couplings)
 
-# # Define parameters
-# h = 0.01 # Define gradient step size
-# gradients = [] # Initialise empty list into which coupling gradients are added
-# threshold = 1e-6 # Define threshold to determine if gradient is sufficiently small
-# learning_rate = 0.01 # Learning rate for the GD algorithm
+# Define parameters
+h = 0.01 # Define gradient step size
+gradients = [] # Initialise empty list into which coupling gradients are added
+threshold = 1e-6 # Define threshold to determine if gradient is sufficiently small
+learning_rate = 0.01 # Learning rate for the GD algorithm
 
-# for _ in (max_iterations):
+for _ in (max_iterations):
 
-#     # Calculate the numerical derivative of each coupling
-#     for coupling in couplings:
-#         calculate_gradient = ((coupling + h) - (coupling - h)) / (2 * h)
-#         gradients.append(calculate_gradient)
+    # Calculate the numerical derivative of each coupling
+    for coupling in couplings:
+        calculate_gradient = ((coupling + h) - (coupling - h)) / (2 * h)
+        gradients.append(calculate_gradient)
     
-#     # Calculate the norm of the gradient vector 
-#     gradient_norm = np.linalg.norm(gradients)
+    # Calculate the norm of the gradient vector 
+    gradient_norm = np.linalg.norm(gradients)
 
-#     # If the gradient is small enough, terminate the descent
-#     if gradient_norm < threshold:
-#         break
+    # If the gradient is small enough, terminate the descent
+    if gradient_norm < threshold:
+        break
 
     
     # Now: do I need to calculate the dynamics of the system to determine a new fitness/fidelity/both?
