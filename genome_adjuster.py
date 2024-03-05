@@ -14,7 +14,7 @@ output_path = r'/home/hgjones9/quantum_control/output-latest/genetic.out'
 with open(output_path, 'r') as file:
     for line in file:
         if "best genome" in line:
-            genome_full = line.split(':')[1].strip("")
+            genome_full = line.split(':')[1].strip()
             print(f'GA output genome: {genome_full}')
 
 # # Test genome
