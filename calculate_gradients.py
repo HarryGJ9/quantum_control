@@ -35,7 +35,7 @@ def output_folders():
     print(output_dirs)
 
     # Sort the output directories by time
-    sorted_output_dirs = sorted(output_dirs, lambda x: os.path.getmtime(x))
+    sorted_output_dirs = sorted(output_dirs, key=lambda x: os.path.getmtime(x))
 
     return sorted_output_dirs
 
