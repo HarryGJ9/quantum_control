@@ -36,10 +36,10 @@ pwd
 
 IFS="','" read ra elements <<< "$adjusted_genomes"
 
-test_genome="${elements[0]//\'}"
+first_element=$(echo "$adjusted_genomes" | sed "s/'\([^']*\)'.*/\1/")
 #test_genome_stripped=genome=$(echo "$string" | sed "s/'//g")
 
-echo "$test_genome"
+echo "$first_element"
 
 
 # # Loop over the list and run spinnet on each genome
