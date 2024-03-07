@@ -34,25 +34,25 @@ echo "$adjusted_genomes"
 cd /home/hgjones9/spinchain
 pwd
 
-IFS="','" read ra elements <<< "$adjusted_genomes"
+# IFS="','" read ra elements <<< "$adjusted_genomes"
 
-first_element=$(echo "$adjusted_genomes" | sed "s/'\([^']*\)'.*/\1/")
-#test_genome_stripped=genome=$(echo "$string" | sed "s/'//g")
+# first_element=$(echo "$adjusted_genomes" | sed "s/'\([^']*\)'.*/\1/")
+# #test_genome_stripped=genome=$(echo "$string" | sed "s/'//g")
 
-echo "$first_element"
+# echo "$first_element"
 
-bin/spinnet "<A|C>$first_element"
+# bin/spinnet "<A|C>$first_element"
 
 
-# # Loop over the list and run spinnet on each genome
-# for string in $adjusted_genomes
-# do
-#     genome=$(echo "$string" | sed "s/'//g")
+# Loop over the list and run spinnet on each genome
+for string in $adjusted_genomes
+do
+    genome=$(echo "$string" | sed "s/'\([^']*\)'.*/\1/")
 
-#     # Call spinnet for each genome
-#     bin/spinnet "<A|C>$genome"
-#     echo "<A|C>$genome"
-# done
+    # Call spinnet for each genome
+    bin/spinnet "<A|C>$genome"
+    echo "<A|C>$genome"
+done
 
 # EVERYTHING CURRENTLY WORKS APART FROM RUNNING SPINNET ON EACH GENOME
 
