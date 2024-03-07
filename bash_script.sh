@@ -41,6 +41,8 @@ first_element=$(echo "$adjusted_genomes" | sed "s/'\([^']*\)'.*/\1/")
 
 echo "$first_element"
 
+bin/spinnet "<A|C>$first_element"
+
 
 # # Loop over the list and run spinnet on each genome
 # for string in $adjusted_genomes
