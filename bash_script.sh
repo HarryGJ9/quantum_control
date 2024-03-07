@@ -9,7 +9,8 @@ echo "Please enter a genome to be optimised":
 read initial_genome
 
 # Extract initial and target state to be used later
-# initial=
+# initial=initial_site
+# final=final_site
 
 
 # Run spinnet -o on an initial genome 
@@ -44,21 +45,30 @@ pwd
 # bin/spinnet "<A|C>$first_element"
 
 
-# Loop over the list and run spinnet on each genome
+##################################################
+# RUN SPINNET ON EACH GENOME TO CALCUALTE DYNAMICS
+##################################################
+
+# Loop over the list of adjusted genoms and run spinnet on each genome
 for string in $adjusted_genomes
 do
-    genome=$(echo "$string" | sed "s/'\([^']*\)'.*/\1/")
+    genome=$(echo "$string" | sed "s/'\([^']*\)'.*/\1/") # Remove the individual quotation marks from each genome
 
-    # Call spinnet for each genome
+    # Call spinnet for each genome, generating a different output directory for each genome
     bin/spinnet "<A|C>$genome"
     echo "<A|C>$genome"
 done
 
-# EVERYTHING CURRENTLY WORKS APART FROM RUNNING SPINNET ON EACH GENOME
+
+###########################################################################
+# CALCULATE THE GRADIENT VECTOR OF THE FIDELITY WITH RESPECT TO THE GENOMES
+###########################################################################
+
+gradient=
 
 
 
-# Calculate the fidelities of each genome by running spinnet
+
 
 
 
