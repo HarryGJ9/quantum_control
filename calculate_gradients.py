@@ -39,6 +39,8 @@ def output_folders():
 
     return sorted_output_dirs
 
+output_folders()
+
 
 
 
