@@ -34,7 +34,7 @@ echo "$adjusted_genomes"
 cd /home/hgjones9/spinchain
 pwd
 
-split_list=" ',' " read ra elements <<< "$adjusted_genomes"
+IFS="','" read ra elements <<< "$adjusted_genomes"
 
 test_genome="${elements[0]//\'}"
 #test_genome_stripped=genome=$(echo "$string" | sed "s/'//g")
