@@ -46,7 +46,8 @@ def filter(dirs):
 
     # Iterate over output folders and find those mose recently created, check that they are a directory
     for dir in dirs:
-        if dir.startswith(f'output-{year}-{month}-{day}-{hour}-{min}') and os.path.isdir(dir):
+        full_path = os.path.join(spinchain_path, dir)
+        if dir.startswith(f'output-{year}-{month}-{day}-{hour}-{min}') and os.path.isdir(full_path):
             output_dirs.append(dir)
     # print(output_dirs)
 
