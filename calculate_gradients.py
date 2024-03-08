@@ -51,10 +51,11 @@ def filter(dirs):
     # print(output_dirs)
 
     # Sort the output directories by time
-    sorted_output_dirs = sorted(output_dirs, key=lambda x: os.path.getmtime(x))
+    # sorted_output_dirs = sorted(output_dirs, key=lambda x: os.path.getmtime(x))
     # print(sorted_output_folders)
 
-    return sorted_output_dirs
+    # return sorted_output_dirs
+    return output_dirs
 
 # Function which looks through each output directory and returns an array of fidelities
 def fidelities(output_dirs):
