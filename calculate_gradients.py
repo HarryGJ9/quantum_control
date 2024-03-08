@@ -130,7 +130,7 @@ sorted_output_dirs = filter(dirs)
 # print(sorted_output_dirs)
 
 # Call fidelities function to get an array of updated fidelities
-updated_fidelities = fidelities(dirs)
+updated_fidelities = fidelities(sorted_output_dirs)
 # print(updated_fidelities)
 # print((updated_fidelities[:,0] - updated_fidelities[:,1]) / (2))
 
