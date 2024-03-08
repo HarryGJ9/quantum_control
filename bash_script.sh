@@ -64,7 +64,7 @@ done
 # CALCULATE THE GRADIENT VECTOR OF THE FIDELITY WITH RESPECT TO THE GENOMES
 ###########################################################################
 
-gradient=
+python3 /home/hgjones9/quantum_control/calculate_gradients.py
 
 
 

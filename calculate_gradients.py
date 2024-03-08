@@ -27,8 +27,9 @@ def current_time():
     day = current_time.day
     hour = current_time.hour
     min = current_time.minute
+    sec = current_time.second
 
-    return year, month, day, hour, min
+    return year, month, day, hour, min, sec
 
 # Function which filters through the folders under spinchain and finds those most recently created 
 def filter(dirs):
@@ -137,8 +138,16 @@ updated_fidelities = fidelities(dirs)
 gradient = calculate_gradient(updated_fidelities)
 print(gradient)
 
+# Retrieve current times
+year = current_time()[0]
+month = current_time()[1]
+day = current_time()[2]
+hour = current_time()[3]
+min = current_time()[4]
+sec = current_time()[5]
+
 # Write the gradient vector out to a .txt file
-with open('gradient.txt', 'w') as file:
+with open(f'/home/hgjones9/spinchain/gradient-{year}-{month}-{day}-{hour}-{min}-{sec}.txt', 'w') as file:
     file.write(str(gradient))
 
 
