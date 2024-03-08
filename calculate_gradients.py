@@ -6,11 +6,11 @@ import datetime
 import numpy as np
 
 # Specify spinchain directory path
-# spinchain_path = r'/home/hgjones9/spinchain'
+spinchain_path = r'/home/hgjones9/spinchain'
 
-# SPECIFY PATH FOR PRACTICE FILES
-spinchain_path = "C:\\Users\harry\quantum_control\outputs_practice"
-output_dirs = os.listdir(spinchain_path)
+# # SPECIFY PATH FOR PRACTICE FILES
+# spinchain_path = "C:\\Users\harry\quantum_control\outputs_practice"
+# output_dirs = os.listdir(spinchain_path)
 # print(output_dirs)
 
 # List all folders under a specific path
@@ -134,8 +134,12 @@ updated_fidelities = fidelities(dirs)
 # print((updated_fidelities[:,0] - updated_fidelities[:,1]) / (2))
 
 # Call calculate_gradient to obtain the gradient vector
-grad = calculate_gradient(updated_fidelities)
-print(grad)
+gradient = calculate_gradient(updated_fidelities)
+print(gradient)
+
+# Write the gradient vector out to a .txt file
+with open('gradient.txt', 'w') as file:
+    file.write(str(gradient))
 
 
 
