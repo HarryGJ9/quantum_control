@@ -121,12 +121,12 @@ def calculate_gradient(fidelities, h=1):
     return gradient_array
 
 
-# Call list_dirs to obtain all directories under spinchain
+# Call list_dirs to obtain all output- directories under spinchain
 dirs = list_dirs(spinchain_path)
 # print(dirs)
 
 # Call filter function to get the relevant output- directories, filtered by time
-# sorted_output_dirs = filter(dirs)
+sorted_output_dirs = filter(dirs)
 # print(sorted_output_dirs)
 
 # Call fidelities function to get an array of updated fidelities
