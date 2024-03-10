@@ -35,12 +35,12 @@ def current_time():
 # Function which filters through the folders under spinchain and finds those most recently created 
 def filter(dirs):
 
-    # Obtain current times
-    year = current_time()[0]
-    month = current_time()[1]
-    day = current_time()[2]
-    hour = current_time()[3]
-    min = current_time()[4]
+    # # Obtain current times
+    # year = current_time()[0]
+    # month = current_time()[1]
+    # day = current_time()[2]
+    # hour = current_time()[3]
+    # min = current_time()[4]
 
     # Initialise empty list of output directories
     output_dirs = []
@@ -56,7 +56,7 @@ def filter(dirs):
     for dir in dirs:
         if dir.startswith('output-') and os.path.isdir(dir):
             dir_creation_time = os.path.getctime(dir)
-            if current_time() - dir_creation_time <= 120:
+            if time.time() - dir_creation_time <= 120:
                 output_dirs.append(dir)
     print(output_dirs)
 
@@ -161,9 +161,6 @@ print(sorted_output_dirs)
 # # Write the gradient vector out to a .txt file
 # with open(f'/home/hgjones9/spinchain/gradient-{year}-{month}-{day}-{hour}-{min}-{sec}.txt', 'w') as file:
 #     file.write(str(gradient))
-
-
-
 
 
 
