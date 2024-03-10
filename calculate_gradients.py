@@ -63,7 +63,7 @@ def filter(dirs):
 
     # Sort the output directories by time
     sorted_output_dirs = sorted(output_dirs, key=lambda x: os.path.getmtime(x))
-    print(sorted_output_folders)
+    print(sorted_output_dirs)
 
     # return sorted_output_dirs
     return output_dirs
