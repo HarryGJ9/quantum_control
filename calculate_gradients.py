@@ -45,18 +45,11 @@ def filter(dirs):
     # Initialise empty list of output directories
     output_dirs = []
 
-    # NEED TO CHANGE THIS PART, WANT TO ACTUALLY FIND THE FOLDERS CREATED IN THE LAST TWO MINUTES
-
-    # # Iterate over output folders and find those mose recently created, check that they are a directory
-    # for dir in dirs:
-    #     if dir.startswith(f'output-{year}-{month}-{day}-{hour}-{min}') and os.path.isdir(dir):
-    #         output_dirs.append(dir)
-    # # print(output_dirs)
-
+    # Iterate over the folders and add the most recent ones to a list of output- directories
     for dir in dirs:
-        if dir.startswith('output-') and os.path.isdir(dir):
+        if dir.startswith('output-') and os.path.isdir(dir): 
             dir_creation_time = os.path.getctime(dir)
-            if time.time() - dir_creation_time <= 120:
+            if time.time() - dir_creation_time <= 120: # Obtain all directories created in the last two minutes
                 output_dirs.append(dir)
     # print(output_dirs)
                 
@@ -143,10 +136,10 @@ print(dirs)
 sorted_output_dirs = filter(dirs)
 print(sorted_output_dirs)
 
-# # Call fidelities function to get an array of updated fidelities
-# updated_fidelities = fidelities(sorted_output_dirs)
-# # print(updated_fidelities)
-# # print((updated_fidelities[:,0] - updated_fidelities[:,1]) / (2))
+# Call fidelities function to get an array of updated fidelities
+updated_fidelities = fidelities(sorted_output_dirs)
+print(updated_fidelities)
+# print((updated_fidelities[:,0] - updated_fidelities[:,1]) / (2))
 
 # # Call calculate_gradient to obtain the gradient vector
 # gradient = calculate_gradient(updated_fidelities)
