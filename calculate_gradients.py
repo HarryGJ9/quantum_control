@@ -69,7 +69,7 @@ def fidelities(output_dirs):
     # Go into each folder -> open 'data' folder -> open 'data_formatted.data' -> save fidelity data in a numpy array
     fidelities = [] # Initialise an empty list to store lists of fidelity values for each file
     for output_dir in output_dirs:   # Iterate over each output- folder
-        path = os.path.join(spinchain_path, output_dir, "data")     # Specify the path to the 'data' folder
+        path = os.path.join(spinchain_path, output_dir, "data")   # Specify the path to the 'data' folder
         data_sets = os.listdir(path) # List each file in the 'data' folder
         for data_set in data_sets:   # Iterate over each file in the 'data' folder
             if data_set == "dynamics_formatted.data": # If the file is 'data_formatted.data' i.e. contains the fidelities
@@ -138,12 +138,12 @@ print(sorted_output_dirs)
 
 # Call fidelities function to get an array of updated fidelities
 updated_fidelities = fidelities(sorted_output_dirs)
-print(updated_fidelities)
+# print(updated_fidelities)
 # print((updated_fidelities[:,0] - updated_fidelities[:,1]) / (2))
 
 # # Call calculate_gradient to obtain the gradient vector
-# gradient = calculate_gradient(updated_fidelities)
-# print(gradient)
+gradient = calculate_gradient(updated_fidelities)
+print(gradient)
 
 # # Retrieve current times
 # year = current_time()[0]
