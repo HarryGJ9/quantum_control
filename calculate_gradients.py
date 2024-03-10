@@ -3,6 +3,7 @@
 
 import os
 import datetime
+import time
 import numpy as np
 
 # Specify spinchain directory path
@@ -44,12 +45,21 @@ def filter(dirs):
     # Initialise empty list of output directories
     output_dirs = []
 
-    # Iterate over output folders and find those mose recently created, check that they are a directory
+    # NEED TO CHANGE THIS PART, WANT TO ACTUALLY FIND THE FOLDERS CREATED IN THE LAST TWO MINUTES
+
+    # # Iterate over output folders and find those mose recently created, check that they are a directory
+    # for dir in dirs:
+    #     if dir.startswith(f'output-{year}-{month}-{day}-{hour}-{min}') and os.path.isdir(dir):
+    #         output_dirs.append(dir)
+    # # print(output_dirs)
+
     for dir in dirs:
-        full_path = os.path.join(spinchain_path, dir)
-        if dir.startswith(f'output-{year}-{month}-{day}-{hour}-{min}') and os.path.isdir(full_path):
-            output_dirs.append(dir)
-    # print(output_dirs)
+        if dir.startswith('output-') and os.path.isdir(dir):
+            dir_creation_time = os.path.getctime(dir)
+            if current_time() - dir_creation_time <= 120:
+                output_dirs.append(dir)
+    print(output_dirs)
+
 
     # Sort the output directories by time
     # sorted_output_dirs = sorted(output_dirs, key=lambda x: os.path.getmtime(x))
