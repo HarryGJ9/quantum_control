@@ -12,7 +12,6 @@ read initial_genome
 # initial=initial_site
 # final=final_site
 
-
 # Run spinnet -o on an initial genome 
 /home/hgjones9/spinchain/bin/spinnet -o "$initial_genome"
 
@@ -35,15 +34,6 @@ echo "$adjusted_genomes"
 cd /home/hgjones9/spinchain
 pwd
 
-# IFS="','" read ra elements <<< "$adjusted_genomes"
-
-# first_element=$(echo "$adjusted_genomes" | sed "s/'\([^']*\)'.*/\1/")
-# #test_genome_stripped=genome=$(echo "$string" | sed "s/'//g")
-
-# echo "$first_element"
-
-# bin/spinnet "<A|C>$first_element"
-
 
 ##################################################
 # RUN SPINNET ON EACH GENOME TO CALCUALTE DYNAMICS
@@ -65,6 +55,11 @@ done
 ###########################################################################
 
 python3 /home/hgjones9/quantum_control/calculate_gradients.py
+
+
+############################################
+# CALCULATE NEW COUPLINGS BY GRADIENT ASCENT
+############################################
 
 
 
