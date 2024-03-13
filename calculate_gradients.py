@@ -51,14 +51,15 @@ def filter(dirs):
             dir_creation_time = os.path.getctime(dir)
             if time.time() - dir_creation_time <= 120: # Obtain all directories created in the last two minutes
                 output_dirs.append(dir)
-    print(output_dirs)
+    # print(output_dirs)
                 
     # Remove 'output-latest' directory
     output_dirs.remove('output-latest')
+    print(output_dirs)
 
     # Sort the output directories by time
     sorted_output_dirs = output_dirs.sort(reverse=False, key=lambda x: os.path.getmtime(x))
-    # print(sorted_output_dirs)
+    print(sorted_output_dirs)
 
     return sorted_output_dirs
 
