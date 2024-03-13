@@ -58,7 +58,7 @@ def filter(dirs):
     # print(output_dirs)
 
     # Sort the output directories by time
-    sorted_output_dirs = output_dirs.sort(reverse=False, key=lambda x: os.path.getmtime(x))
+    # sorted_output_dirs = output_dirs.sort(reverse=False, key=lambda x: os.path.getmtime(x))
     # print(sorted_output_dirs)
 
     return output_dirs
@@ -230,19 +230,18 @@ sorted_output_dirs = filter(dirs)
 print(sorted_output_dirs)
 
 # Call fidelities function to get an array of updated fidelities
-# updated_fidelities = fidelities(sorted_output_dirs)
-# print(updated_fidelities)
-# print(updated_fidelities)
+updated_fidelities = fidelities(sorted_output_dirs)
+print(updated_fidelities)
 # print((updated_fidelities[:,0] - updated_fidelities[:,1]) / (2))
 
 # # Obtain max fidelities from each column (exclude time column)
-# max_fidelities, max_times = max_fidelity(updated_fidelities)
-# # print(max_fidelities)
-# # print(max_times)
+max_fidelities, max_times = max_fidelity(updated_fidelities)
+# print(max_fidelities)
+# print(max_times)
 
-# # # Call calculate_gradient to obtain the gradient vector
-# gradient = calculate_gradient(max_fidelities)
-# # print(gradient)
+# # Call calculate_gradient to obtain the gradient vector
+gradient = calculate_gradient(max_fidelities)
+print(gradient)
 
 # # Retrieve current times
 # year = current_time()[0]
