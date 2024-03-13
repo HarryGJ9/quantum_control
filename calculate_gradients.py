@@ -61,7 +61,7 @@ def filter(dirs):
     sorted_output_dirs = output_dirs.sort(reverse=False, key=lambda x: os.path.getmtime(x))
     # print(sorted_output_dirs)
 
-    return sorted_output_dirs
+    return output_dirs
 
 # Function which returns a 2D array of fidelity values for a set of output folders
 def fidelities(output_dirs):
@@ -230,8 +230,8 @@ sorted_output_dirs = filter(dirs)
 print(sorted_output_dirs)
 
 # Call fidelities function to get an array of updated fidelities
-updated_fidelities = fidelities(sorted_output_dirs)
-print(updated_fidelities)
+# updated_fidelities = fidelities(sorted_output_dirs)
+# print(updated_fidelities)
 # print(updated_fidelities)
 # print((updated_fidelities[:,0] - updated_fidelities[:,1]) / (2))
 
