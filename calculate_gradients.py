@@ -58,10 +58,9 @@ def filter(dirs):
 
     # Sort the output directories by time
     sorted_output_dirs = output_dirs.sort(reverse=False, key=lambda x: os.path.getmtime(x))
-    print(sorted_output_dirs)
+    # print(sorted_output_dirs)
 
-    # return sorted_output_dirs
-    return output_dirs
+    return sorted_output_dirs
 
 # Function which returns a 2D array of fidelity values for a set of output folders
 def fidelities(output_dirs):
@@ -226,11 +225,11 @@ dirs = list_dirs(spinchain_path)
 # print(dirs)
 
 # Call filter function to get the relevant output- directories, filtered by time
-# sorted_output_dirs = filter(dirs)
+sorted_output_dirs = filter(dirs)
 # print(sorted_output_dirs)
 
 # Call fidelities function to get an array of updated fidelities
-updated_fidelities = fidelities(dirs)
+updated_fidelities = fidelities(sorted_output_dirs)
 # print(updated_fidelities)
 # print((updated_fidelities[:,0] - updated_fidelities[:,1]) / (2))
 
