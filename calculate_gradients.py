@@ -229,10 +229,11 @@ print(dirs)
 sorted_output_dirs = filter(dirs)
 print(sorted_output_dirs)
 
-# # Call fidelities function to get an array of updated fidelities
-# updated_fidelities = fidelities(sorted_output_dirs)
-# # print(updated_fidelities)
-# # print((updated_fidelities[:,0] - updated_fidelities[:,1]) / (2))
+# Call fidelities function to get an array of updated fidelities
+updated_fidelities = fidelities(sorted_output_dirs)
+print(updated_fidelities)
+# print(updated_fidelities)
+# print((updated_fidelities[:,0] - updated_fidelities[:,1]) / (2))
 
 # # Obtain max fidelities from each column (exclude time column)
 # max_fidelities, max_times = max_fidelity(updated_fidelities)
