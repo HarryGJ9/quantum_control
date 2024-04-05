@@ -120,19 +120,19 @@ dirs = list_dirs(spinchain_path)
 
 # Find most recent gradient.txt file
 gradient_output_file = get_gradient_file(dirs)
-# print(gradient_output_file)
+print(f"Gradient output file: {gradient_output_file}")
 
 # Open gradient.txt file and retrieve the gradient vector as a numpy array
 gradient_arr = open_gradient(gradient_output_file)
-# print(gradient_arr)
+print(f"Gradient vector: {gradient_arr}")
 
 # Retrieve optimised couplings from genome_adjuster.py 
 optimised_couplings_lst, optimised_couplings_arr = get_couplings()
-print(optimised_couplings_lst)
+print(f"GA optimised couplings: {optimised_couplings_lst}")
 
 # Update couplings using gradient ascent
 new_couplings_lst = update_couplings(gradient_arr, optimised_couplings_arr)
-print(new_couplings_lst)
+print(f"New couplings: {new_couplings_lst}")
 # print(type(new_couplings))
 
 
