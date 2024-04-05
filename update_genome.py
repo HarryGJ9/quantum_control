@@ -62,9 +62,10 @@ from calculate_gradients import list_dirs
 def get_gradient_file(dirs):
 
     for file in dirs:
-        file_creation_time = os.path.getctime(file)
-        if time.time() - file_creation_time <= 60:
-            gradient_output = file
+        if file.startswith('gradient-'):
+            file_creation_time = os.path.getctime(file)
+            if time.time() - file_creation_time <= 60:
+                gradient_output = file
     return gradient_output
 
 # Opens gradient.txt file and convert the gradient list into a numpy array
