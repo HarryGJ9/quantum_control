@@ -93,7 +93,7 @@ def get_couplings():
     return optimised_couplings_lst, optimised_couplings_arr
 
 # Updates couplings using gradient ascent
-def update_couplings(gradient_arr, optimised_couplings_arr, stepsize=1000):
+def update_couplings(gradient_arr, optimised_couplings_arr, stepsize=1e7):
     # Calculate new couplings by ascending gradient
     new_couplings_lst = optimised_couplings_arr + stepsize * gradient_arr
     # print(new_couplings_lst)
@@ -131,8 +131,8 @@ optimised_couplings_lst, optimised_couplings_arr = get_couplings()
 print(optimised_couplings_lst)
 
 # Update couplings using gradient ascent
-new_couplings = update_couplings(gradient_arr, optimised_couplings_arr)
-print(new_couplings)
+new_couplings_lst = update_couplings(gradient_arr, optimised_couplings_arr)
+print(new_couplings_lst)
 # print(type(new_couplings))
 
 
