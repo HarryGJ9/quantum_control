@@ -229,33 +229,33 @@ dirs = list_dirs(spinchain_path)
 
 # Call filter function to get the relevant output- directories, filtered by time
 sorted_output_dirs = filter(dirs)
-# print(sorted_output_dirs)
+print(sorted_output_dirs)
 
 # Call fidelities function to get an array of updated fidelities
 updated_fidelities = fidelities(sorted_output_dirs)
-# print(updated_fidelities)
+print(updated_fidelities)
 # print((updated_fidelities[:,0] - updated_fidelities[:,1]) / (2))
 
 # Obtain max fidelities from each column (exclude time column)
 max_fidelities, max_times = max_fidelity(updated_fidelities)
-# print(max_fidelities)
+print(max_fidelities)
 # print(max_times)
 
 # Call calculate_gradient to obtain the gradient vector
 gradient = calculate_gradient(max_fidelities)
-# print(gradient)
+print(gradient)
 
-# Retrieve current times
-year = current_time()[0]
-month = current_time()[1]
-day = current_time()[2]
-hour = current_time()[3]
-min = current_time()[4]
-sec = current_time()[5]
+# # Retrieve current times
+# year = current_time()[0]
+# month = current_time()[1]
+# day = current_time()[2]
+# hour = current_time()[3]
+# min = current_time()[4]
+# sec = current_time()[5]
 
-# Write the gradient vector out to a .txt file
-with open(f'/home/hgjones9/spinchain/gradient-{year}-{month}-{day}-{hour}-{min}-{sec}.txt', 'w') as file:
-    file.write(str(gradient))
+# # Write the gradient vector out to a .txt file
+# with open(f'/home/hgjones9/spinchain/gradient-{year}-{month}-{day}-{hour}-{min}-{sec}.txt', 'w') as file:
+#     file.write(str(gradient))
 
 
 
