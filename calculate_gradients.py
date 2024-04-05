@@ -245,13 +245,13 @@ max_fidelities, max_times = max_fidelity(updated_fidelities)
 gradient = calculate_gradient(max_fidelities)
 # print(gradient)
 
-# # Retrieve current times
-# year = current_time()[0]
-# month = current_time()[1]
-# day = current_time()[2]
-# hour = current_time()[3]
-# min = current_time()[4]
-# sec = current_time()[5]
+# Retrieve current times
+year = current_time()[0]
+month = current_time()[1]
+day = current_time()[2]
+hour = current_time()[3]
+min = current_time()[4]
+sec = current_time()[5]
 
 # Write the gradient vector out to a .txt file
 with open(f'/home/hgjones9/spinchain/gradient-{year}-{month}-{day}-{hour}-{min}-{sec}.txt', 'w') as file:
