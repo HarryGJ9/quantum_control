@@ -90,7 +90,7 @@ def get_couplings():
     
     return optimised_couplings_arr
 
-# Updates couplings using gradient descent
+# Updates couplings using gradient ascent
 def update_couplings(gradient_arr, optimised_couplings_arr, stepsize=1000):
     # Calculate new couplings by ascending gradient
     new_couplings_arr = optimised_couplings_arr + stepsize * gradient_arr
@@ -100,6 +100,10 @@ def update_couplings(gradient_arr, optimised_couplings_arr, stepsize=1000):
     new_couplings_arr = np.array([round(float(coupling)) for coupling in new_couplings_arr])
 
     return new_couplings_arr
+
+# Reconstruct updated genome based on new couplings
+
+
 
 
 ################
@@ -119,16 +123,16 @@ gradient_output_file = get_gradient_file(dirs)
 
 # Open gradient.txt file and retrieve the gradient vector as a numpy array
 gradient_arr = open_gradient(gradient_output_file)
-print(gradient_arr)
+# print(gradient_arr)
 
 # Retrieve optimised couplings from genome_adjuster.py 
 optimised_couplings_arr = get_couplings()
-print(optimised_couplings_arr)
+# print(optimised_couplings_arr)
 
 # Update couplings using gradient ascent
 new_couplings = update_couplings(gradient_arr, optimised_couplings_arr)
-print(new_couplings)
-print(type(new_couplings))
+# print(new_couplings)
+# print(type(new_couplings))
 
 
 
