@@ -72,12 +72,15 @@ output_path = r'/home/hgjones9/quantum_control/output-latest/genetic.out'
 
 # Extract full optimised genome (inclduing <i|f> directive) from the GA output
 genome_full = find_genome(output_path)
+print(genome_full)
 
 # Adjust the couplings in preparation of derivative calculation
 genome, couplings_plus_h, couplings_minus_h = adjust_couplings(genome_full)
+print(genome)
 
 # Reconstruct genomes based on the adjusted couplings
 adjusted_genomes = construct_new_genomes(genome, couplings_plus_h, couplings_minus_h)
+print(adjusted_genomes)
 
 # Write the new genome and new couplings to a .txt file
 generate_output(genome, adjust_couplings)
