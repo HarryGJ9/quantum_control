@@ -131,8 +131,8 @@ optimised_couplings_arr = get_couplings()
 
 # Update couplings using gradient ascent
 new_couplings = update_couplings(gradient_arr, optimised_couplings_arr)
-# print(new_couplings)
-# print(type(new_couplings))
+print(new_couplings)
+print(type(new_couplings))
 
 
 
