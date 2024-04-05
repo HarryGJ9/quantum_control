@@ -151,7 +151,7 @@ def fidelities(output_dirs):
 # Function to calculate the NxM matrix of central differences 
 # N = number of timesteps
 # M = central differences 
-def calculate_gradient(fidelities, h=1):
+def calculate_gradient(fidelities, h=1e-3):
 
     # Obtain number of columns to iterate over
     num_rows, num_columns = fidelities.shape
