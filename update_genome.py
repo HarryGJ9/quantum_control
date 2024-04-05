@@ -10,48 +10,48 @@ from calculate_gradients import list_dirs
 # TEST
 ##########################
 
-# Test spinchain path
-spinchain_path = 'C:\\Users\harry\quantum_control\outputs_practice'
+# # Test spinchain path
+# spinchain_path = 'C:\\Users\harry\quantum_control\outputs_practice'
 
-# Specify gradient output file from practice directory
-gradient_output = os.path.join(spinchain_path, 'gradient-2024-3-13-16-37-22.txt') 
-print(gradient_output)
+# # Specify gradient output file from practice directory
+# gradient_output = os.path.join(spinchain_path, 'gradient-2024-3-13-16-37-22.txt') 
+# print(gradient_output)
 
-# Open gradient.txt file and convert the gradient list into a numpy array
-def open_gradient(gradient_output):
-    # Open gradient.txt file and output the data as a list
-    with open(gradient_output, 'r') as file:
-        gradient_output = file.read()
+# # Open gradient.txt file and convert the gradient list into a numpy array
+# def open_gradient(gradient_output):
+#     # Open gradient.txt file and output the data as a list
+#     with open(gradient_output, 'r') as file:
+#         gradient_output = file.read()
 
-    # Convert data from the .txt file into an array
-    gradient_lst = ast.literal_eval(gradient_output) # Convert the data from a string to a list
-    gradient_arr = np.array(gradient_lst) # Convert list to an array
-    # print(gradient_arr)
+#     # Convert data from the .txt file into an array
+#     gradient_lst = ast.literal_eval(gradient_output) # Convert the data from a string to a list
+#     gradient_arr = np.array(gradient_lst) # Convert list to an array
+#     # print(gradient_arr)
 
-    return gradient_arr
+#     return gradient_arr
 
 
-gradient_arr = open_gradient(gradient_output)
-print(gradient_arr)
+# gradient_arr = open_gradient(gradient_output)
+# print(gradient_arr)
 
-# Retrieve optimised couplings (PRACTICE)
-optimised_couplings = ['349', '349']
-optimised_couplings_arr = np.array([int(coupling) for coupling in optimised_couplings])
-print(optimised_couplings_arr)
+# # Retrieve optimised couplings (PRACTICE)
+# optimised_couplings = ['349', '349']
+# optimised_couplings_arr = np.array([int(coupling) for coupling in optimised_couplings])
+# print(optimised_couplings_arr)
 
-def update_couplings(gradient_arr, optimised_couplings_arr, stepsize=100000):
+# def update_couplings(gradient_arr, optimised_couplings_arr, stepsize=100000):
 
-    # Calculate new couplings by ascending gradient
-    new_couplings_arr = optimised_couplings_arr + stepsize * gradient_arr
-    print(new_couplings_arr)
+#     # Calculate new couplings by ascending gradient
+#     new_couplings_arr = optimised_couplings_arr + stepsize * gradient_arr
+#     print(new_couplings_arr)
 
-    # Convert new couplings to an array of integers
-    new_couplings_arr = np.array([round(float(coupling)) for coupling in new_couplings_arr])
+#     # Convert new couplings to an array of integers
+#     new_couplings_arr = np.array([round(float(coupling)) for coupling in new_couplings_arr])
 
-    return new_couplings_arr
+#     return new_couplings_arr
 
-updated_couplings = update_couplings(gradient_arr, optimised_couplings_arr)
-print(updated_couplings)
+# updated_couplings = update_couplings(gradient_arr, optimised_couplings_arr)
+# print(updated_couplings)
 
 
 ##############
