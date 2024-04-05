@@ -35,8 +35,8 @@ h = 10 # Derivative stepsize (arbitrary)
 couplings_plus_h = [coupling + h for coupling in couplings]
 couplings_minus_h = [coupling - h for coupling in couplings]
 
-print(f"Couplings + h = {couplings_plus_h}")
-print(f"Couplings - h = {couplings_minus_h}")
+# print(f"Couplings + h = {couplings_plus_h}")
+# print(f"Couplings - h = {couplings_minus_h}")
 
 
 ##################################################
@@ -46,7 +46,7 @@ print(f"Couplings - h = {couplings_minus_h}")
 # Split genome into a list of characters and couplings
 genome_split = re.split(r'([A-Za-z]+|\d+)', genome)
 genome_list = [index for index in genome_split if index]
-print(f"Genomes split into characters and couplings = {genome_list}")
+# print(f"Genomes split into characters and couplings = {genome_list}")
 
 
 # Compile new genomes based on adjusted couplings and letter characters of previous genome
@@ -67,7 +67,7 @@ for index, item in enumerate(genome_split):
         # Add adjusted genomes to a single list
         adjusted_genomes.extend([genome_plus_h, genome_minus_h])
 
-print(f"Adjusted genomes: {adjusted_genomes}")
+# print(f"Adjusted genomes: {adjusted_genomes}")
 
 
 # Write all relevant data to an output .txt file

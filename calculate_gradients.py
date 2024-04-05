@@ -156,7 +156,7 @@ def calculate_gradient(fidelities, h=1):
 
     # Obtain number of columns to iterate over
     num_rows, num_columns = fidelities.shape
-    print(num_columns)
+    # print(num_columns)
     # print(num_columns)
 
     # Initialise gradient vector
