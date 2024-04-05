@@ -220,6 +220,10 @@ def calculate_gradient(fidelities, h=1):
     return gradient
 
 
+###############
+# RUN PROGRAMME 
+###############
+
 # Call list_dirs to obtain all output- directories under spinchain
 dirs = list_dirs(spinchain_path)
 # print(dirs)
