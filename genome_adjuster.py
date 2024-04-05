@@ -83,7 +83,7 @@ adjusted_genomes = construct_new_genomes(genome, couplings_plus_h, couplings_min
 print(adjusted_genomes)
 
 # Write the new genome and new couplings to a .txt file
-generate_output(genome, adjust_couplings)
+generate_output(genome, adjusted_genomes)
 
 
 #########################
