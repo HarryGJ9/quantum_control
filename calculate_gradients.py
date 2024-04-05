@@ -148,7 +148,6 @@ def fidelities(output_dirs):
 
     return fidelity_time_arr
 
-
 # Function to calculate the NxM matrix of central differences 
 # N = number of timesteps
 # M = central differences 

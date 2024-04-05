@@ -3,7 +3,9 @@ import numpy as np
 import time
 import datetime
 import ast
-from genome_adjuster import couplings
+import genome_adjuster
+# from genome_adjuster import couplings
+# from genome_adjuster import genome
 from calculate_gradients import list_dirs
 
 ##########################
@@ -85,7 +87,7 @@ def open_gradient(gradient_output):
 def get_couplings():
     
     # Retrieve coupling values
-    optimised_couplings = couplings
+    optimised_couplings = genome_adjuster.couplings
     optimised_couplings_arr = np.array(optimised_couplings)
     
     return optimised_couplings_arr
@@ -93,15 +95,22 @@ def get_couplings():
 # Updates couplings using gradient ascent
 def update_couplings(gradient_arr, optimised_couplings_arr, stepsize=1000):
     # Calculate new couplings by ascending gradient
-    new_couplings_arr = optimised_couplings_arr + stepsize * gradient_arr
-    print(new_couplings_arr)
+    new_couplings_lst = optimised_couplings_arr + stepsize * gradient_arr
+    # print(new_couplings_lst)
 
-    # Convert new couplings to an array of integers
-    new_couplings_arr = np.array([round(float(coupling)) for coupling in new_couplings_arr])
+    # Convert new couplings to a list of integers
+    new_couplings_lst = [round(float(coupling)) for coupling in new_couplings_lst]
 
-    return new_couplings_arr
+    return new_couplings_lst
 
 # Reconstruct updated genome based on new couplings
+# def reconstruct_genomes(new_couplings):
+
+
+
+
+
+
 
 
 
@@ -132,7 +141,7 @@ optimised_couplings_arr = get_couplings()
 # Update couplings using gradient ascent
 new_couplings = update_couplings(gradient_arr, optimised_couplings_arr)
 print(new_couplings)
-print(type(new_couplings))
+# print(type(new_couplings))
 
 
 

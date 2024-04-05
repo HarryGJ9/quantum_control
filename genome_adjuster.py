@@ -52,7 +52,7 @@ def construct_new_genomes(genome, couplings_plus_h, couplings_minus_h):
             # Add adjusted genomes to a single list
             adjusted_genomes.extend([genome_plus_h, genome_minus_h])
     
-    return adjusted_genomes
+    return genome_list, adjusted_genomes
 
 # Write the adjusted genomes to an output.txt file
 def generate_output(genome, adjusted_genomes):
@@ -79,7 +79,7 @@ genome, couplings, couplings_plus_h, couplings_minus_h = adjust_couplings(genome
 # print(genome)
 
 # Reconstruct genomes based on the adjusted couplings
-adjusted_genomes = construct_new_genomes(genome, couplings_plus_h, couplings_minus_h)
+genome_list, adjusted_genomes = construct_new_genomes(genome, couplings_plus_h, couplings_minus_h)
 # print(adjusted_genomes)
 
 # Write the new genome and adjusted couplings to a .txt file
