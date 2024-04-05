@@ -6,7 +6,7 @@ import ast
 import genome_adjuster
 # from genome_adjuster import couplings
 # from genome_adjuster import genome
-from calculate_gradients import list_dirs
+
 
 ##########################
 # TEST
@@ -59,6 +59,11 @@ from calculate_gradients import list_dirs
 ##############
 # REAL
 ##############
+
+# List all folders under a specific path
+def list_dirs(path):
+    dirs = os.listdir(path)
+    return dirs
 
 # Looks for most recent gradient output.txt file
 def get_gradient_file(dirs):
