@@ -148,31 +148,31 @@ def fidelities(output_dirs):
 
     return fidelity_time_arr
 
-# Function to calculate the NxM matrix of central differences 
-# N = number of timesteps
-# M = central differences 
-def calculate_gradient(fidelities, h=10):
+# # Function to calculate the NxM matrix of central differences 
+# # N = number of timesteps
+# # M = central differences 
+# def calculate_gradient(fidelities, h=10):
 
-    # Obtain number of columns to iterate over
-    num_rows, num_columns = fidelities.shape
-    # print(num_columns)
-    # print(num_columns)
+#     # Obtain number of columns to iterate over
+#     num_rows, num_columns = fidelities.shape
+#     # print(num_columns)
+#     # print(num_columns)
 
-    # Initialise gradient vector
-    gradient = []
+#     # Initialise gradient vector
+#     gradient = []
 
-    # Iterate over columns and calculate the central difference for each timestep
-    for i in range(0, num_columns-1,2):
-        central_diff = (fidelities[:,i] - fidelities[:,i+1]) / (2 * h)
-        # print(fidelities[:,i])
-        # print(fidelities[:,i+1])
-        # print(central_diff)
-        gradient.append(central_diff)
+#     # Iterate over columns and calculate the central difference for each timestep
+#     for i in range(0, num_columns-1,2):
+#         central_diff = (fidelities[:,i] - fidelities[:,i+1]) / (2 * h)
+#         # print(fidelities[:,i])
+#         # print(fidelities[:,i+1])
+#         # print(central_diff)
+#         gradient.append(central_diff)
 
-    # Convert list of lists into an array
-    gradient_array = np.array(gradient).T
+#     # Convert list of lists into an array
+#     gradient_array = np.array(gradient).T
 
-    return gradient_array
+#     return gradient_array
 
 # Function which returns the maximum fidelity and corresponding time for each column of fidelities
 def max_fidelity(fidelities):
@@ -202,7 +202,7 @@ def max_fidelity(fidelities):
     return max_fidelities, time
 
 # Function which calculates the gradient through central difference of each pair of fidelities
-def calculate_gradient(fidelities, h=1):
+def calculate_gradient(fidelities, h=10):
 
     # Obtain number of columns
     num_columns = len(fidelities)
