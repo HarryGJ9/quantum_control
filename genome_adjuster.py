@@ -25,7 +25,7 @@ def adjust_couplings(genome_full, h=10):
     couplings_plus_h = [coupling + h for coupling in couplings]
     couplings_minus_h = [coupling - h for coupling in couplings]
 
-    return genome, couplings_plus_h, couplings_minus_h
+    return genome, couplings, couplings_plus_h, couplings_minus_h
 
 # Constructs new genomes based on the adjusted couplings
 def construct_new_genomes(genome, couplings_plus_h, couplings_minus_h):
@@ -75,7 +75,7 @@ genome_full = find_genome(output_path)
 # print(genome_full)
 
 # Adjust the couplings in preparation of derivative calculation
-genome, couplings_plus_h, couplings_minus_h = adjust_couplings(genome_full)
+genome, couplings, couplings_plus_h, couplings_minus_h = adjust_couplings(genome_full)
 # print(genome)
 
 # Reconstruct genomes based on the adjusted couplings
