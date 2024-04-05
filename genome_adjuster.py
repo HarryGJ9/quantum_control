@@ -14,7 +14,7 @@ def find_genome(output_path):
     return genome_full
 
 # Extracts the couplings from the genome and adjusts couplings
-def adjust_couplings(genome_full, h=10):
+def adjust_couplings(genome_full, h=100):
     # Obtain couplings from the genome
     genome = genome_full.split('#')[0].split('>')[1].replace('"', '') # Remove the <i|f> directive and any digit after the '#' 
     couplings = re.findall(r'\d+', genome) # Find all couplings

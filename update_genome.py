@@ -41,7 +41,7 @@ import genome_adjuster
 # optimised_couplings_arr = np.array([int(coupling) for coupling in optimised_couplings])
 # print(optimised_couplings_arr)
 
-# def update_couplings(gradient_arr, optimised_couplings_arr, stepsize=100000):
+# def update_couplings(gradient_arr, optimised_couplings_arr, stepsize=):
 
 #     # Calculate new couplings by ascending gradient
 #     new_couplings_arr = optimised_couplings_arr + stepsize * gradient_arr
