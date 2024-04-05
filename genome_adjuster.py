@@ -31,7 +31,7 @@ couplings = [int(coupling) for coupling in couplings] # Convert each coupling to
 print(f"Couplings = {couplings}")
 
 # For each coupling, calculate (coupling + h) and (coupling - h) and store them in a lsit
-h = 5 # Derivative stepsize
+h = 10 # Derivative stepsize (arbitrary)
 couplings_plus_h = [coupling + h for coupling in couplings]
 couplings_minus_h = [coupling - h for coupling in couplings]
 

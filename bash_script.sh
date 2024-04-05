@@ -30,10 +30,8 @@ adjusted_genomes=$(grep -oP "Adjusted genomes = \[\K.*(?=\])" "$output_file")
 # Print the list of adjusted genomes
 echo "$adjusted_genomes"
 
-
 cd /home/hgjones9/spinchain
 pwd
-
 
 ##################################################
 # RUN SPINNET ON EACH GENOME TO CALCUALTE DYNAMICS
@@ -56,11 +54,11 @@ done
 
 python3 /home/hgjones9/quantum_control/calculate_gradients.py
 
-
 ############################################
 # CALCULATE NEW COUPLINGS BY GRADIENT ASCENT
 ############################################
 
+python3 /home/hgjones9/quantum_control/calculate_gradients.py
 
 
 
