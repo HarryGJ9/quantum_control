@@ -170,18 +170,25 @@ print(f"New couplings: {new_couplings_lst}")
 
 # Reconstruct new genome based on grad ascent updated couplings
 new_genome = reconstruct_genome(genome_adjuster.genome, new_couplings_lst)
+print(new_genome)
 
-# Retrieve current times
-year = current_time()[0]
-month = current_time()[1]
-day = current_time()[2]
-hour = current_time()[3]
-min = current_time()[4]
-sec = current_time()[5]
+# Write new genome to an output .txt file
+with open(f'/home/hgjones9/spinchain/new_genome') as file:
+    file.write(new_genome)
 
-# Write new genome to an output file
-with open(f'/home/hgjones9/spinchain/new_genome-{year}-{month}-{day}-{hour}-{min}-{sec}.txt', 'w') as file:
-    file.write(str(new_genome))
+# # Retrieve current times
+# year = current_time()[0]
+# month = current_time()[1]
+# day = current_time()[2]
+# hour = current_time()[3]
+# min = current_time()[4]
+# sec = current_time()[5]
+
+# # Write new genome to an output file
+# with open(f'/home/hgjones9/spinchain/new_genome-{year}-{month}-{day}-{hour}-{min}-{sec}.txt', 'w') as file:
+#     file.write(str(new_genome))
+
+
 
 
 
