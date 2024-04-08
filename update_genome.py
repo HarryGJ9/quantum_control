@@ -144,37 +144,37 @@ def current_time():
 # RUN PROGRAMME
 ################
 
-# Specify spinchain path
+# Specify quantum_control path
 quant_cont_path = r'/home/hgjones9/quantum_control'
 
-# List folders under spinchain_path
+# List folders under quantum_control
 dirs = list_dirs(quant_cont_path)
-# print(dirs)
+print(dirs)
 
 # Find most recent gradient.txt file
 gradient_output_file = get_gradient_file(dirs)
 print(f"Gradient output file: {gradient_output_file}")
 
-# Open gradient.txt file and retrieve the gradient vector as a numpy array
-gradient_arr = open_gradient(gradient_output_file)
-print(f"Gradient vector: {gradient_arr}")
+# # Open gradient.txt file and retrieve the gradient vector as a numpy array
+# gradient_arr = open_gradient(gradient_output_file)
+# print(f"Gradient vector: {gradient_arr}")
 
-# Retrieve optimised couplings from genome_adjuster.py 
-optimised_couplings_lst, optimised_couplings_arr = get_couplings()
-print(f"GA optimised couplings: {optimised_couplings_lst}")
+# # Retrieve optimised couplings from genome_adjuster.py 
+# optimised_couplings_lst, optimised_couplings_arr = get_couplings()
+# print(f"GA optimised couplings: {optimised_couplings_lst}")
 
-# Update couplings using gradient ascent
-new_couplings_lst = update_couplings(gradient_arr, optimised_couplings_arr)
-print(f"New couplings: {new_couplings_lst}")
-# print(type(new_couplings))
+# # Update couplings using gradient ascent
+# new_couplings_lst = update_couplings(gradient_arr, optimised_couplings_arr)
+# print(f"New couplings: {new_couplings_lst}")
+# # print(type(new_couplings))
 
-# Reconstruct new genome based on grad ascent updated couplings
-new_genome = reconstruct_genome(genome_adjuster.genome, new_couplings_lst)
-print(new_genome)
+# # Reconstruct new genome based on grad ascent updated couplings
+# new_genome = reconstruct_genome(genome_adjuster.genome, new_couplings_lst)
+# print(new_genome)
 
-# Write new genome to an output .txt file
-with open(f'/home/hgjones9/quantum_control/new_genome.txt', 'w') as file:
-    file.write(new_genome)
+# # Write new genome to an output .txt file
+# with open(f'/home/hgjones9/quantum_control/new_genome.txt', 'w') as file:
+#     file.write(new_genome)
 
 # # Retrieve current times
 # year = current_time()[0]

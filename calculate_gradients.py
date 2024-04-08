@@ -223,7 +223,7 @@ def calculate_gradient(fidelities, h=100):
 # RUN PROGRAMME 
 ###############
 
-# Call list_dirs to obtain all output- directories under spinchain
+# Call list_dirs to obtain all output- directories under quantum_control
 dirs = list_dirs(quant_cont_path)
 # print(dirs)
 
