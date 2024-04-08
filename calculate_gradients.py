@@ -49,7 +49,7 @@ def filter(dirs):
     for dir in dirs:
         if dir.startswith('output-') and os.path.isdir(dir): 
             dir_creation_time = os.path.getctime(dir)
-            if time.time() - dir_creation_time <= 13: # Obtain all directories created in the last two minutes
+            if time.time() - dir_creation_time <= 15: # Obtain all directories created in the last two minutes
                 output_dirs.append(dir)
     # print(output_dirs)
                 
