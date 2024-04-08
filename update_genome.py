@@ -173,7 +173,7 @@ new_genome = reconstruct_genome(genome_adjuster.genome, new_couplings_lst)
 print(new_genome)
 
 # Write new genome to an output .txt file
-with open(f'/home/hgjones9/spinchain/new_genome.txt', 'w') as file:
+with open(f'/home/hgjones9/quantum_control/new_genome.txt', 'w') as file:
     file.write(new_genome)
 
 # # Retrieve current times
