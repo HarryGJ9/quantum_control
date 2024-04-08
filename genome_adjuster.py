@@ -64,7 +64,7 @@ def generate_output(genome, adjusted_genomes):
     # Create directory if it doesn't exist
     os.makedirs(output_dir, exist_ok=True)
     
-    with open(os.join(output_dir, 'initial_adjusted_genome.txt'), 'w') as file:
+    with open(os.path.join(output_dir, 'initial_adjusted_genome.txt'), 'w') as file:
         # Write content to the file
         file.write(f"GA optimised genome = {genome}\n")
         file.write(f"Adjusted genomes = {adjusted_genomes}\n")
