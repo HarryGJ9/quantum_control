@@ -18,6 +18,9 @@ read initial_genome
 # At this point, there is an output file located at /home/hgjones9/quantum_control/output_latest/genetic.out"
 # This file contains the optimised genome "<i|f>AB...BC..."
 
+cd /home/hgjones9/quantum_control
+pwd
+
 # Obtain the optimised output genome and make changes using genome_adjuster.py
 python3 /home/hgjones9/quantum_control/genome_adjuster.py
 
