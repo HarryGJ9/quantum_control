@@ -151,9 +151,9 @@ quant_cont_path = r'/home/hgjones9/quantum_control'
 dirs = list_dirs(quant_cont_path)
 print(dirs)
 
-# Find most recent gradient.txt file
-gradient_output_file = get_gradient_file(dirs)
-print(f"Gradient output file: {gradient_output_file}")
+# # Find most recent gradient.txt file
+# gradient_output_file = get_gradient_file(dirs)
+# print(f"Gradient output file: {gradient_output_file}")
 
 # # Open gradient.txt file and retrieve the gradient vector as a numpy array
 # gradient_arr = open_gradient(gradient_output_file)
