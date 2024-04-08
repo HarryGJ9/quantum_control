@@ -70,7 +70,7 @@ def list_dirs(path):
 def get_gradient_file(dirs):
 
     for file in dirs:
-        if file.startswith('gradient'):
+        if file.startswith('gradient-'):
             file_creation_time = os.path.getctime(file)
             if time.time() - file_creation_time <= 60:
                 gradient_output = file

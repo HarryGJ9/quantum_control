@@ -59,7 +59,7 @@ def construct_new_genomes(genome, couplings_plus_h, couplings_minus_h):
 def generate_output(genome, adjusted_genomes):
 
     # Specify output directory
-    output_dir = '/home/hgjones9/spinchain/'
+    output_dir = '/home/hgjones9/quantum_control/'
 
     # Create directory if it doesn't exist
     os.makedirs(output_dir, exist_ok=True)
