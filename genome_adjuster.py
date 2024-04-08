@@ -90,7 +90,7 @@ genome_list, adjusted_genomes = construct_new_genomes(genome, couplings_plus_h, 
 print(f"Adjusted genomes: {adjusted_genomes}")
 
 # Write the original optimised genome and adjusted couplings to a .txt file
-with open('/home/hgjones9/quantum_control/initial_adjusted_genome.txt', 'w') as file:
+with open('/home/hgjones9/quantum_control/initial_adjusted_genomes.txt', 'w') as file:
     # Write content to the file
     file.write(f"GA optimised genome = {genome}\n")
     file.write(f"Adjusted genomes = {adjusted_genomes}\n")

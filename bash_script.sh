@@ -21,31 +21,31 @@ read initial_genome
 # Obtain the optimised output genome and make changes using genome_adjuster.py
 python3 /home/hgjones9/quantum_control/genome_adjuster.py
 
-# # Specify output file of adjusted genomes
-# output_file='/home/hgjones9/quantum_control/initial_adjusted_genome.txt'
+# Specify output file of adjusted genomes
+output_file='/home/hgjones9/quantum_control/initial_adjusted_genomes.txt'
 
-# # Search output.txt for the line containing the list of adjusted genomes and print them as a list
-# adjusted_genomes=$(grep -oP "Adjusted genomes = \[\K.*(?=\])" "$output_file")
+# Search output.txt for the line containing the list of adjusted genomes and print them as a list
+adjusted_genomes=$(grep -oP "Adjusted genomes = \[\K.*(?=\])" "$output_file")
 
-# # Print the list of adjusted genomes
-# echo "$adjusted_genomes"
+# Print the list of adjusted genomes
+echo "$adjusted_genomes"
 
-# # # cd /home/hgjones9/spinchain
-# # # pwd
+# cd /home/hgjones9/spinchain
+# pwd
 
-# ##################################################
-# # RUN SPINNET ON EACH GENOME TO CALCUALTE DYNAMICS
-# ##################################################
+##################################################
+# RUN SPINNET ON EACH GENOME TO CALCUALTE DYNAMICS
+##################################################
 
-# # Loop over the list of adjusted genoms and run spinnet on each genome
-# for string in $adjusted_genomes
-# do
-#     genome=$(echo "$string" | sed "s/'\([^']*\)'.*/\1/") # Remove the individual quotation marks from each genome
+# Loop over the list of adjusted genoms and run spinnet on each genome
+for string in $adjusted_genomes
+do
+    genome=$(echo "$string" | sed "s/'\([^']*\)'.*/\1/") # Remove the individual quotation marks from each genome
 
-#     # Call spinnet for each genome, generating a different output directory for each genome
-#     /home/hgjones9/spinchain/bin/spinnet "<A|C>$genome"
-#     echo "<A|C>$genome"
-# done
+    # Call spinnet for each genome, generating a different output directory for each genome
+    /home/hgjones9/spinchain/bin/spinnet "<A|C>$genome"
+    echo "<A|C>$genome"
+done
 
 
 # ###########################################################################
