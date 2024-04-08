@@ -74,8 +74,8 @@ def fidelities(output_dirs):
     for output_dir in output_dirs:
 
         # Specify relevant paths
-        data_path = os.path.join(spinchain_path, output_dir, "data")
-        spinchain_out_path = os.path.join(spinchain_path, output_dir, "spinchain.out") 
+        data_path = os.path.join(quant_cont_path, output_dir, "data")
+        spinchain_out_path = os.path.join(quant_cont_path, output_dir, "spinchain.out") 
         
         # List data_sets in output-folder
         data_sets = os.listdir(data_path)
@@ -224,7 +224,7 @@ def calculate_gradient(fidelities, h=100):
 ###############
 
 # Call list_dirs to obtain all output- directories under spinchain
-dirs = list_dirs(spinchain_path)
+dirs = list_dirs(quant_cont_path)
 # print(dirs)
 
 # Call filter function to get the relevant output- directories, filtered by time
