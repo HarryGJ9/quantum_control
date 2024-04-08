@@ -127,6 +127,18 @@ def reconstruct_genome(origin_genome, new_couplings):
 
     return new_genome
 
+# Returns current date and time (used to write file)
+def current_time():
+    
+    current_time = datetime.datetime.now()
+    year = current_time.year
+    month = current_time.month
+    day = current_time.day
+    hour = current_time.hour
+    min = current_time.minute
+    sec = current_time.second
+
+    return year, month, day, hour, min, sec
 
 ################
 # RUN PROGRAMME
@@ -158,6 +170,18 @@ print(f"New couplings: {new_couplings_lst}")
 
 # Reconstruct new genome based on grad ascent updated couplings
 new_genome = reconstruct_genome(genome_adjuster.genome, new_couplings_lst)
+
+# Retrieve current times
+year = current_time()[0]
+month = current_time()[1]
+day = current_time()[2]
+hour = current_time()[3]
+min = current_time()[4]
+sec = current_time()[5]
+
+# Write new genome to an output file
+with open(f'/home/hgjones9/spinchain/new_genome-{year}-{month}-{day}-{hour}-{min}-{sec}.txt', 'w') as file:
+    file.write(str(new_genome))
 
 
 
