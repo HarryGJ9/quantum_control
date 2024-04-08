@@ -58,13 +58,13 @@ def construct_new_genomes(genome, couplings_plus_h, couplings_minus_h):
 # Write the adjusted genomes to an output.txt file
 def generate_output(genome, adjusted_genomes):
 
-    # Specify output directory
-    output_dir = '/home/hgjones9/quantum_control/'
+    # # Specify output directory
+    # output_dir = '/home/hgjones9/quantum_control/'
 
-    # Create directory if it doesn't exist
-    os.makedirs(output_dir, exist_ok=True)
+    # # Create directory if it doesn't exist
+    # os.makedirs(output_dir, exist_ok=True)
     
-    with open(os.path.join(output_dir, 'initial_adjusted_genome.txt'), 'w') as file:
+    with open('/home/hgjones9/quantum_control/initial_adjusted_genome.txt', 'w') as file:
         # Write content to the file
         file.write(f"GA optimised genome = {genome}\n")
         file.write(f"Adjusted genomes = {adjusted_genomes}\n")
