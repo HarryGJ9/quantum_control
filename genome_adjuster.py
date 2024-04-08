@@ -1,4 +1,5 @@
 import re
+import os
 
 # This script takes in the optimised genome found by the GA as an input and returns a list of 
 # genomes that have had their individual couplings altered by the derivative step size
@@ -56,8 +57,14 @@ def construct_new_genomes(genome, couplings_plus_h, couplings_minus_h):
 
 # Write the adjusted genomes to an output.txt file
 def generate_output(genome, adjusted_genomes):
+
+    # Specify output directory
+    output_dir = '/home/hgjones9/spinchain/'
+
+    # Create directory if it doesn't exist
+    os.makedirs(output_dir, exist_ok=True)
     
-    with open('output.txt', 'w') as file:
+    with open(os.join(output_dir, 'initial_adjusted_genome.txt'), 'w') as file:
         # Write content to the file
         file.write(f"GA optimised genome = {genome}\n")
         file.write(f"Adjusted genomes = {adjusted_genomes}\n")
@@ -74,7 +81,7 @@ output_path = r'/home/hgjones9/quantum_control/output-latest/genetic.out'
 genome_full = find_genome(output_path)
 print(f"Full genome: {genome_full}")
 
-# Adjust the couplings in preparation of derivative calculation
+# Strip full genome and adjust the couplings in preparation of derivative calculation
 genome, couplings, couplings_plus_h, couplings_minus_h = adjust_couplings(genome_full)
 print(f"Stripped genome: {genome}")
 

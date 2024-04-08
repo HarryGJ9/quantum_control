@@ -245,7 +245,7 @@ print(f"Maximum fidelities: {max_fidelities}")
 gradient = calculate_gradient(max_fidelities)
 print(f"Gradient vector: {gradient}")
 
-with open(f'/home/hgjones9/spinchain/gradient_latest') as file:
+with open(f'/home/hgjones9/spinchain/gradient_latest.txt', 'w') as file:
     file.write(str(gradient))
 
 # # Retrieve current times
