@@ -7,7 +7,7 @@ import time
 import numpy as np
 
 # Specify spinchain directory path
-spinchain_path = r'/home/hgjones9/spinchain'
+quant_cont_path = r'/home/hgjones9/quantum_control'
 
 # # SPECIFY PATH FOR PRACTICE FILES
 # spinchain_path = "C:\\Users\harry\quantum_control\outputs_practice"
