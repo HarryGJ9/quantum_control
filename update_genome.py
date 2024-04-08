@@ -145,10 +145,10 @@ def current_time():
 ################
 
 # Specify spinchain path
-spinchain_path = r'/home/hgjones9/spinchain'
+quant_cont_path = r'/home/hgjones9/quantum_control'
 
 # List folders under spinchain_path
-dirs = list_dirs(spinchain_path)
+dirs = list_dirs(quant_cont_path)
 # print(dirs)
 
 # Find most recent gradient.txt file
