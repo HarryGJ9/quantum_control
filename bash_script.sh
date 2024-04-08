@@ -22,7 +22,7 @@ read initial_genome
 python3 /home/hgjones9/quantum_control/genome_adjuster.py
 
 # Specify output file of adjusted genomes
-output_file='/home/hgjones9/quantum_control/initial_adjusted_genomes.txt'
+output_file='/home/hgjones9/quantum_control/initial_adjusted_genome.txt'
 
 # Search output.txt for the line containing the list of adjusted genomes and print them as a list
 adjusted_genomes=$(grep -oP "Adjusted genomes = \[\K.*(?=\])" "$output_file")
