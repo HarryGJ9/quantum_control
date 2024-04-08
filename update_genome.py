@@ -4,6 +4,7 @@ import time
 import datetime
 import ast
 import genome_adjuster
+import re
 # from genome_adjuster import couplings
 # from genome_adjuster import genome
 
@@ -108,8 +109,23 @@ def update_couplings(gradient_arr, optimised_couplings_arr, stepsize=1e5):
 
     return new_couplings_lst
 
-# Reconstruct updated genome based on new couplings
-# def reconstruct_genomes(new_couplings)
+# Reconstruct new genome based on new couplings
+def reconstruct_genome(origin_genome, new_couplings):
+
+    # Split original, optimised gnome (e.g. "AB500BC500") into a list of characters and digits (e.g. ['AB', '500', 'BC', '500'])
+    genome_split = re.split(r'([A-Za-z]+|\d+)', origin_genome)
+
+    # Iterate through list and swap the original couplings for the new couplings (e.g. ['AB', '450', 'BC', '450'])
+    new_genome_lst = []
+    for idx, item in enumerate(genome_split):
+        if item.isdigit():
+            new_genome_lst.append(new_couplings.pop(0))
+        else:
+            new_genome_lst.append(item)
+    
+    new_genome = ''.join(str(item) for item in new_genome_lst)
+
+    return new_genome
 
 
 ################
@@ -139,6 +155,9 @@ print(f"GA optimised couplings: {optimised_couplings_lst}")
 new_couplings_lst = update_couplings(gradient_arr, optimised_couplings_arr)
 print(f"New couplings: {new_couplings_lst}")
 # print(type(new_couplings))
+
+# Reconstruct new genome based on grad ascent updated couplings
+new_genome = reconstruct_genome(genome_adjuster.genome, new_couplings_lst)
 
 
 
