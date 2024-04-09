@@ -67,11 +67,7 @@ done
 
 python3 /home/hgjones9/quantum_control/calculate_gradients.py
 
-
-# ########################################################################################################
-# # EXTRACT GA OPTIMISED COUPLINGS FROM 'initial_adjusted_genomes.txt' AND SAVE TO 'old_couplings.txt'
-# ########################################################################################################
-
+# EVERYTING WORKS UP TO HERE, NEXT FIGURE OUT THE UPDATE GENOME PART
 
 
 # ############################################
