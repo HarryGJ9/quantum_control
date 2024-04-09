@@ -121,7 +121,7 @@ gradient_arr = open_gradient(gradient_output_file)
 print(f"Gradient vector: {gradient_arr}")
 
 # Retrieve optimised couplings from genome_adjuster.py 
-optimised_couplings_lst, optimised_couplings_arr = get_couplings(quant_cont_path)
+optimised_couplings_lst, optimised_couplings_arr = get_couplings(dirs)
 print(f"GA optimised couplings: {optimised_couplings_lst}")
 
 # # Update couplings using gradient ascent
