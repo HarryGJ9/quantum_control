@@ -3,10 +3,10 @@ import numpy as np
 import time
 import datetime
 import ast
-import genome_adjuster
+# import genome_adjuster
 import re
-# from genome_adjuster import couplings
-# from genome_adjuster import genome
+from genome_adjuster import couplings
+from genome_adjuster import genome
 
 
 ##########################
@@ -92,8 +92,8 @@ def open_gradient(gradient_output):
 # Gets optimised GA couplings from genome_adjuster.py 
 def get_couplings():
     
-    # Retrieve coupling values
-    optimised_couplings_lst = genome_adjuster.couplings
+    # Retrieve coupling valuesgenome_adjuster
+    optimised_couplings_lst = couplings
     optimised_couplings_arr = np.array(optimised_couplings_lst)
     
     return optimised_couplings_lst, optimised_couplings_arr
