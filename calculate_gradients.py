@@ -6,7 +6,7 @@ import datetime
 import time
 import numpy as np
 
-# Specify spinchain directory path
+# Specify quantum_control directory path
 quant_cont_path = r'/home/hgjones9/quantum_control'
 
 # # SPECIFY PATH FOR PRACTICE FILES
