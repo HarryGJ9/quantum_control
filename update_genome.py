@@ -5,8 +5,8 @@ import datetime
 import ast
 # import genome_adjuster
 import re
-from genome_adjuster import couplings
-from genome_adjuster import genome
+# from genome_adjuster import couplings
+# from genome_adjuster import genome
 
 
 ##########################
@@ -76,69 +76,69 @@ def get_gradient_file(dirs):
                 gradient_output = file
     return gradient_output
 
-# Opens gradient.txt file and convert the gradient list into a numpy array
-def open_gradient(gradient_output):
-    # Open gradient.txt file and output the data as a list
-    with open(gradient_output, 'r') as file:
-        gradient_output = file.read()
+# # Opens gradient.txt file and convert the gradient list into a numpy array
+# def open_gradient(gradient_output):
+#     # Open gradient.txt file and output the data as a list
+#     with open(gradient_output, 'r') as file:
+#         gradient_output = file.read()
 
-    # Convert data from the .txt file into an array
-    gradient_lst = ast.literal_eval(gradient_output) # Convert the data from a string to a list
-    gradient_arr = np.array(gradient_lst) # Convert list to an array
-    # print(gradient_arr)
+#     # Convert data from the .txt file into an array
+#     gradient_lst = ast.literal_eval(gradient_output) # Convert the data from a string to a list
+#     gradient_arr = np.array(gradient_lst) # Convert list to an array
+#     # print(gradient_arr)
 
-    return gradient_arr
+#     return gradient_arr
 
-# Gets optimised GA couplings from genome_adjuster.py 
-def get_couplings():
+# # Gets optimised GA couplings from genome_adjuster.py 
+# def get_couplings():
     
-    # Retrieve coupling valuesgenome_adjuster
-    optimised_couplings_lst = couplings
-    optimised_couplings_arr = np.array(optimised_couplings_lst)
+#     # Retrieve coupling valuesgenome_adjuster
+#     optimised_couplings_lst = couplings
+#     optimised_couplings_arr = np.array(optimised_couplings_lst)
     
-    return optimised_couplings_lst, optimised_couplings_arr
+#     return optimised_couplings_lst, optimised_couplings_arr
 
-# Updates couplings using gradient ascent
-def update_couplings(gradient_arr, optimised_couplings_arr, stepsize=1e5):
-    # Calculate new couplings by ascending gradient
-    new_couplings_lst = optimised_couplings_arr + stepsize * gradient_arr
-    # print(new_couplings_lst)
+# # Updates couplings using gradient ascent
+# def update_couplings(gradient_arr, optimised_couplings_arr, stepsize=1e5):
+#     # Calculate new couplings by ascending gradient
+#     new_couplings_lst = optimised_couplings_arr + stepsize * gradient_arr
+#     # print(new_couplings_lst)
 
-    # Convert new couplings to a list of integers
-    new_couplings_lst = [round(float(coupling)) for coupling in new_couplings_lst]
+#     # Convert new couplings to a list of integers
+#     new_couplings_lst = [round(float(coupling)) for coupling in new_couplings_lst]
 
-    return new_couplings_lst
+#     return new_couplings_lst
 
-# Reconstruct new genome based on new couplings
-def reconstruct_genome(origin_genome, new_couplings):
+# # Reconstruct new genome based on new couplings
+# def reconstruct_genome(origin_genome, new_couplings):
 
-    # Split original, optimised gnome (e.g. "AB500BC500") into a list of characters and digits (e.g. ['AB', '500', 'BC', '500'])
-    genome_split = re.split(r'([A-Za-z]+|\d+)', origin_genome)
+#     # Split original, optimised gnome (e.g. "AB500BC500") into a list of characters and digits (e.g. ['AB', '500', 'BC', '500'])
+#     genome_split = re.split(r'([A-Za-z]+|\d+)', origin_genome)
 
-    # Iterate through list and swap the original couplings for the new couplings (e.g. ['AB', '450', 'BC', '450'])
-    new_genome_lst = []
-    for idx, item in enumerate(genome_split):
-        if item.isdigit():
-            new_genome_lst.append(new_couplings.pop(0))
-        else:
-            new_genome_lst.append(item)
+#     # Iterate through list and swap the original couplings for the new couplings (e.g. ['AB', '450', 'BC', '450'])
+#     new_genome_lst = []
+#     for idx, item in enumerate(genome_split):
+#         if item.isdigit():
+#             new_genome_lst.append(new_couplings.pop(0))
+#         else:
+#             new_genome_lst.append(item)
     
-    new_genome = ''.join(str(item) for item in new_genome_lst)
+#     new_genome = ''.join(str(item) for item in new_genome_lst)
 
-    return new_genome
+#     return new_genome
 
-# Returns current date and time (used to write file)
-def current_time():
+# # Returns current date and time (used to write file)
+# def current_time():
     
-    current_time = datetime.datetime.now()
-    year = current_time.year
-    month = current_time.month
-    day = current_time.day
-    hour = current_time.hour
-    min = current_time.minute
-    sec = current_time.second
+#     current_time = datetime.datetime.now()
+#     year = current_time.year
+#     month = current_time.month
+#     day = current_time.day
+#     hour = current_time.hour
+#     min = current_time.minute
+#     sec = current_time.second
 
-    return year, month, day, hour, min, sec
+#     return year, month, day, hour, min, sec
 
 ################
 # RUN PROGRAMME
@@ -151,9 +151,9 @@ quant_cont_path = '/home/hgjones9/quantum_control'
 dirs = list_dirs(quant_cont_path)
 print(dirs)
 
-# # Find most recent gradient.txt file
-# gradient_output_file = get_gradient_file(dirs)
-# print(f"Gradient output file: {gradient_output_file}")
+# Find most recent gradient.txt file
+gradient_output_file = get_gradient_file(dirs)
+print(f"Gradient output file: {gradient_output_file}")
 
 # # Open gradient.txt file and retrieve the gradient vector as a numpy array
 # gradient_arr = open_gradient(gradient_output_file)
