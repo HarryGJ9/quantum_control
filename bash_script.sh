@@ -33,8 +33,18 @@ adjusted_genomes=$(grep -oP "Adjusted genomes = \[\K.*(?=\])" "$output_file")
 # Print the list of adjusted genomes
 echo "$adjusted_genomes"
 
-# cd /home/hgjones9/spinchain
-# pwd
+#####################################################
+# OBTAIN INITIAL COUPLINGS, READY FOR GRADIENT ASCENT
+#####################################################
+
+python3 extract_initial_couplings.py
+
+#######################################################################
+# RENAME 'initial_couplings.txt' TO 'old_couplings.txt' FOR GRAD ASCENT
+#######################################################################
+
+mv initial_couplings.txt old_couplings.txt
+
 
 ##################################################
 # RUN SPINNET ON EACH GENOME TO CALCUALTE DYNAMICS
@@ -56,6 +66,13 @@ done
 ###########################################################################
 
 python3 /home/hgjones9/quantum_control/calculate_gradients.py
+
+
+########################################################################################################
+# EXTRACT GA OPTIMISED COUPLINGS FROM 'initial_adjusted_genomes.txt' AND SAVE TO 'old_couplings.txt'
+########################################################################################################
+
+
 
 ############################################
 # CALCULATE NEW COUPLINGS BY GRADIENT ASCENT

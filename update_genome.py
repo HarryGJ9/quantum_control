@@ -18,20 +18,20 @@ def list_dirs(path):
     dirs = os.listdir(path)
     return dirs
 
-# Looks for most recent gradient output.txt file
+# Looks for most recent gradient_latest.txt file
 def get_gradient_file(dirs):
 
     for file in dirs:
-        if file.startswith('gradient-'):
+        if file.startswith('gradient_latest'):
             file_creation_time = os.path.getctime(file)
-            if time.time() - file_creation_time <= 60:
-                gradient_output = file
-    return gradient_output
+            if time.time() - file_creation_time <= 10:
+                gradient_output_file = file
+    return gradient_output_file
 
 # Opens gradient.txt file and convert the gradient list into a numpy array
-def open_gradient(gradient_output):
+def open_gradient(gradient_output_file):
     # Open gradient.txt file and output the data as a list
-    with open(gradient_output, 'r') as file:
+    with open(gradient_output_file, 'r') as file:
         gradient_output = file.read()
 
     # Convert data from the .txt file into an array
@@ -41,34 +41,28 @@ def open_gradient(gradient_output):
 
     return gradient_arr
 
-# Gets optimised GA couplings from genome_adjuster.py 
-def get_couplings(dirs):
+# Obtain old couplings ready to be updated
+def extract_old_couplings(quant_cont_path):
 
-    # for file in dirs:
-    #     if file.startswith('initial_adjusted_genomes-'):
-    #         file_creation_time = os.path.getctime(file)
-    #         if time.time() - file_creation_time <= 60:
-    #             initial_adjusted_genomes = file
-    
-    # Read initial_adjusted_genomes.txt to find the GA optimised couplings
-    with open('initial_adjusted_genomes.txt', 'r') as file:
-        optimised_couplings_lst = file.read()
-    
-    # Convert couplings to an array
-    optimised_couplings_arr = np.array(optimised_couplings_lst)
-    
-    return optimised_couplings_lst, optimised_couplings_arr
+    with open(os.path.join(quant_cont_path), 'old_couplings.txt', 'r') as file:
+        old_couplings_lst = file.read()
 
-# # Updates couplings using gradient ascent
-# def update_couplings(gradient_arr, optimised_couplings_arr, stepsize=1e5):
-#     # Calculate new couplings by ascending gradient
-#     new_couplings_lst = optimised_couplings_arr + stepsize * gradient_arr
-#     # print(new_couplings_lst)
+    # Convert old_couplings_lst to an array
+    old_couplings_arr = np.array(old_couplings_lst)
 
-#     # Convert new couplings to a list of integers
-#     new_couplings_lst = [round(float(coupling)) for coupling in new_couplings_lst]
+    return old_couplings_lst, old_couplings_arr
 
-#     return new_couplings_lst
+
+# Updates couplings using gradient ascent
+def update_couplings(gradient_arr, old_couplings_arr, stepsize=1e5):
+    # Calculate new couplings by ascending gradient
+    new_couplings_arr = old_couplings_arr + stepsize * gradient_arr
+    # print(new_couplings_lst)
+
+    # Convert new couplings array to a list of integers
+    new_couplings_lst = [round(float(coupling)) for coupling in new_couplings_arr]
+
+    return new_couplings_lst
 
 # # Reconstruct new genome based on new couplings
 # def reconstruct_genome(origin_genome, new_couplings):
@@ -120,14 +114,14 @@ print(f"Gradient output file: {gradient_output_file}")
 gradient_arr = open_gradient(gradient_output_file)
 print(f"Gradient vector: {gradient_arr}")
 
-# Retrieve optimised couplings from genome_adjuster.py 
-optimised_couplings_lst, optimised_couplings_arr = get_couplings(dirs)
-print(f"GA optimised couplings: {optimised_couplings_lst}")
+# Extract old couplings ready to be updated
+old_couplings_lst, old_couplings_arr = extract_old_couplings(quant_cont_path)
+print(old_couplings_arr)
 
-# # Update couplings using gradient ascent
-# new_couplings_lst = update_couplings(gradient_arr, optimised_couplings_arr)
-# print(f"New couplings: {new_couplings_lst}")
-# # print(type(new_couplings))
+# Update couplings using gradient ascent
+new_couplings_lst = update_couplings(gradient_arr, old_couplings_arr)
+print(f"New couplings: {new_couplings_lst}")
+# print(type(new_couplings))
 
 # # Reconstruct new genome based on grad ascent updated couplings
 # new_genome = reconstruct_genome(genome_adjuster.genome, new_couplings_lst)

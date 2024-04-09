@@ -233,7 +233,7 @@ print(f"Sorted output directories: {sorted_output_dirs}")
 
 # Call fidelities function to get an array of updated fidelities
 updated_fidelities = fidelities(sorted_output_dirs)
-print(f"Fidelities of updated genomes: {updated_fidelities}")
+# print(f"Fidelities of updated genomes: {updated_fidelities}")
 # print((updated_fidelities[:,0] - updated_fidelities[:,1]) / (2))
 
 # Obtain max fidelities from each column (exclude time column)
