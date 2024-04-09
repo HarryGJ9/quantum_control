@@ -43,9 +43,15 @@ def open_gradient(gradient_output):
 
 # Gets optimised GA couplings from genome_adjuster.py 
 def get_couplings(quant_cont_path):
+
+    for file in dirs:
+        if file.startswith('initial_adjusted_genomes-'):
+            file_creation_time = os.path.getctime(file)
+            if time.time() - file_creation_time <= 60:
+                initial_adjusted_genomes = file
     
     # Read initial_adjusted_genomes.txt to find the GA optimised couplings
-    with open(os.path.join(quant_cont_path, 'initial_adjusted_genomes.txt'), 'r') as file:
+    with open(os.path.join(quant_cont_path, initial_adjusted_genomes), 'r') as file:
         optimised_couplings_lst = file.read()
     
     # Convert couplings to an array
