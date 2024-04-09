@@ -5,7 +5,7 @@ import datetime
 import ast
 # import genome_adjuster
 import re
-from genome_adjuster import GA_couplings
+# from genome_adjuster import GA_couplings
 # from genome_adjuster import GA_genome
 
 
