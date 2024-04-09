@@ -15,5 +15,5 @@ with open(file_path, 'r') as file:
             # Print the extracted couplings
             print(f'Initial couplings = {initial_couplings}')
 
-with open(os.path.join(quant_cont_path), 'initial_couplings.txt', 'w') as file:
+with open(os.path.join(quant_cont_path, 'initial_couplings.txt'), 'w') as file:
     file.write(initial_couplings)
