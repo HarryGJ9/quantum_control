@@ -76,18 +76,18 @@ def get_gradient_file(dirs):
                 gradient_output = file
     return gradient_output
 
-# # Opens gradient.txt file and convert the gradient list into a numpy array
-# def open_gradient(gradient_output):
-#     # Open gradient.txt file and output the data as a list
-#     with open(gradient_output, 'r') as file:
-#         gradient_output = file.read()
+# Opens gradient.txt file and convert the gradient list into a numpy array
+def open_gradient(gradient_output):
+    # Open gradient.txt file and output the data as a list
+    with open(gradient_output, 'r') as file:
+        gradient_output = file.read()
 
-#     # Convert data from the .txt file into an array
-#     gradient_lst = ast.literal_eval(gradient_output) # Convert the data from a string to a list
-#     gradient_arr = np.array(gradient_lst) # Convert list to an array
-#     # print(gradient_arr)
+    # Convert data from the .txt file into an array
+    gradient_lst = ast.literal_eval(gradient_output) # Convert the data from a string to a list
+    gradient_arr = np.array(gradient_lst) # Convert list to an array
+    # print(gradient_arr)
 
-#     return gradient_arr
+    return gradient_arr
 
 # # Gets optimised GA couplings from genome_adjuster.py 
 # def get_couplings():
@@ -149,15 +149,15 @@ quant_cont_path = '/home/hgjones9/quantum_control'
 
 # List folders under quantum_control
 dirs = list_dirs(quant_cont_path)
-print(dirs)
+# print(dirs)
 
 # Find most recent gradient.txt file
 gradient_output_file = get_gradient_file(dirs)
 print(f"Gradient output file: {gradient_output_file}")
 
-# # Open gradient.txt file and retrieve the gradient vector as a numpy array
-# gradient_arr = open_gradient(gradient_output_file)
-# print(f"Gradient vector: {gradient_arr}")
+# Open gradient.txt file and retrieve the gradient vector as a numpy array
+gradient_arr = open_gradient(gradient_output_file)
+print(f"Gradient vector: {gradient_arr}")
 
 # # Retrieve optimised couplings from genome_adjuster.py 
 # optimised_couplings_lst, optimised_couplings_arr = get_couplings()
