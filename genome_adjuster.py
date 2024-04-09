@@ -82,17 +82,17 @@ genome_full = find_genome(output_path)
 print(f"Full genome: {genome_full}")
 
 # Strip full genome and adjust the couplings in preparation of derivative calculation
-genome, couplings, couplings_plus_h, couplings_minus_h = adjust_couplings(genome_full)
-print(f"Stripped genome: {genome}")
+GA_genome, GA_couplings, couplings_plus_h, couplings_minus_h = adjust_couplings(genome_full)
+print(f"Stripped genome: {GA_genome}")
 
 # Reconstruct genomes based on the adjusted couplings
-genome_list, adjusted_genomes = construct_new_genomes(genome, couplings_plus_h, couplings_minus_h)
+genome_list, adjusted_genomes = construct_new_genomes(GA_genome, couplings_plus_h, couplings_minus_h)
 print(f"Adjusted genomes: {adjusted_genomes}")
 
 # Write the original optimised genome and adjusted couplings to a .txt file
 with open('/home/hgjones9/quantum_control/initial_adjusted_genomes.txt', 'w') as file:
     # Write content to the file
-    file.write(f"GA optimised genome = {genome}\n")
+    file.write(f"GA optimised genome = {GA_genome}\n")
     file.write(f"Adjusted genomes = {adjusted_genomes}\n")
 
 

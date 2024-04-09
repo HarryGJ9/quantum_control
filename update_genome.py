@@ -5,8 +5,8 @@ import datetime
 import ast
 # import genome_adjuster
 import re
-# from genome_adjuster import couplings
-# from genome_adjuster import genome
+from genome_adjuster import GA_couplings
+# from genome_adjuster import GA_genome
 
 
 ##########################
@@ -89,14 +89,14 @@ def open_gradient(gradient_output):
 
     return gradient_arr
 
-# # Gets optimised GA couplings from genome_adjuster.py 
-# def get_couplings():
+# Gets optimised GA couplings from genome_adjuster.py 
+def get_couplings():
     
-#     # Retrieve coupling valuesgenome_adjuster
-#     optimised_couplings_lst = couplings
-#     optimised_couplings_arr = np.array(optimised_couplings_lst)
+    # Retrieve coupling valuesgenome_adjuster
+    optimised_couplings_lst = GA_couplings
+    optimised_couplings_arr = np.array(optimised_couplings_lst)
     
-#     return optimised_couplings_lst, optimised_couplings_arr
+    return optimised_couplings_lst, optimised_couplings_arr
 
 # # Updates couplings using gradient ascent
 # def update_couplings(gradient_arr, optimised_couplings_arr, stepsize=1e5):
