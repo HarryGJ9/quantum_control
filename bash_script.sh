@@ -24,14 +24,14 @@ pwd
 # Obtain the optimised output genome and make changes using genome_adjuster.py
 python3 /home/hgjones9/quantum_control/genome_adjuster.py
 
-# # Specify output file of adjusted genomes
-# output_file='/home/hgjones9/quantum_control/initial_adjusted_genomes.txt'
+# Specify output file of adjusted genomes
+output_file='/home/hgjones9/quantum_control/initial_adjusted_genomes.txt'
 
-# # Search output.txt for the line containing the list of adjusted genomes and print them as a list
-# adjusted_genomes=$(grep -oP "Adjusted genomes = \[\K.*(?=\])" "$output_file")
+# Search output.txt for the line containing the list of adjusted genomes and print them as a list
+adjusted_genomes=$(grep -oP "Adjusted genomes = \[\K.*(?=\])" "$output_file")
 
-# # Print the list of adjusted genomes
-# echo "$adjusted_genomes"
+# Print the list of adjusted genomes
+echo "$adjusted_genomes"
 
 # # cd /home/hgjones9/spinchain
 # # pwd
