@@ -6,7 +6,6 @@ import os
 
 # Obtains optimised genome from the GA
 def find_genome(output_path):
-    genome_full = None
     # Open genetic.out and find the genome
     with open(output_path, 'r') as file:
         for line in file:
@@ -94,6 +93,7 @@ print(f"Adjusted genomes: {adjusted_genomes}")
 with open('/home/hgjones9/quantum_control/initial_adjusted_genomes.txt', 'w') as file:
     # Write content to the file
     file.write(f"GA optimised genome = {GA_genome}\n")
+    file.write(f"Isolated couplings: {GA_couplings}")
     file.write(f"Adjusted genomes = {adjusted_genomes}\n")
 
 
