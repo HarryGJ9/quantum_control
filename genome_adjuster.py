@@ -105,21 +105,28 @@ print(f"Stripped genome: {GA_genome}")
 genome_list, adjusted_genomes = construct_new_genomes(GA_genome, couplings_plus_h, couplings_minus_h)
 print(f"Adjusted genomes: {adjusted_genomes}")
 
-
-# Retrieve current times
-year = current_time()[0]
-month = current_time()[1]
-day = current_time()[2]
-hour = current_time()[3]
-min = current_time()[4]
-sec = current_time()[5]
-
 # Write the original optimised genome and adjusted couplings to a .txt file
-with open(f'/home/hgjones9/quantum_control/initial_adjusted_genomes-{year}-{month}-{day}-{hour}-{min}-{sec}.txt', 'w') as file:
+with open(f'/home/hgjones9/quantum_control/initial_adjusted_genomes.txt', 'w') as file:
     # Write content to the file
     file.write(f"GA optimised genome = {GA_genome}\n")
     file.write(f"Isolated couplings: {GA_couplings}\n")
     file.write(f"Adjusted genomes = {adjusted_genomes}\n")
+
+
+# # Retrieve current times
+# year = current_time()[0]
+# month = current_time()[1]
+# day = current_time()[2]
+# hour = current_time()[3]
+# min = current_time()[4]
+# sec = current_time()[5]
+
+# # Write the original optimised genome and adjusted couplings to a .txt file
+# with open(f'/home/hgjones9/quantum_control/initial_adjusted_genomes-{year}-{month}-{day}-{hour}-{min}-{sec}.txt', 'w') as file:
+#     # Write content to the file
+#     file.write(f"GA optimised genome = {GA_genome}\n")
+#     file.write(f"Isolated couplings: {GA_couplings}\n")
+#     file.write(f"Adjusted genomes = {adjusted_genomes}\n")
 
 
 #########################
