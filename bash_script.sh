@@ -57,11 +57,11 @@ done
 
 python3 /home/hgjones9/quantum_control/calculate_gradients.py
 
-# # ############################################
-# # # CALCULATE NEW COUPLINGS BY GRADIENT ASCENT
-# # ############################################
+############################################
+# CALCULATE NEW COUPLINGS BY GRADIENT ASCENT
+############################################
 
-# # python3 /home/hgjones9/quantum_control/update_genome.py
+python3 /home/hgjones9/quantum_control/update_genome.py
 
 
 

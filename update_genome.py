@@ -145,7 +145,7 @@ def current_time():
 ################
 
 # Specify quantum_control path
-quant_cont_path = r'/home/hgjones9/quantum_control'
+quant_cont_path = '/home/hgjones9/quantum_control'
 
 # List folders under quantum_control
 dirs = list_dirs(quant_cont_path)
