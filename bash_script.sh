@@ -33,22 +33,22 @@ adjusted_genomes=$(grep -oP "Adjusted genomes = \[\K.*(?=\])" "$output_file")
 # Print the list of adjusted genomes
 echo "$adjusted_genomes"
 
-# # cd /home/hgjones9/spinchain
-# # pwd
+# cd /home/hgjones9/spinchain
+# pwd
 
-# ##################################################
-# # RUN SPINNET ON EACH GENOME TO CALCUALTE DYNAMICS
-# ##################################################
+##################################################
+# RUN SPINNET ON EACH GENOME TO CALCUALTE DYNAMICS
+##################################################
 
-# # Loop over the list of adjusted genoms and run spinnet on each genome
-# for string in $adjusted_genomes
-# do
-#     genome=$(echo "$string" | sed "s/'\([^']*\)'.*/\1/") # Remove the individual quotation marks from each genome
+# Loop over the list of adjusted genoms and run spinnet on each genome
+for string in $adjusted_genomes
+do
+    genome=$(echo "$string" | sed "s/'\([^']*\)'.*/\1/") # Remove the individual quotation marks from each genome
 
-#     # Call spinnet for each genome, generating a different output directory for each genome
-#     /home/hgjones9/spinchain/bin/spinnet "<A|C>$genome"
-#     echo "<A|C>$genome"
-# done
+    # Call spinnet for each genome, generating a different output directory for each genome
+    /home/hgjones9/spinchain/bin/spinnet "<A|C>$genome"
+    echo "<A|C>$genome"
+done
 
 
 # ###########################################################################
