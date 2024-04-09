@@ -51,7 +51,7 @@ def get_couplings(dirs):
                 initial_adjusted_genomes = file
     
     # Read initial_adjusted_genomes.txt to find the GA optimised couplings
-    with open(file, 'r') as file:
+    with open(initial_adjusted_genomes, 'r') as file:
         optimised_couplings_lst = file.read()
     
     # Convert couplings to an array
