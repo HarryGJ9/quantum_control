@@ -37,7 +37,7 @@ echo "$adjusted_genomes"
 # OBTAIN INITIAL COUPLINGS, READY FOR GRADIENT ASCENT
 #####################################################
 
-python3 extract_initial_couplings.py
+python3 /home/hgjones9/quantum_control/extract_initial_couplings.py
 
 #######################################################################
 # RENAME 'initial_couplings.txt' TO 'old_couplings.txt' FOR GRAD ASCENT
@@ -46,39 +46,39 @@ python3 extract_initial_couplings.py
 mv initial_couplings.txt old_couplings.txt
 
 
-##################################################
-# RUN SPINNET ON EACH GENOME TO CALCUALTE DYNAMICS
-##################################################
+# ##################################################
+# # RUN SPINNET ON EACH GENOME TO CALCUALTE DYNAMICS
+# ##################################################
 
-# Loop over the list of adjusted genoms and run spinnet on each genome
-for string in $adjusted_genomes
-do
-    genome=$(echo "$string" | sed "s/'\([^']*\)'.*/\1/") # Remove the individual quotation marks from each genome
+# # Loop over the list of adjusted genoms and run spinnet on each genome
+# for string in $adjusted_genomes
+# do
+#     genome=$(echo "$string" | sed "s/'\([^']*\)'.*/\1/") # Remove the individual quotation marks from each genome
 
-    # Call spinnet for each genome, generating a different output directory for each genome
-    /home/hgjones9/spinchain/bin/spinnet "<A|C>$genome"
-    echo "<A|C>$genome"
-done
-
-
-###########################################################################
-# CALCULATE THE GRADIENT VECTOR OF THE FIDELITY WITH RESPECT TO THE GENOMES
-###########################################################################
-
-python3 /home/hgjones9/quantum_control/calculate_gradients.py
+#     # Call spinnet for each genome, generating a different output directory for each genome
+#     /home/hgjones9/spinchain/bin/spinnet "<A|C>$genome"
+#     echo "<A|C>$genome"
+# done
 
 
-########################################################################################################
-# EXTRACT GA OPTIMISED COUPLINGS FROM 'initial_adjusted_genomes.txt' AND SAVE TO 'old_couplings.txt'
-########################################################################################################
+# ###########################################################################
+# # CALCULATE THE GRADIENT VECTOR OF THE FIDELITY WITH RESPECT TO THE GENOMES
+# ###########################################################################
+
+# python3 /home/hgjones9/quantum_control/calculate_gradients.py
+
+
+# ########################################################################################################
+# # EXTRACT GA OPTIMISED COUPLINGS FROM 'initial_adjusted_genomes.txt' AND SAVE TO 'old_couplings.txt'
+# ########################################################################################################
 
 
 
-############################################
-# CALCULATE NEW COUPLINGS BY GRADIENT ASCENT
-############################################
+# ############################################
+# # CALCULATE NEW COUPLINGS BY GRADIENT ASCENT
+# ############################################
 
-python3 /home/hgjones9/quantum_control/update_genome.py
+# python3 /home/hgjones9/quantum_control/update_genome.py
 
 
 
