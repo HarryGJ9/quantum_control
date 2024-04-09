@@ -6,6 +6,7 @@ import os
 
 # Obtains optimised genome from the GA
 def find_genome(output_path):
+    genome_full = None
     # Open genetic.out and find the genome
     with open(output_path, 'r') as file:
         for line in file:
