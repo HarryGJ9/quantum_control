@@ -55,11 +55,9 @@ def extract_old_couplings():
         
     # Convert literal string from file into a python list
     old_couplings_lst = ast.literal_eval(old_couplings_str)
-    print(type(old_couplings_lst))
    
     # Convert old_couplings_lst to an array
     old_couplings_arr = np.array([int(x) for x in old_couplings_lst])
-    print(type(old_couplings_arr))
     
     return old_couplings_lst, old_couplings_arr
 
@@ -144,9 +142,9 @@ print(f"New couplings: {new_couplings_lst}")
 new_genome = reconstruct_genome(new_couplings_lst)
 print(f'New genome: {new_genome}')
 
-# # Write new genome to an output .txt file
-# with open(f'/home/hgjones9/quantum_control/new_genome.txt', 'w') as file:
-#     file.write(new_genome)
+# Write new genome to an output .txt file
+with open('/home/hgjones9/quantum_control/new_genome.txt', 'w') as file:
+    file.write(new_genome)
 
 # # Retrieve current times
 # year = current_time()[0]
