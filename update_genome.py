@@ -48,7 +48,7 @@ def open_gradient(gradient_output_file):
     return gradient_arr
 
 # Obtain old couplings ready to be updated
-def extract_old_couplings(quant_cont_path):
+def extract_old_couplings():
 
     with open(os.path.join(quant_cont_path, 'old_couplings.txt'), 'r') as file:
         old_couplings_str = file.read()
@@ -68,11 +68,9 @@ def extract_old_couplings(quant_cont_path):
 def update_couplings(gradient_arr, old_couplings_arr, stepsize=1e5):
     # Calculate new couplings by ascending gradient
     new_couplings_arr = old_couplings_arr + stepsize * gradient_arr
-    # print(new_couplings_lst)
 
     # Convert new couplings array to a list of integers
     new_couplings_lst = [round(float(coupling)) for coupling in new_couplings_arr]
-
 
     return new_couplings_lst
 
@@ -135,15 +133,13 @@ gradient_arr = open_gradient(gradient_output_file)
 print(f"Gradient vector: {gradient_arr}")
 
 # Extract old couplings ready to be updated
-old_couplings_lst, old_couplings_arr = extract_old_couplings(quant_cont_path)
+old_couplings_lst, old_couplings_arr = extract_old_couplings()
 print(f'Old couplings: {old_couplings_arr}')
-print(old_couplings_arr.dtype)
 
-
-# # Update couplings using gradient ascent
-# new_couplings_arr = update_couplings(gradient_arr, old_couplings_arr)
-# print(f"New couplings: {new_couplings_arr}")
-# # print(type(new_couplings))
+# Update couplings using gradient ascent
+new_couplings_arr = update_couplings(gradient_arr, old_couplings_arr)
+print(f"New couplings: {new_couplings_arr}")
+# print(type(new_couplings))
 
 # # Reconstruct new genome based on grad ascent updated couplings
 # new_genome = reconstruct_genome(genome_adjuster.genome, new_couplings_lst)
