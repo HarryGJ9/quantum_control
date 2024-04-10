@@ -78,6 +78,17 @@ python3 /home/hgjones9/quantum_control/calculate_gradients.py
 
 python3 /home/hgjones9/quantum_control/update_genome.py
 
+###########################
+# RUN SPINNET ON NEW GENOME
+###########################
+
+# Specify output file location of new genome
+new_genome_output='/home/hgjones9/quantum_control/new_genome.txt'
+
+# Extract new genome from new_genome.txt
+new_genome=$(<"$new_genome_output")
+
+/home/hgjones9/spinchain/bin/spinnet "<A|C>$new_genome"
 
 
 
