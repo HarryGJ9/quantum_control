@@ -55,7 +55,7 @@ def extract_old_couplings(quant_cont_path):
         
 
     # Convert old_couplings_lst to an array
-    old_couplings_arr = np.array(old_couplings_lst)
+    old_couplings_arr = np.array([int(x) for x in old_couplings_lst])
     
 
     return old_couplings_lst, old_couplings_arr

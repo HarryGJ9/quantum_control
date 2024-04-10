@@ -4,13 +4,16 @@
 # OBTAIN ADJUSTED OUTPUT GENOMES FROM GENOME_ADJUSTER.PY
 ########################################################
 
-# User enters an initial genome
-echo "Please enter a genome to be optimised":
-read initial_genome
+# # User enters an initial genome
+# echo "Please enter a genome to be optimised":
+# read initial_genome
 
 # Extract initial and target state to be used later
 # initial=initial_site
 # final=final_site
+
+# Test genome: '<A|C>AB500BC500'
+initial_genome="<A|C>AB500BC500"
 
 # Run spinnet -o on an initial genome 
 /home/hgjones9/spinchain/bin/spinnet -o "$initial_genome"
