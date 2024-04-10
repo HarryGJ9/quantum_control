@@ -108,9 +108,9 @@ print(f"Adjusted genomes: {adjusted_genomes}")
 # Write the original optimised genome and adjusted couplings to a .txt file
 with open(f'/home/hgjones9/quantum_control/initial_adjusted_genomes.txt', 'w') as file:
     # Write content to the file
-    file.write(f"GA optimised genome = {GA_genome}\n")
+    file.write(f"GA optimised genome : {GA_genome}\n")
     file.write(f"Isolated couplings: {GA_couplings}\n")
-    file.write(f"Adjusted genomes = {adjusted_genomes}\n")
+    file.write(f"Adjusted genomes : {adjusted_genomes}\n")
 
 
 # # Retrieve current times

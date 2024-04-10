@@ -177,8 +177,6 @@ def fidelities(output_dirs):
 # Function which returns the maximum fidelity and corresponding time for each column of fidelities
 def max_fidelity(fidelities):
 
-    # print(fidelities.shape)
-
     # Array of timesteps
     time_arr = fidelities[:,0]
     # print(time_arr)
