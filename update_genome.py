@@ -21,11 +21,17 @@ def list_dirs(path):
 # Looks for most recent gradient_latest.txt file
 def get_gradient_file(dirs):
 
+    # for file in dirs:
+    #     if file.startswith('gradient_latest'):
+    #         file_creation_time = os.path.getctime(file)
+    #         if time.time() - file_creation_time <= 10:
+    #             gradient_output_file = file
+
     for file in dirs:
         if file.startswith('gradient_latest'):
-            file_creation_time = os.path.getctime(file)
-            if time.time() - file_creation_time <= 10:
-                gradient_output_file = file
+            gradient_output_file = file
+
+
     return gradient_output_file
 
 # Opens gradient.txt file and convert the gradient list into a numpy array
@@ -37,7 +43,7 @@ def open_gradient(gradient_output_file):
     # Convert data from the .txt file into an array
     gradient_lst = ast.literal_eval(gradient_output) # Convert the data from a string to a list
     gradient_arr = np.array(gradient_lst) # Convert list to an array
-    # print(gradient_arr)
+    
 
     return gradient_arr
 
@@ -64,23 +70,31 @@ def update_couplings(gradient_arr, old_couplings_arr, stepsize=1e5):
 
     return new_couplings_lst
 
-# # Reconstruct new genome based on new couplings
-# def reconstruct_genome(origin_genome, new_couplings):
+# Reconstruct new genome based on new couplings
+def reconstruct_genome(new_couplings):
 
-#     # Split original, optimised gnome (e.g. "AB500BC500") into a list of characters and digits (e.g. ['AB', '500', 'BC', '500'])
-#     genome_split = re.split(r'([A-Za-z]+|\d+)', origin_genome)
+    # Open initial_adjusted_genomes.txt and find the GA optimised genome
+    with open(os.path.join(quant_cont_path, 'initial_adjusted_genomes.txt'), 'r') as file:
+        for line in file:
+            if line.startswith('GA optimised genome'):
+                # Split line to obtain just the genome
+                genome = line.split(':')[1].strip()
 
-#     # Iterate through list and swap the original couplings for the new couplings (e.g. ['AB', '450', 'BC', '450'])
-#     new_genome_lst = []
-#     for idx, item in enumerate(genome_split):
-#         if item.isdigit():
-#             new_genome_lst.append(new_couplings.pop(0))
-#         else:
-#             new_genome_lst.append(item)
+
+    # Split original, optimised gnome (e.g. "AB500BC500") into a list of characters and digits (e.g. ['AB', '500', 'BC', '500'])
+    genome_split = re.split(r'([A-Za-z]+|\d+)', genome)
+
+    # Iterate through list and swap the original couplings for the new couplings (e.g. ['AB', '450', 'BC', '450'])
+    new_genome_lst = []
+    for idx, item in enumerate(genome_split):
+        if item.isdigit():
+            new_genome_lst.append(new_couplings.pop(0))
+        else:
+            new_genome_lst.append(item)
     
-#     new_genome = ''.join(str(item) for item in new_genome_lst)
+    new_genome = ''.join(str(item) for item in new_genome_lst)
 
-#     return new_genome
+    return new_genome
 
 # # Returns current date and time (used to write file)
 # def current_time():
