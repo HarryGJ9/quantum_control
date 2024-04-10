@@ -9,7 +9,7 @@ with open(file_path, 'r') as file:
     # Iterate over each line in the file
     for line in file:
         # Check if the line starts with 'Isolated couplings:'
-        if line.startswith('Isolated couplings:'):
+        if line.startswith('Isolated couplings'):
             # Split the line to extract the list of couplings
             initial_couplings = line.split(':')[1].strip()
             # Print the extracted couplings
