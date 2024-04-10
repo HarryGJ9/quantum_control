@@ -50,7 +50,7 @@ def open_gradient(gradient_output_file):
 # Obtain old couplings ready to be updated
 def extract_old_couplings(quant_cont_path):
 
-    with open(os.path.join(quant_cont_path), 'old_couplings.txt', 'r') as file:
+    with open(os.path.join(quant_cont_path, 'old_couplings.txt'), 'r') as file:
         old_couplings_lst = file.read()
 
     # Convert old_couplings_lst to an array
