@@ -55,9 +55,11 @@ def extract_old_couplings(quant_cont_path):
         
     # Convert literal string from file into a python list
     old_couplings_lst = ast.literal_eval(old_couplings_str)
+    print(type(old_couplings_lst))
    
     # Convert old_couplings_lst to an array
     old_couplings_arr = np.array([int(x) for x in old_couplings_lst])
+    print(type(old_couplings_arr))
     
     return old_couplings_lst, old_couplings_arr
 
