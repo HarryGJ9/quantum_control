@@ -63,20 +63,20 @@ do
 done
 
 
-# ###########################################################################
-# # CALCULATE THE GRADIENT VECTOR OF THE FIDELITY WITH RESPECT TO THE GENOMES
-# ###########################################################################
+###########################################################################
+# CALCULATE THE GRADIENT VECTOR OF THE FIDELITY WITH RESPECT TO THE GENOMES
+###########################################################################
 
-# python3 /home/hgjones9/quantum_control/calculate_gradients.py
+python3 /home/hgjones9/quantum_control/calculate_gradients.py
 
-# # EVERYTING WORKS UP TO HERE, NEXT FIGURE OUT THE UPDATE GENOME PART
+# EVERYTING WORKS UP TO HERE, NEXT FIGURE OUT THE UPDATE GENOME PART
 
 
-# ############################################
-# # CALCULATE NEW COUPLINGS BY GRADIENT ASCENT
-# ############################################
+############################################
+# CALCULATE NEW COUPLINGS BY GRADIENT ASCENT
+############################################
 
-# python3 /home/hgjones9/quantum_control/update_genome.py
+python3 /home/hgjones9/quantum_control/update_genome.py
 
 
 
