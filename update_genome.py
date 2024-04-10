@@ -133,8 +133,12 @@ print(f"Gradient vector: {gradient_arr}")
 
 # Extract old couplings ready to be updated
 old_couplings_lst, old_couplings_arr = extract_old_couplings(quant_cont_path)
-print(type(old_couplings_arr))
-print(type(old_couplings_lst))
+for item in old_couplings_lst:
+    print(type(item))
+
+for item in old_couplings_arr:
+    print(type(item))
+
 
 # # Update couplings using gradient ascent
 # new_couplings_arr = update_couplings(gradient_arr, old_couplings_arr)
