@@ -35,13 +35,6 @@ def current_time():
 # Function which filters through the folders under spinchain and finds those most recently created 
 def filter(dirs):
 
-    # # Obtain current times
-    # year = current_time()[0]
-    # month = current_time()[1]
-    # day = current_time()[2]
-    # hour = current_time()[3]
-    # min = current_time()[4]
-
     # Initialise empty list of output directories
     output_dirs = []
 
@@ -147,32 +140,6 @@ def fidelities(output_dirs):
     fidelity_time_arr = np.hstack((timesteps.reshape(-1, 1), fidelities_arr))
 
     return fidelity_time_arr
-
-# # Function to calculate the NxM matrix of central differences 
-# # N = number of timesteps
-# # M = central differences 
-# def calculate_gradient(fidelities, h=10):
-
-#     # Obtain number of columns to iterate over
-#     num_rows, num_columns = fidelities.shape
-#     # print(num_columns)
-#     # print(num_columns)
-
-#     # Initialise gradient vector
-#     gradient = []
-
-#     # Iterate over columns and calculate the central difference for each timestep
-#     for i in range(0, num_columns-1,2):
-#         central_diff = (fidelities[:,i] - fidelities[:,i+1]) / (2 * h)
-#         # print(fidelities[:,i])
-#         # print(fidelities[:,i+1])
-#         # print(central_diff)
-#         gradient.append(central_diff)
-
-#     # Convert list of lists into an array
-#     gradient_array = np.array(gradient).T
-
-#     return gradient_array
 
 # Function which returns the maximum fidelity and corresponding time for each column of fidelities
 def max_fidelity(fidelities):
