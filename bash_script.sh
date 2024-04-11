@@ -94,7 +94,7 @@ new_genome=$(<"$new_genome_output")
 # HAVEN'T TESTED ANY OF BELOW YET, EVERYTHING ABOVE HERE WORKS
 
 # Define threshold value for stopping the optimisation
-epsilon=0.1
+epsilon=0.01
 
 # Retrieve fidelity value of most recent spinnet calculate to initialise fidelity
 fidelity_out_file='/home/hgjones9/quantum_control/output-latest/genetic.out'
