@@ -91,10 +91,8 @@ new_genome=$(<"$new_genome_output")
 # SETUP LOOP FOR GRADIENT ASCENT
 ################################
 
-# HAVEN'T TESTED ANY OF BELOW YET, EVERYTHING ABOVE HERE WORKS
-
 # Define threshold value for stopping the optimisation
-epsilon=0.01
+epsilon=0.03
 
 # Retrieve fidelity value of most recent spinnet calculate to initialise fidelity
 fidelity_out_file='/home/hgjones9/quantum_control/output-latest/genetic.out'
@@ -162,57 +160,7 @@ do
 
 done
 
-
-# # Adjust couplings and reconstruct adjusted genomes ready for central diff
-# python3 /home/hgjones9/quantum_control/genome_adjuster.py
-
-# # Specify output file of adjusted genomes
-# adjusted_genomes_out='/home/hgjones9/quantum_control/adjusted_genomes.txt'
-
-# # Search output.txt for the line containing the list of adjusted genomes and print them as a list
-# adjusted_genomes=$(grep -oP "Adjusted genomes : \[\K.*(?=\])" "$adjusted_genomes_out")
-
-# # Print the list of adjusted genomes
-# echo "$adjusted_genomes"
-
-# # Loop over the list of adjusted genomes and run spinnet on each genome
-# for string in $adjusted_genomes
-# do
-#     genome=$(echo "$string" | sed "s/'\([^']*\)'.*/\1/") # Remove the individual quotation marks from each genome
-
-#     # Call spinnet for each genome, generating a different output directory for each genome
-#     /home/hgjones9/spinchain/bin/spinnet "<A|C>$genome"
-#     echo "<A|C>$genome"
-# done
-
-# # Calculate gradient vector of fidelity wrt couplings
-# python3 /home/hgjones9/quantum_control/calculate_gradients.py
-
-# # Calculat new couplings by gradient ascent
-# python3 /home/hgjones9/quantum_control/update_genome.py
-
-# # Run spinnet on new genome
-# # Specify output file location of new genome
-# new_genome_output='/home/hgjones9/quantum_control/new_genome.txt'
-
-# # Extract new genome from new_genome.txt
-# new_genome=$(<"$new_genome_output")
-
-# /home/hgjones9/spinchain/bin/spinnet "<A|C>$new_genome"
-
-# # Retrieve fidelity value from 'output_latest'
-# fidelity_out_file='/home/hgjones9/quantum_control/output-latest/genetic.out'
-# fidelity=$(awk '/fidelity/ {for (i=1; i<NF; i++) if ($i == "fidelity") {gsub(/\(/, "", $(i-1)); gsub(/%/, "", $(i-1)); print $(i-1)}}' "$fidelity_out_file")
-
-# # Print the extracted fidelity value
-# echo "$fidelity"
-
-# # Calculate infidelity using awk
-# infidelity=$(awk -v f="$fidelity" 'BEGIN {printf "%.2f", 100 - f}')
-
-# echo "$infidelity"
-
-
+echo "Optimised infidelity : $infidelity"
 
 
 
