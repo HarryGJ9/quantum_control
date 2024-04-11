@@ -160,7 +160,14 @@ do
 
 done
 
+# Return the minimised infidelity
 echo "Optimised infidelity : $infidelity"
+
+# Return the genome corresponding with that infidelity 
+opt_genome_out="/home/hgjones9/quantum_control/output-latest/genetic.out"
+opt_genome=$(awk '/stripped genome/ {print $NF}' "$opt_genome_out")
+
+echo "Stripped Genome: $opt_genome"
 
 
 
