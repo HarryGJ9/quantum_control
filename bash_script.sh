@@ -170,6 +170,8 @@ do
     # Increment the iteration counter
     ((iteration++))  
 
+    echo "$iteration"
+
 done
 
 # Return the minimised infidelity
