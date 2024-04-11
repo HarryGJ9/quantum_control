@@ -98,7 +98,7 @@ epsilon=0.0000001
 
 # Retrieve fidelity value of most recent spinnet calculate to initialise fidelity
 fidelity_out_file='/home/hgjones9/quantum_control/output-latest/genetic.out'
-fidelity=$(awk '/fidelity/ {for (i=1; i<NF; i++) if ($i == "fidelity") print $(i-1)}' "$fidelity_out_file")
+fidelity=$(awk '/fidelity/ {for (i=1; i<NF; i++) if ($i == "fidelity") {gsub(/\(/, "", $(i-1)); print $(i-1)}}' "$fidelity_out_file")
 
 # Print the extracted fidelity value
 echo "$fidelity"
