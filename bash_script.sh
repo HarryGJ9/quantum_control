@@ -93,18 +93,18 @@ new_genome=$(<"$new_genome_output")
 
 # HAVEN'T TESTED ANY OF BELOW YET, EVERYTHING ABOVE HERE WORKS
 
-# # Define threshold value for stopping the optimisation
-# epsilon=0.0000001
+# Define threshold value for stopping the optimisation
+epsilon=0.0000001
 
-# # Retrieve fidelity value of most recent spinnet calculate to initialise fidelity
-# fidelity_out_file='/home/hgjones9/quantum_control/output-latest/genetic.out'
-# fidelity=$(awk '/fidelity/ {gsub(/%/,"",$NF); print $(NF-1)}' "$fidelity_out_file")
+# Retrieve fidelity value of most recent spinnet calculate to initialise fidelity
+fidelity_out_file='/home/hgjones9/quantum_control/output-latest/genetic.out'
+fidelity=$(awk '/fidelity/ {gsub(/%/,"",$NF); print $(NF-1)}' "$fidelity_out_file")
 
-# # Print the extracted fidelity value
-# echo "$fidelity"
+# Print the extracted fidelity value
+echo "$fidelity"
 
-# # Calculate condition (1 - F)
-# one_minus_F=$(echo "1 - $F" | bc)
+# Calculate condition (1 - F)
+one_minus_F=$(echo "1 - $F" | bc)
 
 # while (( $(echo "$one_minus_F > $epsilon" | bc -1) ))
 # do  
