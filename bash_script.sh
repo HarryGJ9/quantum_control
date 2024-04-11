@@ -104,7 +104,7 @@ fidelity=$(awk '/fidelity/ {for (i=1; i<NF; i++) if ($i == "fidelity") {gsub(/\(
 echo "$fidelity"
 
 # Calculate (100 - F) using awk
-infidelity=$(bc -l <<< "100 - $fidelity")
+infidelity=$(awk -v f="$fidelity" 'BEGIN {printf "%.2f", 100 - f}')
 
 echo "$infidelity"
 
