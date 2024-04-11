@@ -56,7 +56,7 @@ def extract_old_couplings():
 
 
 # Updates couplings using gradient ascent
-def update_couplings(gradient_arr, old_couplings_arr, stepsize=1e5):
+def update_couplings(gradient_arr, old_couplings_arr, stepsize=1e4):
     # Calculate new couplings by ascending gradient
     new_couplings_arr = old_couplings_arr + stepsize * gradient_arr
 
