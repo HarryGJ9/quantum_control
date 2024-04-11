@@ -107,7 +107,7 @@ infidelity=$(awk -v f="$fidelity" 'BEGIN {printf "%.2f", 100 - f}')
 echo "$infidelity"
 
 # Initialise number of iterations
-max_iterations=1
+max_iterations=10
 iteration=0
 while (( $(echo "$infidelity > $epsilon" | bc -l) ))
 do  
