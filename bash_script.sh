@@ -103,8 +103,8 @@ fidelity=$(awk '/fidelity/ {for (i=1; i<NF; i++) if ($i == "fidelity") {gsub(/\(
 # Print the extracted fidelity value
 echo "$fidelity"
 
-# Calculate condition (1 - F)
-one_minus_F=$(echo "1 - $F" | bc)
+# Calculate (1 - F) using awk
+one_minus_F=$(awk -v F="$F" 'BEGIN {print 1 - F}')
 
 echo "$one_minus_F"
 
