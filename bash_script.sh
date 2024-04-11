@@ -106,9 +106,18 @@ infidelity=$(awk -v f="$fidelity" 'BEGIN {printf "%.2f", 100 - f}')
 
 echo "$infidelity"
 
-# while (( $(awk -v inf="$infidelity" -v eps="$epsilon" 'BEGIN {print inf > eps}' ) ))
+# Initialise number of iterations
+max_iterations=2
+iteration=0
 while (( $(echo "$infidelity > $epsilon" | bc -l) ))
 do  
+
+    # Break the loop if the number of iterations 
+     if [ $iteration -ge $max_iterations ]; then
+        echo "Maximum number of iterations reached. Exiting loop."
+        break
+    fi
+
     # Adjust couplings and reconstruct adjusted genomes ready for central diff
     python3 /home/hgjones9/quantum_control/genome_adjuster.py
 
