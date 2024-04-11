@@ -112,9 +112,9 @@ iteration=0
 while (( $(echo "$infidelity > $epsilon" | bc -l) ))
 do  
 
-    echo "Infidelity: $infidelity"
-    echo "Epsilon: $epsilon"
-    echo "Comparison: $(echo "$infidelity > $epsilon" | bc -l)"
+    # echo "Infidelity: $infidelity"
+    # echo "Epsilon: $epsilon"
+    # echo "Comparison: $(echo "$infidelity > $epsilon" | bc -l)"
 
     # Break the loop if the number of iterations 
      if [ $iteration -ge $max_iterations ]; then
