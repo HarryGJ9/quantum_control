@@ -18,6 +18,8 @@ initial_genome="<A|C>AB500BC500"
 # Run spinnet -o on an initial genome 
 /home/hgjones9/spinchain/bin/spinnet -o "$initial_genome"
 
+# RETRIEVE THE TIME AND MAX FIDELITY FROM GENOME.OUT
+
 # At this point, there is an output file located at /home/hgjones9/quantum_control/output_latest/genetic.out"
 # This file contains the optimised genome "<i|f>AB...BC..."
 

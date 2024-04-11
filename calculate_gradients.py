@@ -141,6 +141,9 @@ def fidelities(output_dirs):
 
     return fidelity_time_arr
 
+# Function which picks out the fidelities at the time given by the original genetic algorithm
+
+
 # Function which returns the maximum fidelity and corresponding time for each column of fidelities
 def max_fidelity(fidelities):
 
