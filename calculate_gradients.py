@@ -151,6 +151,7 @@ def fidelities_at_time(fidelity_time_arr):
     specified_time = 2.40
     # Format the specified time to match the format in the array, e.g. '3.20' would be '3.200000e+00' in the array
     specified_time_str = "{:.2f}".format(specified_time)
+    print(specified_time_str)
 
     # Pick out the row containing the time of initial max fidelity
     row_index = np.where(np.char.startswith(fidelity_time_arr[:, 0].astype(str), specified_time_str))[0]
