@@ -153,9 +153,10 @@ def fidelities_at_time(fidelity_time_arr):
     # Format fidelity_time_arr such that the time column are all of the form e.g. '2.40' not '2.40000000e+00'
     fidelity_time_arr[:,0] = np.around(fidelity_time_arr[:,0], decimals=2)
 
+    # Specify index of the row containing the specified time
     row_index = np.where(fidelity_time_arr[:,0] == specified_time)[0]
-    print(row_index)
-
+    
+    # If the row index can be picked out, extract the fidelities at that time
     if len(row_index) > 0:
         # Extract columns 2-4 (containing the fidelities)
         fidelities_at_time_arr = np.squeeze(fidelity_time_arr[row_index, 1:])
@@ -222,7 +223,7 @@ print(f"Sorted output directories: {sorted_output_dirs}")
 
 # Call fidelities function to get an array of updated fidelities
 updated_fidelities = fidelities(sorted_output_dirs)
-print(f"Fidelities of updated genomes: {updated_fidelities}")
+# print(f"Fidelities of updated genomes: {updated_fidelities}")
 # print((updated_fidelities[:,0] - updated_fidelities[:,1]) / (2))
 
 # Obtain fidelities at the time of max fidelity provided by the initial genome.out file
