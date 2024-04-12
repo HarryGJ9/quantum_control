@@ -5,6 +5,7 @@ import os
 import datetime
 import time
 import numpy as np
+from max_fidelity_time import time_val
 
 # Specify quantum_control directory path
 quant_cont_path = r'/home/hgjones9/quantum_control'
@@ -142,11 +143,25 @@ def fidelities(output_dirs):
     return fidelity_time_arr
 
 # # Function which picks out the fidelities at the time given by the original genetic algorithm
-# def fidelities_at_time(fidelity_time_arr):
+def fidelities_at_time(fidelity_time_arr):
 
-    
+    # Specify time at which to retrieve data
+    specified_time = time_val
 
+    # Format the specified time to match the format in the array, e.g. '3.20' would be '3.200000e+00' in the array
+    specified_time_str = "{:.2f}".format(specified_time)
 
+    # Pick out the row containing the time of initial max fidelity
+    row_index = np.where(np.char.startswith(fidelity_time_arr[:, 0].astype(str), specified_time_str))[0]
+
+    if len(row_index) > 0:
+        # Extract columns 2-4 (containing the fidelities)
+        fidelities = fidelity_time_arr[row_index, 1:4]
+        print(f"Fidelities at time {specified_time} : {fidelities}")
+    else:
+        print("Specified time not found in the array")
+
+    return fidelities
 
 # Function which returns the maximum fidelity and corresponding time for each column of fidelities
 def max_fidelity(fidelities):
@@ -209,19 +224,19 @@ print(f"Fidelities of updated genomes: {updated_fidelities}")
 # print((updated_fidelities[:,0] - updated_fidelities[:,1]) / (2))
 
 # Obtain fidelities at the time of max fidelity provided by the initial genome.out file
-
+fidelity_vals = fidelities_at_time(updated_fidelities)
 
 # # Obtain max fidelities from each column (exclude time column)
 # max_fidelities, max_times = max_fidelity(updated_fidelities)
 # print(f"Maximum fidelities: {max_fidelities}")
 # # print(max_times)
 
-# # Call calculate_gradient to obtain the gradient vector
-# gradient = calculate_gradient(max_fidelities)
-# print(f"Gradient vector: {gradient}")
+# Call calculate_gradient to obtain the gradient vector
+gradient = calculate_gradient(fidelity_vals)
+print(f"Gradient vector: {gradient}")
 
-# with open('/home/hgjones9/quantum_control/gradient_latest.txt', 'w') as file:
-#     file.write(str(gradient))
+with open('/home/hgjones9/quantum_control/gradient_latest.txt', 'w') as file:
+    file.write(str(gradient))
 
 # # Retrieve current times
 # year = current_time()[0]
