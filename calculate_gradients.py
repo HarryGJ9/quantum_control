@@ -157,37 +157,37 @@ def fidelities_at_time(fidelity_time_arr):
 
     if len(row_index) > 0:
         # Extract columns 2-4 (containing the fidelities)
-        fidelities = fidelity_time_arr[row_index, 1:4]
+        fidelity_at_time_arr = fidelity_time_arr[row_index, 1:4]
         print(f"Fidelities at time {specified_time} : {fidelities}")
     else:
         print("Specified time not found in the array")
 
-    return fidelities
+    return fidelity_at_time_arr
 
-# Function which returns the maximum fidelity and corresponding time for each column of fidelities
-def max_fidelity(fidelities):
+# # Function which returns the maximum fidelity and corresponding time for each column of fidelities
+# def max_fidelity(fidelities):
 
-    # Array of timesteps
-    time_arr = fidelities[:,0]
-    # print(time_arr)
+#     # Array of timesteps
+#     time_arr = fidelities[:,0]
+#     # print(time_arr)
 
-    # Obtain fidelity values by first column (timesteps) 
-    fidelity_vals = fidelities[:,1:]
-    # print(fidelity_vals)
+#     # Obtain fidelity values by first column (timesteps) 
+#     fidelity_vals = fidelities[:,1:]
+#     # print(fidelity_vals)
 
-    # Maximum fidelities of each row 
-    max_fidelities = np.amax(fidelity_vals, axis=0)
-    # print(max_fidelities)
+#     # Maximum fidelities of each row 
+#     max_fidelities = np.amax(fidelity_vals, axis=0)
+#     # print(max_fidelities)
 
-    # Find corresponding time index at which max fidelity occurs
-    max_indices = np.argmax(fidelity_vals, axis=0)
-    # print(max_indices)
+#     # Find corresponding time index at which max fidelity occurs
+#     max_indices = np.argmax(fidelity_vals, axis=0)
+#     # print(max_indices)
 
-    # # Find time value at which max fidelity index occurs
-    time = time_arr[max_indices]
-    # print(time)
+#     # # Find time value at which max fidelity index occurs
+#     time = time_arr[max_indices]
+#     # print(time)
 
-    return max_fidelities, time
+#     return max_fidelities, time
 
 # Function which calculates the gradient through central difference of each pair of fidelities
 def calculate_gradient(fidelities, h=100):
@@ -205,7 +205,6 @@ def calculate_gradient(fidelities, h=100):
     gradient_arr = np.array(gradient)
 
     return gradient
-
 
 ###############
 # RUN PROGRAMME 
