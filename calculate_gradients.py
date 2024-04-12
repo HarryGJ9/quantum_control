@@ -48,7 +48,7 @@ def filter(dirs, N):
     filtered_dirs = [dir for dir in dirs if dir.startswith('output-') and os.path.isdir(dir)]
 
     # Sort directories by creation time in descending order
-    sorted_dirs = sorted(filtered_dirs, key=lambda dir: os.path.getctime(dir), reverse=True)
+    sorted_dirs = sorted(filtered_dirs, key=lambda dir: os.path.getctime(dir), reverse=False)
 
     # Exclude 'output-latest' directory if present
     sorted_dirs = [dir for dir in sorted_dirs if dir != 'output-latest']
@@ -266,7 +266,7 @@ print(f"Sorted output directories: {sorted_output_dirs}")
 
 # Call fidelities function to get an array of updated fidelities
 updated_fidelities = fidelities(sorted_output_dirs)
-# print(f"Fidelities of updated genomes: {updated_fidelities}")
+print(f"Fidelities of updated genomes: {updated_fidelities}")
 # print((updated_fidelities[:,0] - updated_fidelities[:,1]) / (2))
 
 # Obtain fidelities at the time of max fidelity provided by the initial genome.out file
