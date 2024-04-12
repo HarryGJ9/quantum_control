@@ -141,8 +141,8 @@ def fidelities(output_dirs):
 
     return fidelity_time_arr
 
-# Function which picks out the fidelities at the time given by the original genetic algorithm
-def fidelities_at_time(fidelity_time_arr):
+# # Function which picks out the fidelities at the time given by the original genetic algorithm
+# def fidelities_at_time(fidelity_time_arr):
 
     
 
