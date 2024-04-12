@@ -48,7 +48,7 @@ def filter(dirs, N):
     filtered_dirs = [dir for dir in dirs if dir.startswith('output-') and os.path.isdir(dir)]
 
     # Sort directories by creation time in descending order
-    sorted_dirs = sorted(filtered_dirs, key=lambda dir: os.path.getctime(dir))
+    sorted_dirs = sorted(filtered_dirs, key=lambda dir: os.path.getctime(dir), reverse=True)
 
     # Exclude 'output-latest' directory if present
     sorted_dirs = [dir for dir in sorted_dirs if dir != 'output-latest']
@@ -56,8 +56,6 @@ def filter(dirs, N):
     # Take the first N directories, where N = no. of adjusted couplings = 2 x no. of couplings
     output_dirs = sorted_dirs[:N]
 
-    # Reverse order of list
-    output_dirs = output_dirs[::-1]
 
     # # Iterate over the folders and add the most recent ones to a list of output- directories
     # for dir in dirs:
@@ -176,18 +174,15 @@ def fidelities_at_time(fidelity_time_arr):
 
 
     # Format fidelity_time_arr such that the time column are all of the form e.g. '2.40' not '2.40000000e+00'
-    fidelity_time_arr[:,0] = np.around(fidelity_time_arr[:,0], decimals=2)
-    print(fidelity_time_arr)
-
-    # Specify index of the row containing the specified time
-    row_index = np.where(fidelity_time_arr[:,0] == specified_time)[0]
-    
-    # If the row index can be picked out, extract the fidelities at that time
-    if len(row_index) > 0:
-        # Extract columns 2-4 (containing the fidelities)
-        fidelities_at_time_arr = np.squeeze(fidelity_time_arr[row_index, 1:])
-        # print(f"Fidelities at time {specified_time} : {fidelities_at_time_arr}")
-        # print(np.shape(fidelities_at_time_arr))
+    formatted_times = [f'{time:.2f}' for time in fidelity_time_arr[:,0]]
+   
+    # Check if the specified time exists in the array
+    if specified_time in formatted_times:
+        # Find the index of the specified time
+        row_index = formatted_times.index(specified_time)
+        # Extract fidelities at the specified time
+        fidelities_at_time_arr = fidelity_time_arr[row_index, 1:]
+        print(f"Fidelities at time {specified_time} : {fidelities_at_time_arr}")
     else:
         print("Specified time not found in the array")
 
