@@ -23,7 +23,7 @@ pwd
 
 
 # Retrieve max fidelity of optimised genome and time at which it occurs
-/max_fidelity_time.py
+python3 /max_fidelity_time.py
 
 
 # # At this point, there is an output file located at /home/hgjones9/quantum_control/output_latest/genetic.out"
