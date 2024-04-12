@@ -24,7 +24,7 @@ pwd
 # Specify <i|f> directive
 genetic_out_file='/home/hgjones9/quantum_control/output-latest/genetic.out' # Path to genetic.out
 directive_line=$(grep '<i|f> directive *= *<.*>' $genetic_out_file) # Find the line containing '<i|f> directive ='
-i_f=$(echo "$directive_line" | grep -o '<[^>]*>' | head -n 1) # Filter out <i|f> directive from the line
+i_f=$(echo "$directive_line" | grep -o '<[^>]*>' | tail -n 1) # Filter out <i|f> directive from the line
 
 echo "$i_f"
 
