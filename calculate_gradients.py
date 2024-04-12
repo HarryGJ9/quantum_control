@@ -7,6 +7,8 @@ import time
 import numpy as np
 from max_fidelity_time import time_val
 
+print(time_val)
+
 # Specify quantum_control directory path
 quant_cont_path = r'/home/hgjones9/quantum_control'
 
