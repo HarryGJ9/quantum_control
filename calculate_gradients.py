@@ -174,6 +174,7 @@ def fidelities_at_time(fidelity_time_arr):
 
     # Format fidelity_time_arr such that the time column are all of the form e.g. '2.40' not '2.40000000e+00'
     fidelity_time_arr[:,0] = np.around(fidelity_time_arr[:,0], decimals=2)
+    print(fidelity_time_arr)
 
     # Specify index of the row containing the specified time
     row_index = np.where(fidelity_time_arr[:,0] == specified_time)[0]
