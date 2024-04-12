@@ -56,6 +56,9 @@ def filter(dirs, N):
     # Take the first N directories, where N = no. of adjusted couplings = 2 x no. of couplings
     output_dirs = sorted_dirs[:N]
 
+    # Flip the list 
+    output_dirs = sorted_dirs[::-1]
+
 
     # # Iterate over the folders and add the most recent ones to a list of output- directories
     # for dir in dirs:
@@ -258,6 +261,7 @@ num_couplings = sum(1 for elem in genome_lst if elem.isdigit())
 
 # Specify N = how many recent files to use = how many adjusted couplings there are
 N = 2 * num_couplings
+print(N)
 
 # Call filter function to get the relevant output- directories, filtered by time
 sorted_output_dirs = filter(dirs, N)
