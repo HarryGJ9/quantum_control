@@ -142,6 +142,10 @@ def fidelities(output_dirs):
     return fidelity_time_arr
 
 # Function which picks out the fidelities at the time given by the original genetic algorithm
+def fidelities_at_time(fidelity_time_arr):
+
+    
+
 
 
 # Function which returns the maximum fidelity and corresponding time for each column of fidelities
@@ -201,20 +205,23 @@ print(f"Sorted output directories: {sorted_output_dirs}")
 
 # Call fidelities function to get an array of updated fidelities
 updated_fidelities = fidelities(sorted_output_dirs)
-# print(f"Fidelities of updated genomes: {updated_fidelities}")
+print(f"Fidelities of updated genomes: {updated_fidelities}")
 # print((updated_fidelities[:,0] - updated_fidelities[:,1]) / (2))
 
-# Obtain max fidelities from each column (exclude time column)
-max_fidelities, max_times = max_fidelity(updated_fidelities)
-print(f"Maximum fidelities: {max_fidelities}")
-# print(max_times)
+# Obtain fidelities at the time of max fidelity provided by the initial genome.out file
 
-# Call calculate_gradient to obtain the gradient vector
-gradient = calculate_gradient(max_fidelities)
-print(f"Gradient vector: {gradient}")
 
-with open('/home/hgjones9/quantum_control/gradient_latest.txt', 'w') as file:
-    file.write(str(gradient))
+# # Obtain max fidelities from each column (exclude time column)
+# max_fidelities, max_times = max_fidelity(updated_fidelities)
+# print(f"Maximum fidelities: {max_fidelities}")
+# # print(max_times)
+
+# # Call calculate_gradient to obtain the gradient vector
+# gradient = calculate_gradient(max_fidelities)
+# print(f"Gradient vector: {gradient}")
+
+# with open('/home/hgjones9/quantum_control/gradient_latest.txt', 'w') as file:
+#     file.write(str(gradient))
 
 # # Retrieve current times
 # year = current_time()[0]
