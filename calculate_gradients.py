@@ -6,7 +6,7 @@ import datetime
 import time
 import numpy as np
 import re
-from max_fidelity_time import time_val
+# from max_fidelity_time import time_val
 
 # print(time_val)
 
@@ -164,8 +164,13 @@ def fidelities(output_dirs):
 # # Function which picks out the fidelities at the time given by the original genetic algorithm
 def fidelities_at_time(fidelity_time_arr):
 
-    # Specify time at which to retrieve data
-    specified_time = time_val
+    # Open max_fidelity_time.txt to get the specified time
+    with open('/home/hgjones9/quantum_control/max_fidelity_time.txt') as file:
+        lines = file.readlines()
+        if len(lines) >= 2:
+            specified_time = lines[1].strip()
+            print(specified_time)
+
 
     # Format fidelity_time_arr such that the time column are all of the form e.g. '2.40' not '2.40000000e+00'
     fidelity_time_arr[:,0] = np.around(fidelity_time_arr[:,0], decimals=2)

@@ -1,3 +1,5 @@
+import os
+
 # Get maximum fidelity and the time of max fidelity from the first genetic.out file
 
 # genetic.out path
@@ -29,5 +31,11 @@ with open(genetic_out_path, 'r') as file:
     # Print values to check
     print(f'Maximum fidelity of GA optimised genome: {fidelity_val}')
     print(f'Time at maximum fidelity: {time_val}')
+
+# Save to new files to be read in other scripts
+with open('/home/hgjones9/quantum_control/max_fidelity_time.txt', 'w') as file:
+    file.write(fidelity_val + '\n')
+    file.write(time_val + '\n')
+
 
     
