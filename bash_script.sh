@@ -98,7 +98,7 @@ new_genome=$(<"$new_genome_output")
 ################################
 
 # Define threshold value for stopping the optimisation
-epsilon=0.03
+epsilon=0.01
 
 # Retrieve fidelity value of most recent spinnet calculate to initialise fidelity
 fidelity_out_file='/home/hgjones9/quantum_control/output-latest/genetic.out'
@@ -113,7 +113,7 @@ infidelity=$(awk -v f="$fidelity" 'BEGIN {printf "%.2f", 100 - f}')
 echo "$infidelity"
 
 # Initialise number of iterations
-max_iterations=10
+max_iterations=5
 iteration=0
 while (( $(echo "$infidelity > $epsilon" | bc -l) ))
 do  
