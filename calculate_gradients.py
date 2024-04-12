@@ -5,7 +5,8 @@ import os
 import datetime
 import time
 import numpy as np
-# from max_fidelity_time import time_val
+import re
+from max_fidelity_time import time_val
 
 # print(time_val)
 
@@ -38,25 +39,39 @@ def current_time():
 
 
 # Function which filters through the folders under spinchain and finds those most recently created 
-def filter(dirs):
+def filter(dirs, N):
 
     # Initialise empty list of output directories
     output_dirs = []
 
-    # Iterate over the folders and add the most recent ones to a list of output- directories
-    for dir in dirs:
-        if dir.startswith('output-') and os.path.isdir(dir): 
-            dir_creation_time = os.path.getctime(dir)
-            if time.time() - dir_creation_time <= 16: # Obtain all directories created in the last 20 seconds
-                output_dirs.append(dir)
-    # print(output_dirs)
+    # Filter directories that start with 'output-' and are genuine directories
+    filtered_dirs = [dir for dir in dirs if dir.startswith('output-') and os.path.isdir(dir)]
+
+    # Sort directories by creation time in descending order
+    sorted_dirs = sorted(filtered_dirs, key=lambda dir: os.path.getctime(dir), reverse=True)
+
+    # Exclude 'output-latest' directory if present
+    sorted_dirs = [dir for dir in sorted_dirs if dir != 'output-latest']
+
+    # Take the first N directories, where N = no. of adjusted couplings = 2 x no. of couplings
+    output_dirs = sorted_dirs[:N]
+
+    # # Iterate over the folders and add the most recent ones to a list of output- directories
+    # for dir in dirs:
+    #     if dir.startswith('output-') and os.path.isdir(dir): 
+    #         dir_creation_time = os.path.getctime(dir)
+    #         if time.time() - dir_creation_time <= 16: # Obtain all directories created in the last 20 seconds
+    #             output_dirs.append(dir)
+    # # print(output_dirs)
+
+
                 
     # Remove 'output-latest' directory
-    output_dirs.remove('output-latest')
+    # output_dirs.remove('output-latest')
     # print(output_dirs)
 
-    # Sort the output directories by time
-    output_dirs.sort(reverse=False, key=lambda x: os.path.getmtime(x))
+    # # Sort the output directories by time
+    # output_dirs.sort(reverse=False, key=lambda x: os.path.getmtime(x))
 
     return output_dirs
 
@@ -150,7 +165,7 @@ def fidelities(output_dirs):
 def fidelities_at_time(fidelity_time_arr):
 
     # Specify time at which to retrieve data
-    specified_time = 2.40
+    specified_time = time_val
 
     # Format fidelity_time_arr such that the time column are all of the form e.g. '2.40' not '2.40000000e+00'
     fidelity_time_arr[:,0] = np.around(fidelity_time_arr[:,0], decimals=2)
@@ -215,12 +230,33 @@ def calculate_gradient(fidelities, h=100):
 # RUN PROGRAMME 
 ###############
 
+# Specify quantum_control directory path
+quant_cont_path = r'/home/hgjones9/quantum_control'
+
 # Call list_dirs to obtain all output- directories under quantum_control
 dirs = list_dirs(quant_cont_path)
 # print(dirs)
 
+# Obtain number of adjusted couplings
+
+# Specify path to the updated genome
+genome_path = os.path.join(quant_cont_path, 'new_genome.txt')
+
+# Open file new_genome.txt and read genome
+with open(genome_path, 'r') as file:
+    genome_string = file.read()
+
+# Split genome string into a list of characters and numbers
+genome_lst = re.findall(r'{A-Za-z]+|\d+', genome_string)
+
+# Count how many couplings there are
+num_couplings = sum(1 for elem in genome_lst if elem.isdigit())
+
+# Specify N = how many recent files to use = how many adjusted couplings there are
+N = 2 * num_couplings
+
 # Call filter function to get the relevant output- directories, filtered by time
-sorted_output_dirs = filter(dirs)
+sorted_output_dirs = filter(dirs, N)
 print(f"Sorted output directories: {sorted_output_dirs}")
 
 # Call fidelities function to get an array of updated fidelities
