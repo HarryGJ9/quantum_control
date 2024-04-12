@@ -149,21 +149,21 @@ def fidelities_at_time(fidelity_time_arr):
 
     # Specify time at which to retrieve data
     specified_time = 2.40
-    # Format the specified time to match the format in the array, e.g. '3.20' would be '3.200000e+00' in the array
-    specified_time_str = "{:.2f}".format(specified_time)
-    print(specified_time_str)
 
-    # Pick out the row containing the time of initial max fidelity
-    row_index = np.where(np.char.startswith(fidelity_time_arr[:, 0].astype(str), specified_time_str))[0]
+    # Format fidelity_time_arr such that the time column are all of the form e.g. '2.40' not '2.40000000e+00'
+    fidelity_time_arr[:,0] = np.around(fidelity_time_arr[:,0], decimals=2)
+
+    row_index = np.where(fidelity_time_arr[:,0] == specified_time)[0]
+    print(row_index)
 
     if len(row_index) > 0:
         # Extract columns 2-4 (containing the fidelities)
-        fidelity_at_time_arr = fidelity_time_arr[row_index, 1:4]
+        fidelities_at_time_arr = fidelity_time_arr[row_index, 1:]
         print(f"Fidelities at time {specified_time} : {fidelities}")
     else:
         print("Specified time not found in the array")
 
-    return fidelity_at_time_arr
+    return fidelities_at_time_arr
 
 # # Function which returns the maximum fidelity and corresponding time for each column of fidelities
 # def max_fidelity(fidelities):
