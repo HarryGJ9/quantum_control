@@ -79,25 +79,27 @@ done
 # CALCULATE THE GRADIENT VECTOR OF THE FIDELITY WITH RESPECT TO THE GENOMES
 ###########################################################################
 
+# AT THE MOMENT IT ISN'T RETURNING THE MOST RECENT FILES
+
 python3 /home/hgjones9/quantum_control/calculate_gradients.py
 
-############################################
-# CALCULATE NEW COUPLINGS BY GRADIENT ASCENT
-############################################
+# ############################################
+# # CALCULATE NEW COUPLINGS BY GRADIENT ASCENT
+# ############################################
 
-python3 /home/hgjones9/quantum_control/update_genome.py
+# python3 /home/hgjones9/quantum_control/update_genome.py
 
-###########################
-# RUN SPINNET ON NEW GENOME
-###########################
+# ###########################
+# # RUN SPINNET ON NEW GENOME
+# ###########################
 
-# Specify output file location of new genome
-new_genome_output='/home/hgjones9/quantum_control/new_genome.txt'
+# # Specify output file location of new genome
+# new_genome_output='/home/hgjones9/quantum_control/new_genome.txt'
 
-# Extract new genome from new_genome.txt
-new_genome=$(<"$new_genome_output")
+# # Extract new genome from new_genome.txt
+# new_genome=$(<"$new_genome_output")
 
-/home/hgjones9/spinchain/bin/spinnet "$i_f$new_genome"
+# /home/hgjones9/spinchain/bin/spinnet "$i_f$new_genome"
 
 # ################################
 # # SETUP LOOP FOR GRADIENT ASCENT
