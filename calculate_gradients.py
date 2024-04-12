@@ -221,10 +221,11 @@ print(f"Sorted output directories: {sorted_output_dirs}")
 # Call fidelities function to get an array of updated fidelities
 updated_fidelities = fidelities(sorted_output_dirs)
 print(f"Fidelities of updated genomes: {updated_fidelities}")
-# print((updated_fidelities[:,0] - updated_fidelities[:,1]) / (2))
+print((updated_fidelities[:,0] - updated_fidelities[:,1]) / (2))
 
 # Obtain fidelities at the time of max fidelity provided by the initial genome.out file
 fidelity_vals = fidelities_at_time(updated_fidelities)
+print(f'Fidelity values at specified time: {fidelity_vals}')
 
 # # Obtain max fidelities from each column (exclude time column)
 # max_fidelities, max_times = max_fidelity(updated_fidelities)
