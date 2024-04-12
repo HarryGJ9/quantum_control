@@ -159,8 +159,8 @@ def fidelities_at_time(fidelity_time_arr):
     if len(row_index) > 0:
         # Extract columns 2-4 (containing the fidelities)
         fidelities_at_time_arr = fidelity_time_arr[row_index, 1:]
-        print(f"Fidelities at time {specified_time} : {fidelities_at_time_arr}")
-        print(np.shape(fidelities_at_time_arr))
+        # print(f"Fidelities at time {specified_time} : {fidelities_at_time_arr}")
+        # print(np.shape(fidelities_at_time_arr))
     else:
         print("Specified time not found in the array")
 
@@ -234,12 +234,12 @@ print(f'Fidelity values at specified time: {fidelity_vals}')
 # print(f"Maximum fidelities: {max_fidelities}")
 # # print(max_times)
 
-# # Call calculate_gradient to obtain the gradient vector
-# gradient = calculate_gradient(fidelity_vals)
-# print(f"Gradient vector: {gradient}")
+# Call calculate_gradient to obtain the gradient vector
+gradient = calculate_gradient(fidelity_vals)
+print(f"Gradient vector: {gradient}")
 
-# with open('/home/hgjones9/quantum_control/gradient_latest.txt', 'w') as file:
-#     file.write(str(gradient))
+with open('/home/hgjones9/quantum_control/gradient_latest.txt', 'w') as file:
+    file.write(str(gradient))
 
 # # Retrieve current times
 # year = current_time()[0]
