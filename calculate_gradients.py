@@ -35,6 +35,8 @@ def current_time():
 
     return year, month, day, hour, min, sec
 
+
+
 # Function which filters through the folders under spinchain and finds those most recently created 
 def filter(dirs):
 
@@ -45,7 +47,7 @@ def filter(dirs):
     for dir in dirs:
         if dir.startswith('output-') and os.path.isdir(dir): 
             dir_creation_time = os.path.getctime(dir)
-            if time.time() - dir_creation_time <= 20: # Obtain all directories created in the last two minutes
+            if time.time() - dir_creation_time <= 16: # Obtain all directories created in the last 20 seconds
                 output_dirs.append(dir)
     # print(output_dirs)
                 
