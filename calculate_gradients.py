@@ -158,7 +158,7 @@ def fidelities_at_time(fidelity_time_arr):
 
     if len(row_index) > 0:
         # Extract columns 2-4 (containing the fidelities)
-        fidelities_at_time_arr = fidelity_time_arr[row_index, 1:]
+        fidelities_at_time_arr = np.squeeze(fidelity_time_arr[row_index, 1:])
         # print(f"Fidelities at time {specified_time} : {fidelities_at_time_arr}")
         # print(np.shape(fidelities_at_time_arr))
     else:
