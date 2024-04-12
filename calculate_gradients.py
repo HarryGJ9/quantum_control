@@ -5,9 +5,9 @@ import os
 import datetime
 import time
 import numpy as np
-from max_fidelity_time import time_val
+# from max_fidelity_time import time_val
 
-print(time_val)
+# print(time_val)
 
 # Specify quantum_control directory path
 quant_cont_path = r'/home/hgjones9/quantum_control'
@@ -148,8 +148,7 @@ def fidelities(output_dirs):
 def fidelities_at_time(fidelity_time_arr):
 
     # Specify time at which to retrieve data
-    specified_time = time_val
-
+    specified_time = 2.40
     # Format the specified time to match the format in the array, e.g. '3.20' would be '3.200000e+00' in the array
     specified_time_str = "{:.2f}".format(specified_time)
 
