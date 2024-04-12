@@ -221,7 +221,7 @@ print(f"Sorted output directories: {sorted_output_dirs}")
 # Call fidelities function to get an array of updated fidelities
 updated_fidelities = fidelities(sorted_output_dirs)
 print(f"Fidelities of updated genomes: {updated_fidelities}")
-print((updated_fidelities[:,0] - updated_fidelities[:,1]) / (2))
+# print((updated_fidelities[:,0] - updated_fidelities[:,1]) / (2))
 
 # Obtain fidelities at the time of max fidelity provided by the initial genome.out file
 fidelity_vals = fidelities_at_time(updated_fidelities)
@@ -232,12 +232,12 @@ print(f'Fidelity values at specified time: {fidelity_vals}')
 # print(f"Maximum fidelities: {max_fidelities}")
 # # print(max_times)
 
-# Call calculate_gradient to obtain the gradient vector
-gradient = calculate_gradient(fidelity_vals)
-print(f"Gradient vector: {gradient}")
+# # Call calculate_gradient to obtain the gradient vector
+# gradient = calculate_gradient(fidelity_vals)
+# print(f"Gradient vector: {gradient}")
 
-with open('/home/hgjones9/quantum_control/gradient_latest.txt', 'w') as file:
-    file.write(str(gradient))
+# with open('/home/hgjones9/quantum_control/gradient_latest.txt', 'w') as file:
+#     file.write(str(gradient))
 
 # # Retrieve current times
 # year = current_time()[0]
