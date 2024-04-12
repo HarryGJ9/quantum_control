@@ -21,8 +21,10 @@ with open(genetic_out_path, 'r') as file:
                 fidelity_val = line_split[fidelity_idx - 1]
                 time_val = line_split[time_idx + 1]
 
-                # Remove '%' from fidelity_val
-                fidelity_val = fidelity_val.replace('%', '')
+                # Remove '%' and '(' from fidelity_val and remove the ')' from time_val
+                fidelity_val = fidelity_val.replace('(', '').replace('%', '')
+                time_val = time_val.replace(')', '')
+
     
     # Print values to check
     print(f'Maximum fidelity of GA optimised genome: {fidelity_val}')
