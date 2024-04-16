@@ -42,9 +42,6 @@ def current_time():
 # Function which filters through the folders under spinchain and finds those most recently created 
 def filter(dirs, N):
 
-    # # Initialise empty list of output directories
-    # output_dirs = []
-
     # Filter directories that start with 'output-' and are genuine directories
     filtered_dirs = [dir for dir in dirs if dir.startswith('output-') and os.path.isdir(dir)]
 
@@ -56,28 +53,9 @@ def filter(dirs, N):
 
     # Take the first N directories, where N = no. of adjusted couplings = 2 x no. of couplings
     output_dirs = sorted_dirs[:N]
-    print(type(output_dirs))
 
     # Flip the list 
     output_dirs.reverse()
-
-
-    # # Iterate over the folders and add the most recent ones to a list of output- directories
-    # for dir in dirs:
-    #     if dir.startswith('output-') and os.path.isdir(dir): 
-    #         dir_creation_time = os.path.getctime(dir)
-    #         if time.time() - dir_creation_time <= 16: # Obtain all directories created in the last 20 seconds
-    #             output_dirs.append(dir)
-    # # print(output_dirs)
-
-
-                
-    # Remove 'output-latest' directory
-    # output_dirs.remove('output-latest')
-    # print(output_dirs)
-
-    # # Sort the output directories by time
-    # output_dirs.sort(reverse=False, key=lambda x: os.path.getmtime(x))
 
     return output_dirs
 
@@ -187,7 +165,7 @@ def fidelities_at_time(fidelity_time_arr):
         row_index = formatted_times.index(specified_time)
         # Extract fidelities at the specified time
         fidelities_at_time_arr = fidelity_time_arr[row_index, 1:]
-        print(f"Fidelities at time {specified_time} : {fidelities_at_time_arr}")
+        # print(f"Fidelities at time {specified_time} : {fidelities_at_time_arr}")
     else:
         print("Specified time not found in the array")
 
@@ -263,7 +241,6 @@ num_couplings = len(couplings_lst)
 
 # Specify N = how many recent files to use = how many adjusted couplings there are
 N = 2 * num_couplings
-print(N)
 
 # Call filter function to get the relevant output- directories, filtered by time
 sorted_output_dirs = filter(dirs, N)
@@ -289,18 +266,6 @@ print(f"Gradient vector: {gradient}")
 
 with open('/home/hgjones9/quantum_control/gradient_latest.txt', 'w') as file:
     file.write(str(gradient))
-
-# # Retrieve current times
-# year = current_time()[0]
-# month = current_time()[1]
-# day = current_time()[2]
-# hour = current_time()[3]
-# min = current_time()[4]
-# sec = current_time()[5]
-
-# # Write the gradient vector out to a .txt file
-# with open(f'/home/hgjones9/quantum_control/gradient-{year}-{month}-{day}-{hour}-{min}-{sec}.txt', 'w') as file:
-#     file.write(str(gradient))
 
 
 
