@@ -78,7 +78,7 @@ def filter(dirs, N):
     # # Sort the output directories by time
     # output_dirs.sort(reverse=False, key=lambda x: os.path.getmtime(x))
 
-    return output_dirs
+    return sorted_dirs
 
 # Function which returns a 2D array of fidelity values for a set of output folders
 def fidelities(output_dirs):
