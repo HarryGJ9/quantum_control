@@ -56,9 +56,10 @@ def filter(dirs, N):
 
     # Take the first N directories, where N = no. of adjusted couplings = 2 x no. of couplings
     output_dirs = sorted_dirs[:N]
+    print(type(output_dirs))
 
-    # # Flip the list 
-    # output_dirs = output_dirs.reverse()
+    # Flip the list 
+    output_dirs.reverse()
 
 
     # # Iterate over the folders and add the most recent ones to a list of output- directories
