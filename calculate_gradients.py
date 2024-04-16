@@ -7,9 +7,7 @@ import time
 import numpy as np
 import re
 import ast
-# from max_fidelity_time import time_val
 
-# print(time_val)
 
 # Specify quantum_control directory path
 quant_cont_path = r'/home/hgjones9/quantum_control'
@@ -36,7 +34,6 @@ def current_time():
     sec = current_time.second
 
     return year, month, day, hour, min, sec
-
 
 
 # Function which filters through the folders under spinchain and finds those most recently created 
@@ -254,11 +251,6 @@ updated_fidelities = fidelities(sorted_output_dirs)
 # Obtain fidelities at the time of max fidelity provided by the initial genome.out file
 fidelity_vals = fidelities_at_time(updated_fidelities)
 print(f'Fidelity values at specified time: {fidelity_vals}')
-
-# # Obtain max fidelities from each column (exclude time column)
-# max_fidelities, max_times = max_fidelity(updated_fidelities)
-# print(f"Maximum fidelities: {max_fidelities}")
-# # print(max_times)
 
 # Call calculate_gradient to obtain the gradient vector
 gradient = calculate_gradient(fidelity_vals)

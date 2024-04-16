@@ -8,10 +8,6 @@
 echo "Please enter a genome to be optimised":
 read initial_genome
 
-# Extract initial and target state to be used later
-# initial=initial_site
-# final=final_site
-
 # Test genome: '<A|C>AB500BC500'
 # initial_genome="<A|C>AB500BC500"
 
@@ -30,11 +26,6 @@ echo "$i_f"
 
 # Retrieve max fidelity of optimised genome and time at which it occurs
 python3 /home/hgjones9/quantum_control/max_fidelity_time.py
-
-
-# At this point, there is an output file located at /home/hgjones9/quantum_control/output_latest/genetic.out"
-# This file contains the optimised genome "<i|f>AB...BC..."
-
 
 # Obtain the optimised output genome and make changes using genome_adjuster.py
 python3 /home/hgjones9/quantum_control/initial_genome_adjuster.py
