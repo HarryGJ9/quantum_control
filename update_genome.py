@@ -5,7 +5,6 @@ import datetime
 import ast
 import re
 
-
 # List all folders under a specific path
 def list_dirs(path):
     dirs = os.listdir(path)
