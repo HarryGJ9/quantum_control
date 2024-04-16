@@ -199,7 +199,7 @@ echo "Optimised infidelity : $infidelity"
 opt_genome_out="/home/hgjones9/quantum_control/output-latest/genetic.out"
 opt_genome=$(awk '/stripped genome/ {print $NF}' "$opt_genome_out")
 
-echo "Optimised Genome: $opt_genome$pos_directive"
+echo "Optimised Genome: $opt_genome"
 
 
 
