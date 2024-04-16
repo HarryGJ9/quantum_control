@@ -27,7 +27,7 @@ echo "$i_f"
 # Specify position directive
 pos_directive=$(grep 'pos directive *= ' $genetic_out_file | cut -d'=' -f2)
 
-echo "pos_directive"
+echo "$pos_directive"
 
 # # Retrieve max fidelity of optimised genome and time at which it occurs
 # python3 /home/hgjones9/quantum_control/max_fidelity_time.py
