@@ -255,6 +255,7 @@ with open(genome_path, 'r') as file:
 
 # Split genome string into a list of characters and numbers
 genome_lst = re.findall(r'{A-Za-z]+|\d+', genome_string)
+print(genome_lst)
 
 # Count how many couplings there are
 num_couplings = sum(1 for elem in genome_lst if elem.isdigit())
