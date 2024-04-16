@@ -24,176 +24,181 @@ i_f=$(echo "$directive_line" | grep -o '<[^>]*>' | tail -n 1) # Filter out <i|f>
 
 echo "$i_f"
 
-# Retrieve max fidelity of optimised genome and time at which it occurs
-python3 /home/hgjones9/quantum_control/max_fidelity_time.py
+# Specify position directive
+pos_directive=$(grep 'pos directive *= ' $genetic_out_file | cut -d'=' -f2)
 
-# Obtain the optimised output genome and make changes using genome_adjuster.py
-python3 /home/hgjones9/quantum_control/initial_genome_adjuster.py
+echo "pos_directive"
 
-# Specify output file of adjusted genomes
-output_file='/home/hgjones9/quantum_control/initial_adjusted_genomes.txt'
+# # Retrieve max fidelity of optimised genome and time at which it occurs
+# python3 /home/hgjones9/quantum_control/max_fidelity_time.py
 
-# Search output.txt for the line containing the list of adjusted genomes and print them as a list
-adjusted_genomes=$(grep -oP "Adjusted genomes : \[\K.*(?=\])" "$output_file")
+# # Obtain the optimised output genome and make changes using genome_adjuster.py
+# python3 /home/hgjones9/quantum_control/initial_genome_adjuster.py
 
-# Print the list of adjusted genomes
-echo "$adjusted_genomes"
+# # Specify output file of adjusted genomes
+# output_file='/home/hgjones9/quantum_control/initial_adjusted_genomes.txt'
 
-#####################################################
-# OBTAIN INITIAL COUPLINGS, READY FOR GRADIENT ASCENT
-#####################################################
+# # Search output.txt for the line containing the list of adjusted genomes and print them as a list
+# adjusted_genomes=$(grep -oP "Adjusted genomes : \[\K.*(?=\])" "$output_file")
 
-python3 /home/hgjones9/quantum_control/extract_initial_couplings.py
+# # Print the list of adjusted genomes
+# echo "$adjusted_genomes"
 
-#######################################################################
-# RENAME 'initial_couplings.txt' TO 'old_couplings.txt' FOR GRAD ASCENT
-#######################################################################
+# #####################################################
+# # OBTAIN INITIAL COUPLINGS, READY FOR GRADIENT ASCENT
+# #####################################################
 
-mv initial_couplings.txt old_couplings.txt
+# python3 /home/hgjones9/quantum_control/extract_initial_couplings.py
 
-##################################################
-# RUN SPINNET ON EACH GENOME TO CALCUALTE DYNAMICS
-##################################################
+# #######################################################################
+# # RENAME 'initial_couplings.txt' TO 'old_couplings.txt' FOR GRAD ASCENT
+# #######################################################################
 
-# Loop over the list of adjusted genomes and run spinnet on each genome
-for string in $adjusted_genomes
-do
-    genome=$(echo "$string" | sed "s/'\([^']*\)'.*/\1/") # Remove the individual quotation marks from each genome
+# mv initial_couplings.txt old_couplings.txt
 
-    # Call spinnet for each genome, generating a different output directory for each genome
-    /home/hgjones9/spinchain/bin/spinnet "$i_f$genome"
-    echo "$i_f$genome"
-done
+# ##################################################
+# # RUN SPINNET ON EACH GENOME TO CALCUALTE DYNAMICS
+# ##################################################
+
+# # Loop over the list of adjusted genomes and run spinnet on each genome
+# for string in $adjusted_genomes
+# do
+#     genome=$(echo "$string" | sed "s/'\([^']*\)'.*/\1/") # Remove the individual quotation marks from each genome
+
+#     # Call spinnet for each genome, generating a different output directory for each genome
+#     /home/hgjones9/spinchain/bin/spinnet "$i_f$genome"
+#     echo "$i_f$genome"
+# done
 
 
-###########################################################################
-# CALCULATE THE GRADIENT VECTOR OF THE FIDELITY WITH RESPECT TO THE GENOMES
-###########################################################################
+# ###########################################################################
+# # CALCULATE THE GRADIENT VECTOR OF THE FIDELITY WITH RESPECT TO THE GENOMES
+# ###########################################################################
 
-# AT THE MOMENT IT ISN'T RETURNING THE MOST RECENT FILES
+# # AT THE MOMENT IT ISN'T RETURNING THE MOST RECENT FILES
 
-python3 /home/hgjones9/quantum_control/calculate_gradients.py
+# python3 /home/hgjones9/quantum_control/calculate_gradients.py
 
-############################################
-# CALCULATE NEW COUPLINGS BY GRADIENT ASCENT
-############################################
+# ############################################
+# # CALCULATE NEW COUPLINGS BY GRADIENT ASCENT
+# ############################################
 
-python3 /home/hgjones9/quantum_control/update_genome.py
+# python3 /home/hgjones9/quantum_control/update_genome.py
 
-###########################
-# RUN SPINNET ON NEW GENOME
-###########################
+# ###########################
+# # RUN SPINNET ON NEW GENOME
+# ###########################
 
-# Specify output file location of new genome
-new_genome_output='/home/hgjones9/quantum_control/new_genome.txt'
+# # Specify output file location of new genome
+# new_genome_output='/home/hgjones9/quantum_control/new_genome.txt'
 
-# Extract new genome from new_genome.txt
-new_genome=$(<"$new_genome_output")
+# # Extract new genome from new_genome.txt
+# new_genome=$(<"$new_genome_output")
 
-/home/hgjones9/spinchain/bin/spinnet "$i_f$new_genome"
+# /home/hgjones9/spinchain/bin/spinnet "$i_f$new_genome"
 
-# Previous generates unwanted directory, so delete
-rm -r /home/hgjones9/quantum_control/spinchain
+# # Previous generates unwanted directory, so delete
+# rm -r /home/hgjones9/quantum_control/spinchain
 
-################################
-# SETUP LOOP FOR GRADIENT ASCENT
-################################
+# ################################
+# # SETUP LOOP FOR GRADIENT ASCENT
+# ################################
 
-# Define threshold value for stopping the optimisation
-epsilon=0.01
+# # Define threshold value for stopping the optimisation
+# epsilon=0.01
 
-# Retrieve fidelity value of most recent spinnet calculate to initialise fidelity
-fidelity_out_file='/home/hgjones9/quantum_control/output-latest/genetic.out'
-fidelity=$(awk '/fidelity/ {for (i=1; i<NF; i++) if ($i == "fidelity") {gsub(/\(/, "", $(i-1)); gsub(/%/, "", $(i-1)); print $(i-1)}}' "$fidelity_out_file")
+# # Retrieve fidelity value of most recent spinnet calculate to initialise fidelity
+# fidelity_out_file='/home/hgjones9/quantum_control/output-latest/genetic.out'
+# fidelity=$(awk '/fidelity/ {for (i=1; i<NF; i++) if ($i == "fidelity") {gsub(/\(/, "", $(i-1)); gsub(/%/, "", $(i-1)); print $(i-1)}}' "$fidelity_out_file")
 
-# Print the extracted fidelity value
-echo "$fidelity"
+# # Print the extracted fidelity value
+# echo "$fidelity"
 
-# Calculate infidelity using awk
-infidelity=$(awk -v f="$fidelity" 'BEGIN {printf "%.2f", 100 - f}')
+# # Calculate infidelity using awk
+# infidelity=$(awk -v f="$fidelity" 'BEGIN {printf "%.2f", 100 - f}')
 
-echo "$infidelity"
+# echo "$infidelity"
 
-# Initialise number of iterations
-max_iterations=5
-iteration=0
-while (( $(echo "$infidelity > $epsilon" | bc -l) ))
-do  
+# # Initialise number of iterations
+# max_iterations=5
+# iteration=0
+# while (( $(echo "$infidelity > $epsilon" | bc -l) ))
+# do  
 
-#     # echo "Infidelity: $infidelity"
-#     # echo "Epsilon: $epsilon"
-#     # echo "Comparison: $(echo "$infidelity > $epsilon" | bc -l)"
+# #     # echo "Infidelity: $infidelity"
+# #     # echo "Epsilon: $epsilon"
+# #     # echo "Comparison: $(echo "$infidelity > $epsilon" | bc -l)"
 
-    # Break the loop if the number of iterations 
-     if [ $iteration -ge $max_iterations ]; then
-        echo "Maximum number of iterations reached. Exiting loop."
-        break
-    fi
+#     # Break the loop if the number of iterations 
+#      if [ $iteration -ge $max_iterations ]; then
+#         echo "Maximum number of iterations reached. Exiting loop."
+#         break
+#     fi
 
-    # Adjust couplings and reconstruct adjusted genomes ready for central diff
-    python3 /home/hgjones9/quantum_control/genome_adjuster.py
+#     # Adjust couplings and reconstruct adjusted genomes ready for central diff
+#     python3 /home/hgjones9/quantum_control/genome_adjuster.py
 
-    # Specify output file of adjusted genomes
-    adjusted_genomes_out='/home/hgjones9/quantum_control/adjusted_genomes.txt'
+#     # Specify output file of adjusted genomes
+#     adjusted_genomes_out='/home/hgjones9/quantum_control/adjusted_genomes.txt'
     
-    # Search output.txt for the line containing the list of adjusted genomes and print them as a list
-    adjusted_genomes=$(grep -oP "Adjusted genomes : \[\K.*(?=\])" "$adjusted_genomes_out")
+#     # Search output.txt for the line containing the list of adjusted genomes and print them as a list
+#     adjusted_genomes=$(grep -oP "Adjusted genomes : \[\K.*(?=\])" "$adjusted_genomes_out")
 
-    # Print the list of adjusted genomes
-    echo "$adjusted_genomes"
+#     # Print the list of adjusted genomes
+#     echo "$adjusted_genomes"
 
-    # Loop over the list of adjusted genomes and run spinnet on each genome
-    for string in $adjusted_genomes
-    do
-        genome=$(echo "$string" | sed "s/'\([^']*\)'.*/\1/") # Remove the individual quotation marks from each genome
+#     # Loop over the list of adjusted genomes and run spinnet on each genome
+#     for string in $adjusted_genomes
+#     do
+#         genome=$(echo "$string" | sed "s/'\([^']*\)'.*/\1/") # Remove the individual quotation marks from each genome
 
-        # Call spinnet for each genome, generating a different output directory for each genome
-        /home/hgjones9/spinchain/bin/spinnet "$i_f$genome"
-        echo "$i_f$genome"
-    done
+#         # Call spinnet for each genome, generating a different output directory for each genome
+#         /home/hgjones9/spinchain/bin/spinnet "$i_f$genome"
+#         echo "$i_f$genome"
+#     done
 
-    # Calculate gradient vector of fidelity wrt couplings
-    python3 /home/hgjones9/quantum_control/calculate_gradients.py
+#     # Calculate gradient vector of fidelity wrt couplings
+#     python3 /home/hgjones9/quantum_control/calculate_gradients.py
 
-    # Calculat new couplings by gradient ascent
-    python3 /home/hgjones9/quantum_control/update_genome.py
+#     # Calculat new couplings by gradient ascent
+#     python3 /home/hgjones9/quantum_control/update_genome.py
 
-    # Run spinnet on new genome
-    # Specify output file location of new genome
-    new_genome_output='/home/hgjones9/quantum_control/new_genome.txt'
+#     # Run spinnet on new genome
+#     # Specify output file location of new genome
+#     new_genome_output='/home/hgjones9/quantum_control/new_genome.txt'
 
-    # Extract new genome from new_genome.txt
-    new_genome=$(<"$new_genome_output")
+#     # Extract new genome from new_genome.txt
+#     new_genome=$(<"$new_genome_output")
 
-    /home/hgjones9/spinchain/bin/spinnet "$i_f$new_genome"
+#     /home/hgjones9/spinchain/bin/spinnet "$i_f$new_genome"
 
-    # Retrieve fidelity value from 'output_latest'
-    fidelity_out_file='/home/hgjones9/quantum_control/output-latest/genetic.out'
-    fidelity=$(awk '/fidelity/ {for (i=1; i<NF; i++) if ($i == "fidelity") {gsub(/\(/, "", $(i-1)); gsub(/%/, "", $(i-1)); print $(i-1)}}' "$fidelity_out_file")
+#     # Retrieve fidelity value from 'output_latest'
+#     fidelity_out_file='/home/hgjones9/quantum_control/output-latest/genetic.out'
+#     fidelity=$(awk '/fidelity/ {for (i=1; i<NF; i++) if ($i == "fidelity") {gsub(/\(/, "", $(i-1)); gsub(/%/, "", $(i-1)); print $(i-1)}}' "$fidelity_out_file")
 
-    # Print the extracted fidelity value
-    echo "$fidelity"
+#     # Print the extracted fidelity value
+#     echo "$fidelity"
 
-    # Calculate infidelity using awk
-    infidelity=$(awk -v f="$fidelity" 'BEGIN {printf "%.2f", 100 - f}')
+#     # Calculate infidelity using awk
+#     infidelity=$(awk -v f="$fidelity" 'BEGIN {printf "%.2f", 100 - f}')
 
-    echo "$infidelity"
+#     echo "$infidelity"
 
-    # Increment the iteration counter
-    ((iteration++))  
+#     # Increment the iteration counter
+#     ((iteration++))  
 
-    echo "$iteration"
+#     echo "$iteration"
 
-done
+# done
 
-# Return the minimised infidelity
-echo "Optimised infidelity : $infidelity"
+# # Return the minimised infidelity
+# echo "Optimised infidelity : $infidelity"
 
-# Return the genome corresponding with that infidelity 
-opt_genome_out="/home/hgjones9/quantum_control/output-latest/genetic.out"
-opt_genome=$(awk '/stripped genome/ {print $NF}' "$opt_genome_out")
+# # Return the genome corresponding with that infidelity 
+# opt_genome_out="/home/hgjones9/quantum_control/output-latest/genetic.out"
+# opt_genome=$(awk '/stripped genome/ {print $NF}' "$opt_genome_out")
 
-echo "Stripped Genome: $opt_genome"
+# echo "Stripped Genome: $opt_genome"
 
 
 
