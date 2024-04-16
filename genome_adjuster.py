@@ -21,8 +21,9 @@ def adjust_couplings(genome_str, h=100):
     couplings_lst = [int(coupling) for coupling in couplings] # Convert each coupling to an integer and stor in a list
 
     # For each coupling, calculate (coupling + h) and (coupling - h) and store in a list
-    couplings_plus_h = [coupling + h for coupling in couplings]
-    couplings_minus_h = [coupling - h for coupling in couplings]
+    couplings_plus_h = [coupling + h for coupling in couplings_lst]
+    couplings_minus_h = [coupling - h for coupling in couplings_lst]
+
 
     return couplings_plus_h, couplings_minus_h
 
@@ -62,10 +63,11 @@ print(f'New genome: {new_genome}')
 
 # Adjust couplings in preparation for central diff calculation
 couplings_plus_h, couplings_minus_h = adjust_couplings(new_genome)
+# print(f"Adjusted couplings: {couplings_plus_h}, {couplings_minus_h}")
 
 # Reconstruct genomes based on adjusted couplings
-adjusted_genomes = construct_new_genomes
-print(f'Adjusted genomes: {adjusted_genomes}')
+genome_lst, adjusted_genomes = construct_new_genomes(new_genome, couplings_plus_h, couplings_minus_h)
+# print(f'Adjusted genomes: {adjusted_genomes}')
 
 # Write adjusted genomes to a file 
 with open(os.path.join(quant_cont_path, 'adjusted_genomes.txt'), 'w') as file:

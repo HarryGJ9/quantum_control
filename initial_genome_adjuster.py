@@ -74,7 +74,7 @@ print(f"Stripped genome: {GA_genome}")
 
 # Reconstruct genomes based on the adjusted couplings
 genome_list, adjusted_genomes = construct_new_genomes(GA_genome, couplings_plus_h, couplings_minus_h)
-print(f"Adjusted genomes: {adjusted_genomes}")
+# print(f"Adjusted genomes: {adjusted_genomes}")
 
 # Write the original optimised genome and adjusted couplings to a .txt file
 with open(f'/home/hgjones9/quantum_control/initial_adjusted_genomes.txt', 'w') as file:
