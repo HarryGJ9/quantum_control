@@ -42,8 +42,8 @@ def current_time():
 # Function which filters through the folders under spinchain and finds those most recently created 
 def filter(dirs, N):
 
-    # Initialise empty list of output directories
-    output_dirs = []
+    # # Initialise empty list of output directories
+    # output_dirs = []
 
     # Filter directories that start with 'output-' and are genuine directories
     filtered_dirs = [dir for dir in dirs if dir.startswith('output-') and os.path.isdir(dir)]
@@ -51,14 +51,14 @@ def filter(dirs, N):
     # Sort directories by creation time in descending order
     sorted_dirs = sorted(filtered_dirs, key=lambda dir: os.path.getctime(dir), reverse=True)
 
-    # Exclude 'output-latest' directory if present
-    sorted_dirs = [dir for dir in sorted_dirs if dir != 'output-latest']
+    # # Exclude 'output-latest' directory if present
+    # sorted_dirs = [dir for dir in sorted_dirs if dir != 'output-latest']
 
-    # Take the first N directories, where N = no. of adjusted couplings = 2 x no. of couplings
-    output_dirs = sorted_dirs[:N]
+    # # Take the first N directories, where N = no. of adjusted couplings = 2 x no. of couplings
+    # output_dirs = sorted_dirs[:N]
 
-    # Flip the list 
-    output_dirs = sorted_dirs[::-1]
+    # # Flip the list 
+    # output_dirs = sorted_dirs[::-1]
 
 
     # # Iterate over the folders and add the most recent ones to a list of output- directories
@@ -259,13 +259,6 @@ couplings_lst = ast.literal_eval(couplings_str)
 
 # Count couplings
 num_couplings = len(couplings_lst)
-
-# # Split genome string into a list of characters and numbers
-# genome_lst = re.findall(r'{A-Za-z]+|\d+', genome_string)
-# print(genome_lst)
-
-# # Count how many couplings there are
-# num_couplings = sum(1 for elem in genome_lst if elem.isdigit())
 
 # Specify N = how many recent files to use = how many adjusted couplings there are
 N = 2 * num_couplings
