@@ -6,6 +6,7 @@ import datetime
 import time
 import numpy as np
 import re
+import ast
 # from max_fidelity_time import time_val
 
 # print(time_val)
@@ -247,18 +248,24 @@ dirs = list_dirs(quant_cont_path)
 # Obtain number of adjusted couplings
 
 # Specify path to the updated genome
-genome_path = os.path.join(quant_cont_path, 'new_genome.txt')
+genome_path = os.path.join(quant_cont_path, 'old_couplings.txt')
 
-# Open file new_genome.txt and read genome
+# Open file old_couplings.txt and count couplings
 with open(genome_path, 'r') as file:
-    genome_string = file.read()
+    couplings_str = file.read()
 
-# Split genome string into a list of characters and numbers
-genome_lst = re.findall(r'{A-Za-z]+|\d+', genome_string)
-print(genome_lst)
+# Convert string into list
+couplings_lst = ast.literal_eval(couplings_str)
 
-# Count how many couplings there are
-num_couplings = sum(1 for elem in genome_lst if elem.isdigit())
+# Count couplings
+num_couplings = len(couplings_lst)
+
+# # Split genome string into a list of characters and numbers
+# genome_lst = re.findall(r'{A-Za-z]+|\d+', genome_string)
+# print(genome_lst)
+
+# # Count how many couplings there are
+# num_couplings = sum(1 for elem in genome_lst if elem.isdigit())
 
 # Specify N = how many recent files to use = how many adjusted couplings there are
 N = 2 * num_couplings
