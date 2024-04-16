@@ -25,10 +25,8 @@ i_f=$(echo "$directive_line" | grep -o '<[^>]*>' | tail -n 1) # Filter out <i|f>
 echo "$i_f"
 
 # Specify position directive
-pos_directive_line=$(grep 'pos directive *=' $genetic_out_file)
-
-# Extract the string after '=' sign
-pos_directive=$(echo "$directive_line" | sed 's/.*= *//')
+pos_directive_line=$(grep 'pos directive *=' $genetic_out_file) # Find line containing position directive
+pos_directive=$(echo "$pos_directive_line" | sed 's/.*= *//') # Extract the string after '=' sign
 
 echo "$pos_directive"
 
