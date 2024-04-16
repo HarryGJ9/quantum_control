@@ -96,7 +96,7 @@ new_genome_output='/home/hgjones9/quantum_control/new_genome.txt'
 # Extract new genome from new_genome.txt
 new_genome=$(<"$new_genome_output")
 
-/home/hgjones9/spinchain/bin/spinnet "$i_f$new_genome"
+/home/hgjones9/spinchain/bin/spinnet "$i_f$new_genome$pos_directive"
 
 # Previous generates unwanted directory, so delete
 rm -r /home/hgjones9/quantum_control/spinchain
@@ -154,8 +154,8 @@ do
         genome=$(echo "$string" | sed "s/'\([^']*\)'.*/\1/") # Remove the individual quotation marks from each genome
 
         # Call spinnet for each genome, generating a different output directory for each genome
-        /home/hgjones9/spinchain/bin/spinnet "$i_f$genome"
-        echo "$i_f$genome"
+        /home/hgjones9/spinchain/bin/spinnet "$i_f$genome$pos_directive"
+        echo "$i_f$genome$pos_directive"
     done
 
     # Calculate gradient vector of fidelity wrt couplings
@@ -171,7 +171,7 @@ do
     # Extract new genome from new_genome.txt
     new_genome=$(<"$new_genome_output")
 
-    /home/hgjones9/spinchain/bin/spinnet "$i_f$new_genome"
+    /home/hgjones9/spinchain/bin/spinnet "$i_f$new_genome$pos_directive"
 
     # Retrieve fidelity value from 'output_latest'
     fidelity_out_file='/home/hgjones9/quantum_control/output-latest/genetic.out'
@@ -199,7 +199,7 @@ echo "Optimised infidelity : $infidelity"
 opt_genome_out="/home/hgjones9/quantum_control/output-latest/genetic.out"
 opt_genome=$(awk '/stripped genome/ {print $NF}' "$opt_genome_out")
 
-echo "Stripped Genome: $opt_genome"
+echo "Optimised Genome: $opt_genome$pos_directive"
 
 
 
