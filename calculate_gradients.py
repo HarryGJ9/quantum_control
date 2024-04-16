@@ -51,11 +51,11 @@ def filter(dirs, N):
     # Sort directories by creation time in descending order
     sorted_dirs = sorted(filtered_dirs, key=lambda dir: os.path.getctime(dir), reverse=True)
 
-    # # Exclude 'output-latest' directory if present
-    # sorted_dirs = [dir for dir in sorted_dirs if dir != 'output-latest']
+    # Exclude 'output-latest' directory if present
+    sorted_dirs = [dir for dir in sorted_dirs if dir != 'output-latest']
 
-    # # Take the first N directories, where N = no. of adjusted couplings = 2 x no. of couplings
-    # output_dirs = sorted_dirs[:N]
+    # Take the first N directories, where N = no. of adjusted couplings = 2 x no. of couplings
+    output_dirs = sorted_dirs[:N]
 
     # # Flip the list 
     # output_dirs = sorted_dirs[::-1]
@@ -78,7 +78,7 @@ def filter(dirs, N):
     # # Sort the output directories by time
     # output_dirs.sort(reverse=False, key=lambda x: os.path.getmtime(x))
 
-    return sorted_dirs
+    return output_dirs
 
 # Function which returns a 2D array of fidelity values for a set of output folders
 def fidelities(output_dirs):
