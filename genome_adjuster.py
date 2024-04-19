@@ -24,8 +24,37 @@ def adjust_couplings(genome_str, h=100):
     couplings_plus_h = [coupling + h for coupling in couplings_lst]
     couplings_minus_h = [coupling - h for coupling in couplings_lst]
 
-
     return couplings_plus_h, couplings_minus_h
+
+# Normalise adjusted couplings to all be the same number of digits
+def normalise_couplings(couplings):
+
+    # Check if a four digit coupling is present
+    four_digit_present = any(coupling >= 1000 for coupling in couplings)
+
+    # Add a '0' in front of any two digit number, or change any negative numbers to 0
+    for i in range(len(couplings)):
+        if 0 <= couplings[i] < 100:
+            couplings[i] = f'{couplings[i]:03d}'
+        elif couplings[i] < 0:
+            couplings[i] = '000'
+
+    # If four digit coupling present, add a '0' at the start
+    if four_digit_present:
+        for i in range(len(couplings)):
+            print(f'Coupling: {couplings[i]}')
+            print(f'Type: {type(couplings[i])}')
+            couplings[i] = int(couplings[i])
+            if 100 <= couplings[i] < 1000:
+                couplings[i] = f'{couplings[i]:04d}'
+            elif 0 <= couplings[i] < 100:
+                couplings[i] = f'{couplings[i]:04d}'
+            elif couplings[i] <= 0:
+                couplings[i] = '0000'
+    
+    
+    return couplings
+
 
 # Construct new genomes based on adjusted couplings
 def construct_new_genomes(genome_str, couplings_plus_h, couplings_minus_h):
@@ -33,6 +62,19 @@ def construct_new_genomes(genome_str, couplings_plus_h, couplings_minus_h):
     genome_split = re.split(r'([A-Za-z]+|\d+)', genome_str)
     genome_list = [index for index in genome_split if index]
     # print(f"Genomes split into characters and couplings = {genome_list}")
+
+    # Normalise adjusted couplings to ensure all couplings have the same number of digits
+    adjusted_couplings = couplings_plus_h + couplings_minus_h # Concatenate lists
+    print(f'Concatenated couplings: {adjusted_couplings}')
+    adjusted_couplings = normalise_couplings(adjusted_couplings) # Normalise whole list
+    print(f'Concatenated couplings normalised: {adjusted_couplings}')
+    midpoint = len(adjusted_couplings) // 2 # Calculate midpoint of list
+    
+    # Split back into two lists
+    couplings_plus_h = adjusted_couplings[:midpoint]
+    couplings_minus_h = adjusted_couplings[midpoint:]
+    print(f'Couplings + h: {couplings_plus_h}')
+    print(f'Couplings - h: {couplings_minus_h}')
 
     # Compile new genomes based on adjusted couplings and letter characters of previous genome
     adjusted_genomes = []

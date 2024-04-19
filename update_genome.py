@@ -4,6 +4,7 @@ import time
 import datetime
 import ast
 import re
+import sys
 
 # List all folders under a specific path
 def list_dirs(path):
@@ -47,14 +48,52 @@ def extract_old_couplings():
     
     return old_couplings_lst, old_couplings_arr
 
+# Ensure all couplings are normalised to the same number of digits (padded by 0s)
+def normalise_couplings(couplings):
+
+    # Make sure all couplings are integers
+    couplings = [int(coupling) for coupling in couplings]
+
+    # Check if a four digit coupling is present
+    four_digit_present = any(coupling >= 1000 for coupling in couplings)
+    print(f'Four digit present: {four_digit_present}')
+
+    # Add a '0' in front of any two digit number, or change any negative numbers to 0
+    for i in range(len(couplings)):
+        if 0 <= couplings[i] < 100:
+            couplings[i] = f'{couplings[i]:03d}'
+        elif couplings[i] < 0:
+            couplings[i] = '000'
+    
+    # If four digit coupling present, add a '0' at the start
+    if four_digit_present:
+        for i in range(len(couplings)):
+            print(f'Coupling: {couplings[i]}')
+            print(f'Type: {type(couplings[i])}')
+            couplings[i] = int(couplings[i])
+            if 100 <= couplings[i] < 1000:
+                couplings[i] = f'{couplings[i]:04d}'
+            elif 0 <= couplings[i] < 100:
+                couplings[i] = f'{couplings[i]:04d}'
+            elif couplings[i] <= 0:
+                couplings[i] = '0000'
+    
+    return couplings
 
 # Updates couplings using gradient ascent
-def update_couplings(gradient_arr, old_couplings_arr, stepsize=5e4):
+def update_couplings(gradient_arr, old_couplings_arr, stepsize):
+    
     # Calculate new couplings by ascending gradient
     new_couplings_arr = old_couplings_arr + stepsize * gradient_arr
+    print(f'New couplings array: {new_couplings_arr}')
 
     # Convert new couplings array to a list of integers
     new_couplings_lst = [round(float(coupling)) for coupling in new_couplings_arr]
+    print(f'New couplings list: {new_couplings_lst}')        
+
+    # Normalise all couplings to have the same number of digits
+    new_couplings_lst = normalise_couplings(new_couplings_lst)
+    print(f'New couplings list normalised: {new_couplings_lst}')
 
     return new_couplings_lst
 
@@ -108,8 +147,14 @@ print(f"Gradient vector: {gradient_arr}")
 old_couplings_lst, old_couplings_arr = extract_old_couplings()
 print(f'Old couplings: {old_couplings_arr}')
 
+# Check if stepsize argument is provided in bash_script.sh, if so adjust stepsize accordingly
+if len(sys.argv) > 1:
+    stepsize = int(sys.argv[1])
+else:
+    stepsize = 1e5
+
 # Update couplings using gradient ascent
-new_couplings_lst = update_couplings(gradient_arr, old_couplings_arr)
+new_couplings_lst = update_couplings(gradient_arr, old_couplings_arr, stepsize)
 print(f"New couplings: {new_couplings_lst}")
 
 # Reconstruct new genome based on grad ascent updated couplings

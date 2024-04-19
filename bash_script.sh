@@ -12,7 +12,7 @@ read initial_genome
 # initial_genome="<A|C>AB500BC500"
 
 # Run spinnet -o on an initial genome 
-/home/hgjones9/spinchain/bin/spinnet -o "$initial_genome"
+/home/hgjones9/spinchain/bin/spinnet -o -G 1 "$initial_genome"
 
 cd /home/hgjones9/quantum_control
 pwd
@@ -98,39 +98,42 @@ new_genome=$(<"$new_genome_output")
 
 /home/hgjones9/spinchain/bin/spinnet "$i_f$new_genome$pos_directive"
 
-# Previous generates unwanted directory, so delete
-rm -r /home/hgjones9/quantum_control/spinchain
+# # Previous generates unwanted directory, so delete
+# rm -r /home/hgjones9/quantum_control/spinchain
 
 ################################
 # SETUP LOOP FOR GRADIENT ASCENT
 ################################
 
-# Define threshold value for stopping the optimisation
-epsilon=0.01
+# Initialise variables
+epsilon=0.01 # Threshold value for stopping optimisation
+stepsize=100000 # Stepsize to be used in gradient ascent
+
 
 # Retrieve fidelity value of most recent spinnet calculate to initialise fidelity
 fidelity_out_file='/home/hgjones9/quantum_control/output-latest/genetic.out'
-fidelity=$(awk '/fidelity/ {for (i=1; i<NF; i++) if ($i == "fidelity") {gsub(/\(/, "", $(i-1)); gsub(/%/, "", $(i-1)); print $(i-1)}}' "$fidelity_out_file")
+old_fidelity=$(awk '/fidelity/ {for (i=1; i<NF; i++) if ($i == "fidelity") {gsub(/\(/, "", $(i-1)); gsub(/%/, "", $(i-1)); print $(i-1)}}' "$fidelity_out_file")
 
 # Print the extracted fidelity value
-echo "$fidelity"
+echo "$old_fidelity"
 
 # Calculate infidelity using awk
-infidelity=$(awk -v f="$fidelity" 'BEGIN {printf "%.2f", 100 - f}')
+infidelity=$(awk -v f="$old_fidelity" 'BEGIN {printf "%.2f", 100 - f}')
 
 echo "$infidelity"
 
 # Initialise number of iterations
-max_iterations=5
+max_iterations=10
 iteration=0
 while (( $(echo "$infidelity > $epsilon" | bc -l) ))
 do  
 
-    # Break the loop if the number of iterations 
+    # Break the loop if the number of iterations exceeds max_iterations
      if [ $iteration -ge $max_iterations ]; then
         echo "Maximum number of iterations reached. Exiting loop."
         break
     fi
+
 
     # Adjust couplings and reconstruct adjusted genomes ready for central diff
     python3 /home/hgjones9/quantum_control/genome_adjuster.py
@@ -158,7 +161,7 @@ do
     python3 /home/hgjones9/quantum_control/calculate_gradients.py
 
     # Calculat new couplings by gradient ascent
-    python3 /home/hgjones9/quantum_control/update_genome.py
+    python3 /home/hgjones9/quantum_control/update_genome.py "$stepsize"
 
     # Run spinnet on new genome
     # Specify output file location of new genome
@@ -176,15 +179,37 @@ do
     # Print the extracted fidelity value
     echo "$fidelity"
 
+    # Calculate the difference between the old fidelity and new fidelity
+    fidelity_diff=$(echo "$fidelity - $old_fidelity" | bc)
+
+    echo "Fidelity difference = $fidelity_diff"
+
+    # If new fidelity - old fidelity < 0, halve the step size
+    if [ "$(echo "$fidelity_diff < 0" | bc)" -eq 1 ]; then
+        
+        stepsize=$((stepsize / 2))
+    
+    else
+        stepsize="$stepsize"
+    
+    fi
+
+    echo "Stepsize = $stepsize"
+
+    # Break the loop if the |new fidelity - old fidelity| < threshold
+
     # Calculate infidelity using awk
     infidelity=$(awk -v f="$fidelity" 'BEGIN {printf "%.2f", 100 - f}')
 
-    echo "$infidelity"
+    echo "Infidelity = $infidelity"
 
     # Increment the iteration counter
     ((iteration++))  
 
-    echo "$iteration"
+    echo "Iteration: $iteration"
+
+    # Update old_fidelity value
+    old_fidelity="$fidelity"
 
 done
 
