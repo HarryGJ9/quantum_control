@@ -45,8 +45,8 @@ def normalise_couplings(couplings):
     # If four digit coupling present, add a '0' at the start
     if four_digit_present:
         for i in range(len(couplings)):
-            print(f'Coupling: {couplings[i]}')
-            print(f'Type: {type(couplings[i])}')
+            # print(f'Coupling: {couplings[i]}')
+            # print(f'Type: {type(couplings[i])}')
             couplings[i] = int(couplings[i])
             if 100 <= couplings[i] < 1000:
                 couplings[i] = f'{couplings[i]:04d}'
@@ -99,6 +99,28 @@ def construct_new_genomes(genome, couplings_plus_h, couplings_minus_h):
     
     return genome_list, adjusted_genomes
 
+# Normalise adjusted genomes
+def normalise_genome(genome):
+
+    # Split the genome string into characters and couplings of letters and digits
+    split_genome = re.findall(r'[A-Za-z]+|\d+', genome)
+    
+    # Separate the characters and digits into different lists
+    characters = [item for item in split_genome if item.isalpha()]
+    couplings = [int(item) for item in split_genome if item.isdigit()]
+    # print(characters)
+    # print(couplings)
+
+    # Normalise couplings
+    couplings_norm = normalise_couplings(couplings)
+    # print(couplings_norm)
+
+    # Merge genome
+    adjusted_genome = ''.join([f'{character}{coupling}' for character, coupling in zip(characters, couplings)])
+    # print(adjusted_genome)
+
+    return adjusted_genome
+
 
 ###############
 # RUN PROGRAMME
@@ -119,12 +141,20 @@ print(f"Stripped genome: {GA_genome}")
 genome_list, adjusted_genomes = construct_new_genomes(GA_genome, couplings_plus_h, couplings_minus_h)
 # print(f"Adjusted genomes: {adjusted_genomes}")
 
+# Ensure all adjusted genomes have normalised couplings
+adjusted_genomes_norm = []
+for genome in adjusted_genomes:
+    adjusted_genome = normalise_genome(genome)
+    adjusted_genomes_norm.append(adjusted_genome)
+
+# print(f'Normalised adjusted genomes: {adjusted_genomes_norm}')
+
 # Write the original optimised genome and adjusted couplings to a .txt file
 with open(f'/home/hgjones9/quantum_control/initial_adjusted_genomes.txt', 'w') as file:
     # Write content to the file
     file.write(f"GA optimised genome : {GA_genome}\n")
     file.write(f"Isolated couplings : {GA_couplings}\n")
-    file.write(f"Adjusted genomes : {adjusted_genomes}\n")
+    file.write(f"Adjusted genomes : {adjusted_genomes_norm}\n")
 
 
 

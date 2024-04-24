@@ -107,7 +107,6 @@ def reconstruct_genome(new_couplings_lst):
                 # Split line to obtain just the genome
                 genome = line.split(':')[1].strip()
 
-
     # Split original, optimised gnome (e.g. "AB500BC500") into a list of characters and digits (e.g. ['AB', '500', 'BC', '500'])
     genome_split = re.split(r'([A-Za-z]+|\d+)', genome)
 
@@ -118,7 +117,8 @@ def reconstruct_genome(new_couplings_lst):
             new_genome_lst.append(new_couplings_lst.pop(0))
         else:
             new_genome_lst.append(item)
-    
+
+    # Reconstruct genome based on new couplings
     new_genome = ''.join(str(item) for item in new_genome_lst)
 
     return new_genome
@@ -151,7 +151,8 @@ print(f'Old couplings: {old_couplings_arr}')
 if len(sys.argv) > 1:
     stepsize = int(sys.argv[1])
 else:
-    stepsize = 1e5
+    stepsize = 50000
+
 
 # Update couplings using gradient ascent
 new_couplings_lst = update_couplings(gradient_arr, old_couplings_arr, stepsize)

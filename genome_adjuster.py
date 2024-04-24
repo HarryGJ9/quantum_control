@@ -14,7 +14,7 @@ def find_new_genome():
     return new_genome_str
 
 # Extract couplings from genome and adjust couplings
-def adjust_couplings(genome_str, h=100):
+def adjust_couplings(genome_str, h=200):
     
     # Obtain couplings from genome
     couplings = re.findall(r'\d+', genome_str) # Find all couplings
@@ -42,8 +42,8 @@ def normalise_couplings(couplings):
     # If four digit coupling present, add a '0' at the start
     if four_digit_present:
         for i in range(len(couplings)):
-            print(f'Coupling: {couplings[i]}')
-            print(f'Type: {type(couplings[i])}')
+            # print(f'Coupling: {couplings[i]}')
+            # print(f'Type: {type(couplings[i])}')
             couplings[i] = int(couplings[i])
             if 100 <= couplings[i] < 1000:
                 couplings[i] = f'{couplings[i]:04d}'
@@ -95,6 +95,28 @@ def construct_new_genomes(genome_str, couplings_plus_h, couplings_minus_h):
 
     return genome_list, adjusted_genomes
 
+# Normalise adjusted genomes
+def normalise_genome(genome):
+
+    # Split the genome string into characters and couplings of letters and digits
+    split_genome = re.findall(r'[A-Za-z]+|\d+', genome)
+    
+    # Separate the characters and digits into different lists
+    characters = [item for item in split_genome if item.isalpha()]
+    couplings = [int(item) for item in split_genome if item.isdigit()]
+    # print(characters)
+    # print(couplings)
+
+    # Normalise couplings
+    couplings_norm = normalise_couplings(couplings)
+    # print(couplings_norm)
+
+    # Merge genome
+    adjusted_genome = ''.join([f'{character}{coupling}' for character, coupling in zip(characters, couplings)])
+    # print(adjusted_genome)
+
+    return adjusted_genome
+
 ###############
 # RUN PROGRAMME
 ###############
@@ -111,6 +133,14 @@ couplings_plus_h, couplings_minus_h = adjust_couplings(new_genome)
 genome_lst, adjusted_genomes = construct_new_genomes(new_genome, couplings_plus_h, couplings_minus_h)
 # print(f'Adjusted genomes: {adjusted_genomes}')
 
+# Ensure all adjusted genomes have normalised couplings
+adjusted_genomes_norm = []
+for genome in adjusted_genomes:
+    adjusted_genome = normalise_genome(genome)
+    adjusted_genomes_norm.append(adjusted_genome)
+
+# print(f'Normalised adjusted genomes: {adjusted_genomes_norm}')
+
 # Write adjusted genomes to a file 
 with open(os.path.join(quant_cont_path, 'adjusted_genomes.txt'), 'w') as file:
-    file.write(f"Adjusted genomes : {adjusted_genomes}")
+    file.write(f"Adjusted genomes : {adjusted_genomes_norm}")

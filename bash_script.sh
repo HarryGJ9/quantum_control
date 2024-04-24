@@ -12,7 +12,7 @@ read initial_genome
 # initial_genome="<A|C>AB500BC500"
 
 # Run spinnet -o on an initial genome 
-/home/hgjones9/spinchain/bin/spinnet -o -G 1 "$initial_genome"
+/home/hgjones9/spinchain/bin/spinnet -o -G 10 "$initial_genome"
 
 cd /home/hgjones9/quantum_control
 pwd
@@ -107,7 +107,7 @@ new_genome=$(<"$new_genome_output")
 
 # Initialise variables
 epsilon=0.01 # Threshold value for stopping optimisation
-stepsize=100000 # Stepsize to be used in gradient ascent
+stepsize=50000 # Stepsize to be used in gradient ascent
 
 
 # Retrieve fidelity value of most recent spinnet calculate to initialise fidelity
@@ -196,7 +196,11 @@ do
 
     echo "Stepsize = $stepsize"
 
-    # Break the loop if the |new fidelity - old fidelity| < threshold
+    # Break the loop if the fidelities are the same
+    if [ "$(echo "$fidelity_diff == 0" | bc)" -eq 1 ]; then
+        echo "Change in fidelities is zero. Break."
+        break
+    fi
 
     # Calculate infidelity using awk
     infidelity=$(awk -v f="$fidelity" 'BEGIN {printf "%.2f", 100 - f}')

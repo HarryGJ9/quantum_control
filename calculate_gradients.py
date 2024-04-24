@@ -194,7 +194,7 @@ def fidelities_at_time(fidelity_time_arr):
 #     return max_fidelities, time
 
 # Function which calculates the gradient through central difference of each pair of fidelities
-def calculate_gradient(fidelities, h=100):
+def calculate_gradient(fidelities, h=200):
 
     # Obtain number of columns
     num_columns = len(fidelities)
