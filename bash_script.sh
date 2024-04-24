@@ -184,15 +184,18 @@ do
 
     echo "Fidelity difference = $fidelity_diff"
 
-    # If new fidelity - old fidelity < 0, halve the step size
-    if [ "$(echo "$fidelity_diff < 0" | bc)" -eq 1 ]; then
+    # # If new fidelity - old fidelity < 0, halve the step size
+    # if [ "$(echo "$fidelity_diff < 0" | bc)" -eq 1 ]; then
         
-        stepsize=$((stepsize / 2))
+    #     stepsize=$((stepsize / 2))
     
-    else
-        stepsize="$stepsize"
+    # else
+    #     stepsize="$stepsize"
     
-    fi
+    # fi
+
+    # Halve the stepsize each time
+    stepsize=$((stepsize / 2))
 
     echo "Stepsize = $stepsize"
 
