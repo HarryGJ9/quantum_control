@@ -79,16 +79,16 @@ def construct_new_genomes(genome, couplings_plus_h, couplings_minus_h):
     
     # Normalise adjusted couplings to ensure all couplings have the same number of digits
     adjusted_couplings = couplings_plus_h + couplings_minus_h # Concatenate lists
-    print(f'Concatenated couplings: {adjusted_couplings}')
+    # print(f'Concatenated couplings: {adjusted_couplings}')
     adjusted_couplings = normalise_couplings(adjusted_couplings) # Normalise whole list
-    print(f'Concatenated couplings normalised: {adjusted_couplings}')
+    # print(f'Concatenated couplings normalised: {adjusted_couplings}')
     midpoint = len(adjusted_couplings) // 2 # Calculate midpoint of list
     
     # Split back into two lists
     couplings_plus_h = adjusted_couplings[:midpoint]
     couplings_minus_h = adjusted_couplings[midpoint:]
-    print(f'Couplings + h: {couplings_plus_h}')
-    print(f'Couplings - h: {couplings_minus_h}')
+    # print(f'Couplings + h: {couplings_plus_h}')
+    # print(f'Couplings - h: {couplings_minus_h}')
 
     # Compile new genomes based on adjusted couplings and letter characters of previous genome
     adjusted_genomes = []

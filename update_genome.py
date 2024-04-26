@@ -56,7 +56,7 @@ def normalise_couplings(couplings):
 
     # Check if a four digit coupling is present
     four_digit_present = any(coupling >= 1000 for coupling in couplings)
-    print(f'Four digit present: {four_digit_present}')
+    # print(f'Four digit present: {four_digit_present}')
 
     # Add a '0' in front of any two digit number, or change any negative numbers to 0
     for i in range(len(couplings)):
@@ -101,11 +101,11 @@ def grad_ascent(gradient_arr, old_couplings_arr, stepsize):
 
     # Convert new couplings array to a list of integers
     new_couplings_lst = [round(float(coupling)) for coupling in new_couplings_arr]
-    print(f'New couplings list: {new_couplings_lst}')        
+    # print(f'New couplings list: {new_couplings_lst}')        
 
     # Normalise all couplings to have the same number of digits
     new_couplings_lst = normalise_couplings(new_couplings_lst)
-    print(f'New couplings list normalised: {new_couplings_lst}')
+    # print(f'New couplings list normalised: {new_couplings_lst}')
 
     return new_couplings_lst
 
@@ -177,7 +177,7 @@ dirs = list_dirs(quant_cont_path)
 
 # Find most recent gradient.txt file
 gradient_output_file = get_gradient_file(dirs)
-print(f"Gradient output file: {gradient_output_file}")
+# print(f"Gradient output file: {gradient_output_file}")
 
 # Open gradient.txt file and retrieve the gradient vector as a numpy array
 gradient_arr = open_gradient(gradient_output_file)
@@ -187,8 +187,8 @@ print(f"Gradient vector: {gradient_arr}")
 old_couplings_lst, old_couplings_arr = extract_old_couplings()
 print(f'Old couplings: {old_couplings_arr}')
 
-print("Number of arguments:", len(sys.argv))
-print("Arguments:", sys.argv)
+# print("Number of arguments:", len(sys.argv))
+# print("Arguments:", sys.argv)
 
 # Input the change value from bash script
 if len(sys.argv) > 1:
@@ -200,8 +200,7 @@ else:
 if len(sys.argv) > 2:
     stepsize = int(sys.argv[-1])
 else:
-    stepsize = 100000
-
+    stepsize = 1000000
 
 # # Update couplings using gradient ascent
 # new_couplings_lst, change = mom_grad_ascent(gradient_arr, old_couplings_arr, stepsize, change)

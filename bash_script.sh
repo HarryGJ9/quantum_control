@@ -120,7 +120,7 @@ new_genome=$(<"$new_genome_output")
 
 # Initialise variables
 epsilon=0.01 # Threshold value for stopping optimisation
-stepsize=100000 # Stepsize to be used in gradient ascent
+stepsize=1000000 # Stepsize to be used in gradient ascent
 max_iterations=10 # Maximum interations before loop exits
 
 # Retrieve fidelity value of most recent spinnet calculate to initialise fidelity
@@ -202,37 +202,43 @@ do
 
     # Print the extracted fidelity value
     echo "$fidelity"
-
+    
     # Calculate the difference between the old fidelity and new fidelity
     fidelity_diff=$(echo "$fidelity - $old_fidelity" | bc)
 
     echo "Fidelity difference = $fidelity_diff"
 
+    #####################
+    # BREAKING CONDITIONS
+    #####################
+
+    # AT THE MOMENT, STEP SIZE CAN BE TOO BIG WHICH MESSES UP COUPLING CHANGES
+    # FIND WAY TO USE ADAPTIVE STEP SIZE
+
+    # If the fidelity reaches 100%, break
+    if [ "$(echo "$fidelity == 100" | bc)" -eq 1 ]; then
+        echo "Fidelity has reached 100%. Break."
+        break
+
     # If new fidelity - old fidelity < 0, halve the step size
-    # Else if new_fidelity - old_fidelity > 0, double step size
-    if [ "$(echo "$fidelity_diff < 0" | bc)" -eq 1 ]; then
+    elif [ "$(echo "$fidelity_diff < 0" | bc)" -eq 1 ]; then
         
         stepsize=$((stepsize / 2))
     
-    elif [ "$(echo "$fidelity_diff > 0" | bc)" -eq 1 ]; then
+    # # Else if new_fidelity - old_fidelity > 0, double step size
+    # elif [ "$(echo "$fidelity_diff > 0" | bc)" -eq 1 ]; then
 
-        stepsize=$((stepsize * 2))
-    else
-        stepsize="$stepsize"
+    #     stepsize=$(bc <<< "$stepsize * 2")
+    
+    # Else if new_fidelity - old_fidelity == 0, break 
+    elif [ "$(echo "$fidelity_diff == 0" | bc)" -eq 1 ]; then
+        echo "Change in fidelities is zero. Break."
+        break
     
     fi
 
-    # # Halve the stepsize each time
-    # stepsize=$((stepsize / 4))
+       echo "Stepsize = $stepsize"
 
-
-    echo "Stepsize = $stepsize"
-
-    # Break the loop if the fidelities are the same
-    if [ "$(echo "$fidelity_diff == 0" | bc)" -eq 1 ]; then
-        echo "Change in fidelities is zero. Break."
-        break
-    fi
 
     # Calculate infidelity using awk
     infidelity=$(awk -v f="$fidelity" 'BEGIN {printf "%.2f", 100 - f}')

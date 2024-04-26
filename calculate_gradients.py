@@ -150,7 +150,7 @@ def fidelities_at_time(fidelity_time_arr):
         lines = file.readlines()
         if len(lines) >= 2:
             specified_time = lines[1].strip()
-            print(specified_time)
+            # print(specified_time)
 
 
     # Format fidelity_time_arr such that the time column are all of the form e.g. '2.40' not '2.40000000e+00'
@@ -254,7 +254,7 @@ print(f'Fidelity values at specified time: {fidelity_vals}')
 
 # Call calculate_gradient to obtain the gradient vector
 gradient = calculate_gradient(fidelity_vals)
-print(f"Gradient vector: {gradient}")
+# print(f"Gradient vector: {gradient}")
 
 with open('/home/hgjones9/quantum_control/gradient_latest.txt', 'w') as file:
     file.write(str(gradient))
