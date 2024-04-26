@@ -5,15 +5,26 @@ import datetime
 # This script takes in the optimised genome found by the GA as an input and returns a list of 
 # genomes that have had their individual couplings altered by the derivative step size
 
-# Obtains optimised genome from the GA
+# # Obtains optimised genome from the GA
+# def find_genome(output_path):
+#     # Open genetic.out and find the genome
+#     with open(output_path, 'r') as file:
+#         for line in file:
+#             if "best genome" in line:
+#                 genome_full = line.split(':')[1].strip()
+#                 # print(f'GA output genome: {genome_full}')
+#     return genome_full
+
+# Obtains un-optimised genome from just spinnet
 def find_genome(output_path):
     # Open genetic.out and find the genome
     with open(output_path, 'r') as file:
         for line in file:
-            if "best genome" in line:
+            if "initial genome" in line:
                 genome_full = line.split(':')[1].strip()
                 # print(f'GA output genome: {genome_full}')
     return genome_full
+
 
 # Extracts the couplings from the genome and adjusts couplings
 def adjust_couplings(genome_full, h=100):

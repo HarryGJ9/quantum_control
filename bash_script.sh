@@ -11,16 +11,19 @@ read initial_genome
 # Test genome: '<A|C>AB500BC500'
 # initial_genome="<A|C>AB500BC500"
 
-# Run spinnet -o on an initial genome 
-/home/hgjones9/spinchain/bin/spinnet -o -G 5 "$initial_genome"
+# # Run spinnet -o on an initial genome 
+# /home/hgjones9/spinchain/bin/spinnet -o -G 5 "$initial_genome"
 
-cd /home/hgjones9/quantum_control
-pwd
+/home/hgjones9/spinchain/bin/spinnet "$initial_genome"
+
+# cd /home/hgjones9/quantum_control
+# pwd
 
 # Specify <i|f> directive
 genetic_out_file='/home/hgjones9/quantum_control/output-latest/genetic.out' # Path to genetic.out
 directive_line=$(grep '<i|f> directive *= *<.*>' $genetic_out_file) # Find the line containing '<i|f> directive ='
 i_f=$(echo "$directive_line" | grep -o '<[^>]*>' | tail -n 1) # Filter out <i|f> directive from the line
+
 
 echo "$i_f"
 
@@ -45,7 +48,7 @@ adjusted_genomes=$(grep -oP "Adjusted genomes : \[\K.*(?=\])" "$output_file")
 # # Print the list of adjusted genomes
 # echo "$adjusted_genomes"
 
-#####################################################
+# #####################################################
 # OBTAIN INITIAL COUPLINGS, READY FOR GRADIENT ASCENT
 #####################################################
 
@@ -91,7 +94,7 @@ python3 /home/hgjones9/quantum_control/update_genome.py
 # Read the change array from the file
 
 
-mapfile -t change < /home/hgjones9/quantum_control/change.txt
+# mapfile -t change < /home/hgjones9/quantum_control/change.txt
 # change=("${change[@]}")
 # echo "$change"
 
@@ -117,7 +120,7 @@ new_genome=$(<"$new_genome_output")
 
 # Initialise variables
 epsilon=0.01 # Threshold value for stopping optimisation
-stepsize=50000 # Stepsize to be used in gradient ascent
+stepsize=100000 # Stepsize to be used in gradient ascent
 max_iterations=10 # Maximum interations before loop exits
 
 # Retrieve fidelity value of most recent spinnet calculate to initialise fidelity
@@ -169,15 +172,18 @@ do
     # Calculate gradient vector of fidelity wrt couplings
     python3 /home/hgjones9/quantum_control/calculate_gradients.py
 
-    # Calculate new couplings by gradient ascent
-    python3 /home/hgjones9/quantum_control/update_genome.py "${change[@]}" "$stepsize" 
+    # # Calculate new couplings by gradient ascent
+    # python3 /home/hgjones9/quantum_control/update_genome.py "${change[@]}" "$stepsize" 
+
+      # Calculate new couplings by gradient ascent
+    python3 /home/hgjones9/quantum_control/update_genome.py "$stepsize" 
 
     # # Update the change
     # change_output='/home/hgjones9/quantum_control/change.txt'
     # change=$(<"$change_output")
 
     # Read the change array from the file
-    mapfile -t change < /home/hgjones9/quantum_control/change.txt
+    # mapfile -t change < /home/hgjones9/quantum_control/change.txt
     # change=("${change[@]}")
     # echo "$change"
 
@@ -203,10 +209,14 @@ do
     echo "Fidelity difference = $fidelity_diff"
 
     # If new fidelity - old fidelity < 0, halve the step size
+    # Else if new_fidelity - old_fidelity > 0, double step size
     if [ "$(echo "$fidelity_diff < 0" | bc)" -eq 1 ]; then
         
         stepsize=$((stepsize / 2))
     
+    elif [ "$(echo "$fidelity_diff > 0" | bc)" -eq 1 ]; then
+
+        stepsize=$((stepsize * 2))
     else
         stepsize="$stepsize"
     

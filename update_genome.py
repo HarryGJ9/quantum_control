@@ -80,50 +80,62 @@ def normalise_couplings(couplings):
     
     return couplings
 
-# # Updates couplings using gradient ascent
-# def grad_ascent(gradient_arr, old_couplings_arr, stepsize):
+# Updates couplings using gradient ascent
+def grad_ascent(gradient_arr, old_couplings_arr, stepsize):
+
+    # # Convert the change list to an array if it isn't already an array
+    # if type(change) is not np.ndarray:
+    #     change = np.array(change, dtype=float)
+    # else:
+    #     change = change.astype(float) 
+
+    # # Change in the couplings
+    # change = stepsize * gradient_arr
+
+    #  # Calculate new couplings using momentum gradient ascent
+    # new_couplings_arr = old_couplings_arr + change
     
-#     # Calculate new couplings by ascending gradient
-#     new_couplings_arr = old_couplings_arr + stepsize * gradient_arr
-#     print(f'New couplings array: {new_couplings_arr}')
+    # Calculate new couplings by ascending gradient
+    new_couplings_arr = old_couplings_arr + stepsize * gradient_arr
+    # print(f'New couplings array: {new_couplings_arr}')
 
-#     # Convert new couplings array to a list of integers
-#     new_couplings_lst = [round(float(coupling)) for coupling in new_couplings_arr]
-#     print(f'New couplings list: {new_couplings_lst}')        
-
-#     # Normalise all couplings to have the same number of digits
-#     new_couplings_lst = normalise_couplings(new_couplings_lst)
-#     print(f'New couplings list normalised: {new_couplings_lst}')
-
-#     return new_couplings_lst
-
-# Update couplings using momentum gradient ascent
-def mom_grad_ascent(gradient_arr, old_couplings_arr, stepsize, change):
-
-    print(f"Change input: {change}")
-
-    # Convert the change list to an array if it isn't already an array
-    if type(change) is not np.ndarray:
-        change = np.array(change, dtype=float)
-    else:
-        change = change.astype(float) 
-
-    # Define momentum
-    momentum = 0.8
-
-    # Change in the couplings
-    change = stepsize * gradient_arr + (1 - momentum) * change
-
-    # Calculate new couplings using momentum gradient ascent
-    new_couplings_arr = old_couplings_arr + change
-
-    # Convert array to list of integers
+    # Convert new couplings array to a list of integers
     new_couplings_lst = [round(float(coupling)) for coupling in new_couplings_arr]
+    print(f'New couplings list: {new_couplings_lst}')        
 
-    # Normalise all couplings to have same number of digits
+    # Normalise all couplings to have the same number of digits
     new_couplings_lst = normalise_couplings(new_couplings_lst)
+    print(f'New couplings list normalised: {new_couplings_lst}')
 
-    return new_couplings_lst, change
+    return new_couplings_lst
+
+# # Update couplings using momentum gradient ascent
+# def mom_grad_ascent(gradient_arr, old_couplings_arr, stepsize, change):
+
+#     print(f"Change input: {change}")
+
+#     # Convert the change list to an array if it isn't already an array
+#     if type(change) is not np.ndarray:
+#         change = np.array(change, dtype=float)
+#     else:
+#         change = change.astype(float) 
+
+#     # Define momentum
+#     momentum = 0.8
+
+#     # Change in the couplings
+#     change = stepsize * gradient_arr + momentum * change
+
+#     # Calculate new couplings using momentum gradient ascent
+#     new_couplings_arr = old_couplings_arr + change
+
+#     # Convert array to list of integers
+#     new_couplings_lst = [round(float(coupling)) for coupling in new_couplings_arr]
+
+#     # Normalise all couplings to have same number of digits
+#     new_couplings_lst = normalise_couplings(new_couplings_lst)
+
+#     return new_couplings_lst, change
 
 # Reconstruct new genome based on new couplings
 def reconstruct_genome(new_couplings_lst):
@@ -188,13 +200,17 @@ else:
 if len(sys.argv) > 2:
     stepsize = int(sys.argv[-1])
 else:
-    stepsize = 50000
+    stepsize = 100000
 
 
-# Update couplings using gradient ascent
-new_couplings_lst, change = mom_grad_ascent(gradient_arr, old_couplings_arr, stepsize, change)
+# # Update couplings using gradient ascent
+# new_couplings_lst, change = mom_grad_ascent(gradient_arr, old_couplings_arr, stepsize, change)
+# print(f"New couplings: {new_couplings_lst}")
+# print(f"Change array: {change}")
+
+new_couplings_lst = grad_ascent(gradient_arr, old_couplings_arr, stepsize)
 print(f"New couplings: {new_couplings_lst}")
-print(f"Change array: {change}")
+
 
 # Overwrite old_couplings.txt with new_couplings_lst
 with open(os.path.join(quant_cont_path, 'old_couplings.txt'), 'w') as file:
