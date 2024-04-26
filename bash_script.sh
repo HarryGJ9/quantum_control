@@ -12,7 +12,7 @@ read initial_genome
 # initial_genome="<A|C>AB500BC500"
 
 # Run spinnet -o on an initial genome 
-/home/hgjones9/spinchain/bin/spinnet -o -G 10 "$initial_genome"
+/home/hgjones9/spinchain/bin/spinnet -o -G 5 "$initial_genome"
 
 cd /home/hgjones9/quantum_control
 pwd
@@ -42,8 +42,8 @@ output_file='/home/hgjones9/quantum_control/initial_adjusted_genomes.txt'
 # Search output.txt for the line containing the list of adjusted genomes and print them as a list
 adjusted_genomes=$(grep -oP "Adjusted genomes : \[\K.*(?=\])" "$output_file")
 
-# Print the list of adjusted genomes
-echo "$adjusted_genomes"
+# # Print the list of adjusted genomes
+# echo "$adjusted_genomes"
 
 #####################################################
 # OBTAIN INITIAL COUPLINGS, READY FOR GRADIENT ASCENT
@@ -76,15 +76,25 @@ done
 # CALCULATE THE GRADIENT VECTOR OF THE FIDELITY WITH RESPECT TO THE GENOMES
 ###########################################################################
 
-# AT THE MOMENT IT ISN'T RETURNING THE MOST RECENT FILES
-
 python3 /home/hgjones9/quantum_control/calculate_gradients.py
 
 ############################################
 # CALCULATE NEW COUPLINGS BY GRADIENT ASCENT
 ############################################
 
+# # Initialise the change
+# change=0.0
+
 python3 /home/hgjones9/quantum_control/update_genome.py
+
+# Update the change
+# Read the change array from the file
+
+
+mapfile -t change < /home/hgjones9/quantum_control/change.txt
+# change=("${change[@]}")
+# echo "$change"
+
 
 ###########################
 # RUN SPINNET ON NEW GENOME
@@ -108,7 +118,7 @@ new_genome=$(<"$new_genome_output")
 # Initialise variables
 epsilon=0.01 # Threshold value for stopping optimisation
 stepsize=50000 # Stepsize to be used in gradient ascent
-
+max_iterations=10 # Maximum interations before loop exits
 
 # Retrieve fidelity value of most recent spinnet calculate to initialise fidelity
 fidelity_out_file='/home/hgjones9/quantum_control/output-latest/genetic.out'
@@ -123,7 +133,6 @@ infidelity=$(awk -v f="$old_fidelity" 'BEGIN {printf "%.2f", 100 - f}')
 echo "$infidelity"
 
 # Initialise number of iterations
-max_iterations=10
 iteration=0
 while (( $(echo "$infidelity > $epsilon" | bc -l) ))
 do  
@@ -144,8 +153,8 @@ do
     # Search output.txt for the line containing the list of adjusted genomes and print them as a list
     adjusted_genomes=$(grep -oP "Adjusted genomes : \[\K.*(?=\])" "$adjusted_genomes_out")
 
-    # Print the list of adjusted genomes
-    echo "$adjusted_genomes"
+    # # Print the list of adjusted genomes
+    # echo "$adjusted_genomes"
 
     # Loop over the list of adjusted genomes and run spinnet on each genome
     for string in $adjusted_genomes
@@ -160,8 +169,17 @@ do
     # Calculate gradient vector of fidelity wrt couplings
     python3 /home/hgjones9/quantum_control/calculate_gradients.py
 
-    # Calculat new couplings by gradient ascent
-    python3 /home/hgjones9/quantum_control/update_genome.py "$stepsize"
+    # Calculate new couplings by gradient ascent
+    python3 /home/hgjones9/quantum_control/update_genome.py "${change[@]}" "$stepsize" 
+
+    # # Update the change
+    # change_output='/home/hgjones9/quantum_control/change.txt'
+    # change=$(<"$change_output")
+
+    # Read the change array from the file
+    mapfile -t change < /home/hgjones9/quantum_control/change.txt
+    # change=("${change[@]}")
+    # echo "$change"
 
     # Run spinnet on new genome
     # Specify output file location of new genome
@@ -184,18 +202,19 @@ do
 
     echo "Fidelity difference = $fidelity_diff"
 
-    # # If new fidelity - old fidelity < 0, halve the step size
-    # if [ "$(echo "$fidelity_diff < 0" | bc)" -eq 1 ]; then
+    # If new fidelity - old fidelity < 0, halve the step size
+    if [ "$(echo "$fidelity_diff < 0" | bc)" -eq 1 ]; then
         
-    #     stepsize=$((stepsize / 2))
+        stepsize=$((stepsize / 2))
     
-    # else
-    #     stepsize="$stepsize"
+    else
+        stepsize="$stepsize"
     
-    # fi
+    fi
 
-    # Halve the stepsize each time
-    stepsize=$((stepsize / 2))
+    # # Halve the stepsize each time
+    # stepsize=$((stepsize / 4))
+
 
     echo "Stepsize = $stepsize"
 

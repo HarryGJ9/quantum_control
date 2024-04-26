@@ -147,7 +147,7 @@ for genome in adjusted_genomes:
     adjusted_genome = normalise_genome(genome)
     adjusted_genomes_norm.append(adjusted_genome)
 
-# print(f'Normalised adjusted genomes: {adjusted_genomes_norm}')
+print(f'Normalised adjusted genomes: {adjusted_genomes_norm}')
 
 # Write the original optimised genome and adjusted couplings to a .txt file
 with open(f'/home/hgjones9/quantum_control/initial_adjusted_genomes.txt', 'w') as file:
