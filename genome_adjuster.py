@@ -14,7 +14,7 @@ def find_new_genome():
     return new_genome_str
 
 # Extract couplings from genome and adjust couplings
-def adjust_couplings(genome_str, h=200):
+def adjust_couplings(genome_str, h=100):
     
     # Obtain couplings from genome
     couplings = re.findall(r'\d+', genome_str) # Find all couplings
@@ -34,10 +34,10 @@ def normalise_couplings(couplings):
 
     # Add a '0' in front of any two digit number, or change any negative numbers to 0
     for i in range(len(couplings)):
-        if 0 <= couplings[i] < 100:
+        if 0 < couplings[i] < 100:
             couplings[i] = f'{couplings[i]:03d}'
-        elif couplings[i] < 0:
-            couplings[i] = '000'
+        elif couplings[i] <= 0:
+            couplings[i] = '001'
 
     # If four digit coupling present, add a '0' at the start
     if four_digit_present:
@@ -47,10 +47,10 @@ def normalise_couplings(couplings):
             couplings[i] = int(couplings[i])
             if 100 <= couplings[i] < 1000:
                 couplings[i] = f'{couplings[i]:04d}'
-            elif 0 <= couplings[i] < 100:
+            elif 0 < couplings[i] < 100:
                 couplings[i] = f'{couplings[i]:04d}'
             elif couplings[i] <= 0:
-                couplings[i] = '0000'
+                couplings[i] = '0001'
     
     
     return couplings
@@ -123,7 +123,7 @@ def normalise_genome(genome):
 
 # Extract most recent updated genome
 new_genome = find_new_genome()
-print(f'New genome: {new_genome}')
+# print(f'New genome: {new_genome}')
 
 # Adjust couplings in preparation for central diff calculation
 couplings_plus_h, couplings_minus_h = adjust_couplings(new_genome)

@@ -5,25 +5,25 @@ import datetime
 # This script takes in the optimised genome found by the GA as an input and returns a list of 
 # genomes that have had their individual couplings altered by the derivative step size
 
-# # Obtains optimised genome from the GA
-# def find_genome(output_path):
-#     # Open genetic.out and find the genome
-#     with open(output_path, 'r') as file:
-#         for line in file:
-#             if "best genome" in line:
-#                 genome_full = line.split(':')[1].strip()
-#                 # print(f'GA output genome: {genome_full}')
-#     return genome_full
-
-# Obtains un-optimised genome from just spinnet
+# Obtains optimised genome from the GA
 def find_genome(output_path):
     # Open genetic.out and find the genome
     with open(output_path, 'r') as file:
         for line in file:
-            if "initial genome" in line:
+            if "best genome" in line:
                 genome_full = line.split(':')[1].strip()
                 # print(f'GA output genome: {genome_full}')
     return genome_full
+
+# Obtains un-optimised genome from just spinnet
+# def find_genome(output_path):
+#     # Open genetic.out and find the genome
+#     with open(output_path, 'r') as file:
+#         for line in file:
+#             if "initial genome" in line:
+#                 genome_full = line.split(':')[1].strip()
+#                 # print(f'GA output genome: {genome_full}')
+#     return genome_full
 
 
 # Extracts the couplings from the genome and adjusts couplings
@@ -48,10 +48,10 @@ def normalise_couplings(couplings):
 
     # Add a '0' in front of any two digit number, or change any negative numbers to 0
     for i in range(len(couplings)):
-        if 0 <= couplings[i] < 100:
+        if 0 < couplings[i] < 100:
             couplings[i] = f'{couplings[i]:03d}'
-        elif couplings[i] < 0:
-            couplings[i] = '000'
+        elif couplings[i] <= 0:
+            couplings[i] = '001'
 
     # If four digit coupling present, add a '0' at the start
     if four_digit_present:
@@ -61,10 +61,10 @@ def normalise_couplings(couplings):
             couplings[i] = int(couplings[i])
             if 100 <= couplings[i] < 1000:
                 couplings[i] = f'{couplings[i]:04d}'
-            elif 0 <= couplings[i] < 100:
+            elif 0 < couplings[i] < 100:
                 couplings[i] = f'{couplings[i]:04d}'
             elif couplings[i] <= 0:
-                couplings[i] = '0000'
+                couplings[i] = '0001'
 
     return couplings
 

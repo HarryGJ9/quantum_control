@@ -60,10 +60,10 @@ def normalise_couplings(couplings):
 
     # Add a '0' in front of any two digit number, or change any negative numbers to 0
     for i in range(len(couplings)):
-        if 0 <= couplings[i] < 100:
+        if 0 < couplings[i] < 100:
             couplings[i] = f'{couplings[i]:03d}'
-        elif couplings[i] < 0:
-            couplings[i] = '000'
+        elif couplings[i] <= 0:
+            couplings[i] = '001'
     
     # If four digit coupling present, add a '0' at the start
     if four_digit_present:
@@ -73,10 +73,10 @@ def normalise_couplings(couplings):
             couplings[i] = int(couplings[i])
             if 100 <= couplings[i] < 1000:
                 couplings[i] = f'{couplings[i]:04d}'
-            elif 0 <= couplings[i] < 100:
+            elif 0 < couplings[i] < 100:
                 couplings[i] = f'{couplings[i]:04d}'
             elif couplings[i] <= 0:
-                couplings[i] = '0000'
+                couplings[i] = '0001'
     
     return couplings
 
@@ -97,6 +97,7 @@ def grad_ascent(gradient_arr, old_couplings_arr, stepsize):
     
     # Calculate new couplings by ascending gradient
     new_couplings_arr = old_couplings_arr + stepsize * gradient_arr
+    print(f"Stepsize used in calculation: {stepsize}")
     # print(f'New couplings array: {new_couplings_arr}')
 
     # Convert new couplings array to a list of integers
@@ -187,20 +188,23 @@ print(f"Gradient vector: {gradient_arr}")
 old_couplings_lst, old_couplings_arr = extract_old_couplings()
 print(f'Old couplings: {old_couplings_arr}')
 
-# print("Number of arguments:", len(sys.argv))
-# print("Arguments:", sys.argv)
+print("Number of arguments:", len(sys.argv))
+print("Arguments:", sys.argv)
 
-# Input the change value from bash script
-if len(sys.argv) > 1:
-    change = np.array(sys.argv[1:-1], dtype=float)
-else:
-    change = np.zeros_like(gradient_arr)
+# # Input the change value from bash script
+# if len(sys.argv) > 1:
+#     change = np.array(sys.argv[1:-1], dtype=float)
+# else:
+#     change = np.zeros_like(gradient_arr)
 
-# Check if stepsize argument is provided in bash_script.sh, if so adjust stepsize accordingly
-if len(sys.argv) > 2:
-    stepsize = int(sys.argv[-1])
-else:
-    stepsize = 1000000
+# # Check if stepsize argument is provided in bash_script.sh, if so adjust stepsize accordingly
+# if len(sys.argv) > 2:
+#     stepsize = int(sys.argv[-1])
+# else:
+#     stepsize = 1000000
+
+# Use stepsize argument provided in bash script
+stepsize = int(sys.argv[-1])
 
 # # Update couplings using gradient ascent
 # new_couplings_lst, change = mom_grad_ascent(gradient_arr, old_couplings_arr, stepsize, change)
@@ -215,18 +219,18 @@ print(f"New couplings: {new_couplings_lst}")
 with open(os.path.join(quant_cont_path, 'old_couplings.txt'), 'w') as file:
     file.write(str(new_couplings_lst))
 
-# Convert the NumPy array to a list
-change_lst = change.tolist()
+# # Convert the NumPy array to a list
+# change_lst = change.tolist()
 
-# Open the file for writing
-with open('/home/hgjones9/quantum_control/change.txt', 'w') as file:
-    # Write each element of the list to a separate line in the file
-    for item in change_lst:
-        file.write(str(item) + '\n')
+# # Open the file for writing
+# with open('/home/hgjones9/quantum_control/change.txt', 'w') as file:
+#     # Write each element of the list to a separate line in the file
+#     for item in change_lst:
+#         file.write(str(item) + '\n')
 
 # Reconstruct new genome based on grad ascent updated couplings
 new_genome = reconstruct_genome(new_couplings_lst)
-print(f'New genome: {new_genome}')
+# print(f'New genome: {new_genome}')
 
 # Write new genome to an output .txt file
 with open('/home/hgjones9/quantum_control/new_genome.txt', 'w') as file:
