@@ -27,7 +27,7 @@ def find_genome(output_path):
 
 
 # Extracts the couplings from the genome and adjusts couplings
-def adjust_couplings(genome_full, h=100):
+def adjust_couplings(genome_full, h=0.5):
     # Obtain couplings from the genome
     genome = genome_full.split('#')[0].split('>')[1].replace('"', '') # Remove the <i|f> directive and any digit after the '#' 
     couplings = re.findall(r'\d+', genome) # Find all couplings
@@ -35,8 +35,8 @@ def adjust_couplings(genome_full, h=100):
     # print(f"Couplings = {couplings}")
 
     # For each coupling, calculate (coupling + h) and (coupling - h) and store them in a lsit
-    couplings_plus_h = [coupling + h for coupling in couplings]
-    couplings_minus_h = [coupling - h for coupling in couplings]
+    couplings_plus_h = [round(float(coupling + (coupling * h))) for coupling in couplings]
+    couplings_minus_h = [round(float(coupling - (coupling * h))) for coupling in couplings]
 
     return genome, couplings, couplings_plus_h, couplings_minus_h
 

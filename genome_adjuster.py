@@ -14,15 +14,15 @@ def find_new_genome():
     return new_genome_str
 
 # Extract couplings from genome and adjust couplings
-def adjust_couplings(genome_str, h=100):
+def adjust_couplings(genome_str, h=0.5):
     
     # Obtain couplings from genome
     couplings = re.findall(r'\d+', genome_str) # Find all couplings
     couplings_lst = [int(coupling) for coupling in couplings] # Convert each coupling to an integer and stor in a list
 
     # For each coupling, calculate (coupling + h) and (coupling - h) and store in a list
-    couplings_plus_h = [coupling + h for coupling in couplings_lst]
-    couplings_minus_h = [coupling - h for coupling in couplings_lst]
+    couplings_plus_h = [round(float(coupling + (coupling * h)))for coupling in couplings_lst]
+    couplings_minus_h = [round(float(coupling - (coupling * h)))for coupling in couplings_lst]
 
     return couplings_plus_h, couplings_minus_h
 
@@ -123,7 +123,7 @@ def normalise_genome(genome):
 
 # Extract most recent updated genome
 new_genome = find_new_genome()
-# print(f'New genome: {new_genome}')
+print(f'New genome: {new_genome}')
 
 # Adjust couplings in preparation for central diff calculation
 couplings_plus_h, couplings_minus_h = adjust_couplings(new_genome)

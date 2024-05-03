@@ -152,6 +152,8 @@ read initial_genome
 # /home/hgjones9/spinchain/bin/spinnet "$initial_genome"
 
 # Need to backup the new genome to a .txt file incase the first iteration doesn't improve
+python3 /home/hgjones9/quantum_control/GA_genome.py
+cp new_genome.txt new_genome_backup.txt
 
 # Specify <i|f> directive
 genetic_out_file='/home/hgjones9/quantum_control/output-latest/genetic.out' # Path to genetic.out
@@ -175,7 +177,7 @@ old_fidelity=$(head -n 1 /home/hgjones9/quantum_control/max_fidelity_time.txt) #
 echo "Initial fidelity: $old_fidelity"
 infidelity=$(echo "100 - $old_fidelity" | bc) # Calculate initial infidelity
 echo "Initial infidelity: $infidelity"
-epsilon=0.01 # Define threshold for stopping the loop
+epsilon=0.0 # Define threshold for stopping the loop
 stepsize=1000000 # Define gradient ascent stepsize
 max_iterations=10 # Specify maximum number of iterations before gradient ascent breaks
 iteration=0
@@ -198,8 +200,9 @@ do
         # Extract initial adjusted couplings, ready for gradient ascent
         python3 /home/hgjones9/quantum_control/extract_initial_couplings.py
 
-        # Rename initial_couplings.txt to old_couplings.txt
+        # Rename initial_couplings.txt to old_couplings.txt and backup
         mv initial_couplings.txt old_couplings.txt
+        cp old_couplings.txt old_couplings_backup.txt
 
         # Run spinnet on each adjusted genome to calculate dynamics
         for string in $adjusted_genomes
@@ -217,10 +220,10 @@ do
 
         # Calculate new couplings by gradient ascent
         python3 /home/hgjones9/quantum_control/update_genome.py "$stepsize"
-
+        
         # Backup files
-        cp old_couplings.txt old_couplings_backup.txt   # Backup the old_couplings incase fidelity doesn't improve
-        cp new_genome.txt new_genome_backup.txt  # Backup the current version of new_genome.txt incase the fidelity doesn't improve
+        # cp old_couplings.txt old_couplings_backup.txt   # Backup the old_couplings incase fidelity doesn't improve
+        # cp new_genome.txt new_genome_backup.txt  # Backup the current version of new_genome.txt incase the fidelity doesn't improve
 
         # Specify output file location of new genome
         new_genome_output='/home/hgjones9/quantum_control/new_genome.txt'  
@@ -264,8 +267,8 @@ do
         # Search output.txt for the line containing the list of adjusted genomes and print them as a list
         adjusted_genomes=$(grep -oP "Adjusted genomes : \[\K.*(?=\])" "$adjusted_genomes_out")
 
-        # # Print the list of adjusted genomes
-        # echo "$adjusted_genomes"
+        # Print the list of adjusted genomes
+        echo "$adjusted_genomes"
 
         # Loop over the list of adjusted genomes and run spinnet on each genome
         for string in $adjusted_genomes
@@ -279,7 +282,7 @@ do
 
         # Calculate gradient vector of fidelity wrt couplings
         python3 /home/hgjones9/quantum_control/calculate_gradients.py
-        cp gradient_latest.txt gradient_latest_backup.txt # Backup 
+        # cp gradient_latest.txt gradient_latest_backup.txt # Backup 
 
         # # Calculate new couplings by gradient ascent
         # python3 /home/hgjones9/quantum_control/update_genome.py "${change[@]}" "$stepsize" 
@@ -384,7 +387,7 @@ do
 
     fi
 
-    echo "Stepsize: $stepsize"
+    # echo "Stepsize: $stepsize"
 
 done
 
