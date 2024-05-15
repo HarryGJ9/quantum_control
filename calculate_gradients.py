@@ -205,6 +205,8 @@ def calculate_gradient(fidelities, h=200):
         central_diff = (fidelities[i] - fidelities[i + 1]) / (2 * h)
         gradient.append(central_diff)
 
+    # Find derivative wrt time and append to gradient array
+
     # Convert list to numpy array
     gradient_arr = np.array(gradient)
 

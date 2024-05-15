@@ -1,5 +1,4 @@
 
-
 # Obtains optimised genome from the GA
 def find_genome(output_path):
     # Open genetic.out and find the genome
