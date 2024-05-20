@@ -204,7 +204,7 @@ print("Arguments:", sys.argv)
 #     stepsize = 1000000
 
 # Use stepsize argument provided in bash script
-stepsize = int(sys.argv[-1])
+stepsize = int(float(sys.argv[-1]))
 
 # # Update couplings using gradient ascent
 # new_couplings_lst, change = mom_grad_ascent(gradient_arr, old_couplings_arr, stepsize, change)

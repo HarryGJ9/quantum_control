@@ -1,18 +1,30 @@
+"""
+This script prepares a list of genome ready for calculating the gradient w.r.t couplings and saves them to a .txt file
+
+Input: GA optimised genome
+
+Returns: List of genomes that have had their individual couplings altered by a certain amount.
+         List size 2N (N = number of couplings)
+
+e.g. GA optimised genome: AB300BC400
+    returns: [AB400BC400, AB200BC400, AB300BC500, AB300BC300]
+"""
+
+
 import re
 import os
 import datetime
 
-# This script takes in the optimised genome found by the GA as an input and returns a list of 
-# genomes that have had their individual couplings altered by the derivative step size
-
 # Obtains optimised genome from the GA
 def find_genome(output_path):
+
     # Open genetic.out and find the genome
     with open(output_path, 'r') as file:
         for line in file:
             if "best genome" in line:
                 genome_full = line.split(':')[1].strip()
                 # print(f'GA output genome: {genome_full}')
+
     return genome_full
 
 # Obtains un-optimised genome from just spinnet
@@ -28,6 +40,7 @@ def find_genome(output_path):
 
 # Extracts the couplings from the genome and adjusts couplings
 def adjust_couplings(genome_full, h=0.5):
+
     # Obtain couplings from the genome
     genome = genome_full.split('#')[0].split('>')[1].replace('"', '') # Remove the <i|f> directive and any digit after the '#' 
     couplings = re.findall(r'\d+', genome) # Find all couplings
@@ -68,10 +81,9 @@ def normalise_couplings(couplings):
 
     return couplings
 
-
-
 # Constructs new genomes based on the adjusted couplings
 def construct_new_genomes(genome, couplings_plus_h, couplings_minus_h):
+    
     # Split genome into a list of characters and couplings
     genome_split = re.split(r'([A-Za-z]+|\d+)', genome)
     genome_list = [index for index in genome_split if index]

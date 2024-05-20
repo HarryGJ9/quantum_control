@@ -1,3 +1,7 @@
+"""
+Script obtains the GA optimised genome and saves it to a .txt file
+
+"""
 
 # Obtains optimised genome from the GA
 def find_genome(output_path):
