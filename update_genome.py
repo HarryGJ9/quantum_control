@@ -97,7 +97,7 @@ def grad_ascent(gradient_arr, old_couplings_arr, stepsize):
     
     # Calculate new couplings by ascending gradient
     new_couplings_arr = old_couplings_arr + stepsize * gradient_arr
-    print(f"Stepsize used in calculation: {stepsize}")
+    # print(f"Stepsize used in calculation: {stepsize}")
     # print(f'New couplings array: {new_couplings_arr}')
 
     # Convert new couplings array to a list of integers
@@ -182,14 +182,15 @@ gradient_output_file = get_gradient_file(dirs)
 
 # Open gradient.txt file and retrieve the gradient vector as a numpy array
 gradient_arr = open_gradient(gradient_output_file)
-print(f"Gradient vector: {gradient_arr}")
+# print(f"Gradient vector: {gradient_arr}")
+# print(type(gradient_arr))
 
 # Extract old couplings ready to be updated
 old_couplings_lst, old_couplings_arr = extract_old_couplings()
 print(f'Old couplings: {old_couplings_arr}')
 
-print("Number of arguments:", len(sys.argv))
-print("Arguments:", sys.argv)
+# print("Number of arguments:", len(sys.argv))
+# print("Arguments:", sys.argv)
 
 # # Input the change value from bash script
 # if len(sys.argv) > 1:

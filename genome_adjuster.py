@@ -14,15 +14,15 @@ def find_new_genome():
     return new_genome_str
 
 # Extract couplings from genome and adjust couplings
-def adjust_couplings(genome_str, h=0.5):
+def adjust_couplings(genome_str, h=0.1):
     
     # Obtain couplings from genome
     couplings = re.findall(r'\d+', genome_str) # Find all couplings
     couplings_lst = [int(coupling) for coupling in couplings] # Convert each coupling to an integer and stor in a list
 
-    # For each coupling, calculate (coupling + h) and (coupling - h) and store in a list
-    couplings_plus_h = [round(float(coupling + (coupling * h)))for coupling in couplings_lst]
-    couplings_minus_h = [round(float(coupling - (coupling * h)))for coupling in couplings_lst]
+    # Calculate adjusted couplings and store in two separate lists
+    couplings_plus_h = [round(float(coupling) * (1 + h)) for coupling in couplings]
+    couplings_minus_h = [round(float(coupling) * (1 - h)) for coupling in couplings]
 
     return couplings_plus_h, couplings_minus_h
 
@@ -73,8 +73,8 @@ def construct_new_genomes(genome_str, couplings_plus_h, couplings_minus_h):
     # Split back into two lists
     couplings_plus_h = adjusted_couplings[:midpoint]
     couplings_minus_h = adjusted_couplings[midpoint:]
-    print(f'Couplings + h: {couplings_plus_h}')
-    print(f'Couplings - h: {couplings_minus_h}')
+    # print(f'Couplings + h: {couplings_plus_h}')
+    # print(f'Couplings - h: {couplings_minus_h}')
 
     # Compile new genomes based on adjusted couplings and letter characters of previous genome
     adjusted_genomes = []

@@ -39,7 +39,7 @@ def find_genome(output_path):
 
 
 # Extracts the couplings from the genome and adjusts couplings
-def adjust_couplings(genome_full, h=0.5):
+def adjust_couplings(genome_full, h=0.1):
 
     # Obtain couplings from the genome
     genome = genome_full.split('#')[0].split('>')[1].replace('"', '') # Remove the <i|f> directive and any digit after the '#' 
@@ -47,9 +47,12 @@ def adjust_couplings(genome_full, h=0.5):
     couplings = [int(coupling) for coupling in couplings] # Convert each coupling to an integer and return as a list
     # print(f"Couplings = {couplings}")
 
-    # For each coupling, calculate (coupling + h) and (coupling - h) and store them in a lsit
-    couplings_plus_h = [round(float(coupling + (coupling * h))) for coupling in couplings]
-    couplings_minus_h = [round(float(coupling - (coupling * h))) for coupling in couplings]
+    # # For each coupling, calculate (coupling + h) and (coupling - h) and store them in a lsit
+    # couplings_plus_h = [round(float(coupling + (coupling * h))) for coupling in couplings]
+    # couplings_minus_h = [round(float(coupling - (coupling * h))) for coupling in couplings]
+
+    couplings_plus_h = [round(float((1 + h) * coupling)) for coupling in couplings]
+    couplings_minus_h = [round(float((1 - h) * coupling)) for coupling in couplings]
 
     return genome, couplings, couplings_plus_h, couplings_minus_h
 
@@ -158,7 +161,7 @@ print(f"Full genome: {genome_full}")
 
 # Strip full genome and adjust the couplings in preparation of derivative calculation
 GA_genome, GA_couplings, couplings_plus_h, couplings_minus_h = adjust_couplings(genome_full)
-print(f"Stripped genome: {GA_genome}")
+# print(f"Stripped genome: {GA_genome}")
 
 # Reconstruct genomes based on the adjusted couplings
 genome_list, adjusted_genomes = construct_new_genomes(GA_genome, couplings_plus_h, couplings_minus_h)
@@ -170,7 +173,7 @@ for genome in adjusted_genomes:
     adjusted_genome = normalise_genome(genome)
     adjusted_genomes_norm.append(adjusted_genome)
 
-print(f'Normalised adjusted genomes: {adjusted_genomes_norm}')
+# print(f'Adjusted genomes: {adjusted_genomes_norm}')
 
 # Write the original optimised genome and adjusted couplings to a .txt file
 with open(f'/home/hgjones9/quantum_control/initial_adjusted_genomes.txt', 'w') as file:

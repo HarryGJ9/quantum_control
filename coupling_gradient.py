@@ -12,6 +12,7 @@ import time
 import numpy as np
 import re
 import ast
+import sys
 
 
 # Specify quantum_control directory path
@@ -136,21 +137,21 @@ def fidelities(output_dirs):
 
     return fidelity_time_arr
 
- # Function which picks out the fidelities at the time given by the original genetic algorithm
-
 # Function which returns the fidelities of each adjusted genome at the specified time
 def fidelities_at_time(fidelity_time_arr):
 
-    # Open max_fidelity_time.txt to get the specified time
-    with open('/home/hgjones9/quantum_control/max_fidelity_time.txt') as file:
-        lines = file.readlines()
-        if len(lines) >= 2:
-            specified_time = lines[1].strip()
-            # print(specified_time)
+    # # Open max_fidelity_time.txt to get the specified time
+    # with open('/home/hgjones9/quantum_control/max_fidelity_time.txt') as file:
+    #     lines = file.readlines()
+    #     if len(lines) >= 2:
+    #         specified_time = lines[1].strip()
+    #         # print(specified_time)
 
+    # Specify time to find fidelities
+    specified_time = round(float(sys.argv[1]), 2)
 
     # Format fidelity_time_arr such that the time column are all of the form e.g. '2.40' not '2.40000000e+00'
-    formatted_times = [f'{time:.2f}' for time in fidelity_time_arr[:,0]]
+    formatted_times = [round(float(time), 2) for time in fidelity_time_arr[:,0]]
    
     # Check if the specified time exists in the array
     if specified_time in formatted_times:
@@ -167,25 +168,30 @@ def fidelities_at_time(fidelity_time_arr):
 
     return fidelities_at_time_arr
 
-
 # Function which calculates the gradient through central difference of each pair of fidelities
-def calculate_gradient(fidelities, h=200):
+def calculate_gradient(fidelities, couplings, h=0.1):
 
-    # Obtain number of columns
-    num_columns = len(fidelities)
 
-    # Iterate over each column pair and find the central difference, then append it to gradient list
-    gradient = []
-    for i in range(0, num_columns-1,2):
-        central_diff = (fidelities[i] - fidelities[i + 1]) / (2 * h)
-        gradient.append(central_diff)
+    # Ensure the input lists are of correct lengths
+    if len(fidelities) != 2 * len(couplings):
+        raise ValueError("The length of fidelities should be twice the length of couplings")
 
-    # Find derivative wrt time and append to gradient array
+    gradient_lst = []
 
-    # Convert list to numpy array
-    gradient_arr = np.array(gradient)
+    # Iterate over each coupling and corresponding pair of fidelities
+    for i in range(len(couplings)):
+        f_plus = fidelities[2 * i]
+        f_minus = fidelities[2 * i + 1]
+        coupling = couplings[i]
+        central_diff = (f_plus - f_minus) / (2 * h * coupling)
+        gradient_lst.append(central_diff)
 
-    return gradient
+    # # Convert list to numpy array
+    # gradient_arr = np.array(gradient)
+
+    return gradient_lst
+
+
 
 ###############
 # RUN PROGRAMME 
@@ -218,7 +224,7 @@ N = 2 * num_couplings
 
 # Call filter function to get the relevant output- directories, filtered by time
 sorted_output_dirs = filter(dirs, N)
-print(f"Sorted output directories: {sorted_output_dirs}")
+# print(f"Sorted output directories: {sorted_output_dirs}")
 
 # Call fidelities function to get an array of updated fidelities
 updated_fidelities = fidelities(sorted_output_dirs)
@@ -227,10 +233,11 @@ updated_fidelities = fidelities(sorted_output_dirs)
 
 # Obtain fidelities at the time of max fidelity provided by the initial genome.out file
 fidelity_vals = fidelities_at_time(updated_fidelities)
-print(f'Fidelity values at specified time: {fidelity_vals}')
+fidelity_vals = fidelity_vals * 100
+# print(f'Fidelity values at specified time: {fidelity_vals}')
 
 # Call calculate_gradient to obtain the gradient vector
-gradient = calculate_gradient(fidelity_vals)
+gradient = calculate_gradient(fidelity_vals, couplings_lst)
 # print(f"Gradient vector: {gradient}")
 
 with open('/home/hgjones9/quantum_control/gradient_latest.txt', 'w') as file:

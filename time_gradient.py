@@ -7,6 +7,7 @@ Returns: temporal gradient of genome.
 """
 
 import os
+import sys
 import numpy as np
 
 # Find time gradient
@@ -103,29 +104,47 @@ def get_fidelities(output_dirs):
 
     return fidelity_time_arr
 
-# Obtain fidelity at specified time, one backwards timestep and one forwards timestep
+# Obtain fidelity at specified time, one backwards timestep and one forwards timestep and order them in a list
 def fidelity_time_diff(fidelities, specified_time):
     
     # Find index where time matches the specified time
-    index = np.where(fidelities[:,0] == specified_time)[0]
+    index = np.where(np.isclose(fidelities[:, 0].astype(float), specified_time))[0]
 
-    if len(index) > 0:
-        # Get the fidelity corresponding to the specific time
-        fidelity = fidelities[index[0], 1]
-        print("\nFidelity at time {}: {}".format(specified_time, fidelity))
+    if index.size > 0:
+
+        # Index of specified time
+        idx = index[0]
+        
+        # Obtain fidelity at specified time and at indices either side
+        fidelity = fidelities[idx, 1]
+        fidelity_back = fidelities[idx - 1, 1] if (idx - 1) >= 0 else None
+        fidelity_forward = fidelities[idx + 1 , 1] if (idx + 1) < fidelities.shape[0] else None
+
+        # Input fidelities into a list 
+        fidelity_lst = [fidelity_back, fidelity, fidelity_forward]
+        fidelity_lst = [round(fidelity * 100, 2) for fidelity in fidelity_lst]
+
+        # Input times into a list
+        time_lst = [fidelities[idx - 1,0], fidelities[idx,0], fidelities[idx + 1,0]]
+        time_lst = [float(round(time, 2)) for time in time_lst]
+
+        # Stack lists together into an array
+        time_fidelity_arr = np.column_stack((time_lst, fidelity_lst))
+
     else:
-        print("\nSpecific time {} not found in the array.".format(specified_time))
+        print(f"The value {specified_time} is not found in the array.")
 
+    return time_fidelity_arr
 
-    return fidelity
+def max_fidelity_time(time_fidelity_arr):
 
+    # Find index of maximum value
+    max_index = np.argmax(time_fidelity_arr[:,1])
 
+    # Obtain row corresponding to that index
+    max_vals = time_fidelity_arr[max_index]
 
-
-
-
-
-
+    return max_vals
 
 
 ###############
@@ -141,10 +160,34 @@ output_dirs = list_dirs(quant_cont_path)
 
 # Obtain fidelity against time values
 fidelities = get_fidelities(output_dirs)
-print(fidelities)
-# print(type(fidelities[0,0]))
+# print(fidelities)
 
-print(fidelity_time_diff(fidelities, 2.0))
+# Retrieve specified time at initial max fidelity for input to fidelity_time_diff
+specified_time = float(sys.argv[1])
+# specified_time = 2.0
+
+# Obtain 2D array of forwards and backwards time and fidelity values
+time_fidelity_arr = fidelity_time_diff(fidelities, specified_time)
+# print(time_fidelity_arr)
+
+# Pick highest value of fidelity and specify new corresponding time
+max_vals = max_fidelity_time(time_fidelity_arr)
+# print(max_vals)
+
+# Save new fidelity
+new_fidelity = max_vals[1]
+
+# Write new fidelity to .txt file
+with open('/home/hgjones9/quantum_control/new_fidelity.txt', 'w') as file:
+    file.write(str(new_fidelity))
+
+# Save new time
+new_time = max_vals[0]
+
+# Write updated time to a file
+with open('/home/hgjones9/quantum_control/new_time.txt', 'w') as file:
+    file.write(str(new_time))
+
 
 
 
