@@ -28,7 +28,6 @@ def list_dirs(path):
     dirs = os.listdir(path)
     return dirs
 
-
 # Filter through the folders under spinchain and find those most recently created 
 def filter(dirs, N):
 
@@ -49,124 +48,144 @@ def filter(dirs, N):
 
     return output_dirs
 
-# Function which returns a 2D array of time and fidelity values for a set of output folders
+# Function which returns a 1D array of fidelity values of each of the adjusted genomes at the specified time
 def fidelities(output_dirs):
+
+    # Initialise fidelities list
+    fidelities = []
+
+    # For each output directory, open 'genetic.out' and extract the fidelity value at the specified time
+    for dir in output_dirs:
+        with open(os.path.join(dir, 'genetic.out'), 'r') as file:
+            for line in file:
+                if line.startswith('with fitness'):
+                    fidelity_match = re.search(r'(\d+\.\d+)% fidelity', line)
+                    if fidelity_match:
+                        fidelity = fidelity_match.group(1)
+        fidelities.append(fidelity)
     
-    # Initialise fidelity list
-    fidelities = [] 
+    # Convert each fidelity into a float
+    fidelities = [round(float(fidelity), 2) for fidelity in fidelities]
 
-    timesteps = None
-
-    # Iterate over the output- directories and obtain fidelity values
-    for output_dir in output_dirs:
-
-        # Specify relevant paths
-        data_path = os.path.join(quant_cont_path, output_dir, "data")
-        spinchain_out_path = os.path.join(quant_cont_path, output_dir, "spinchain.out") 
-        
-        # List data_sets in output-folder
-        data_sets = os.listdir(data_path)
-
-        for data_set in data_sets:
-            if data_set == 'dynamics_formatted.data':
+    return fidelities
                 
-                # Load text from dynamics_formatted.data file
-                fidelity = np.loadtxt(os.path.join(data_path, 'dynamics_formatted.data'), dtype=complex, comments='#')
-
-                # Obtain timesteps from dynamics_formatted.data file
-                timesteps = np.absolute(fidelity[:,0])
-
-                # TAKEN FROM DYNAMICS.PY
-                # Obtains an array of fidelities for each output- file
-                init = fidelity[:, 1]*0.0
-                final = fidelity[:, 1]*0.0
-                numI = 0
-                numF = 0
-                initialIndexes = []
-                initialCoeffs = []
-                finalIndexes = []
-                finalCoeffs = []
-                inInit = True
-
-                with open(spinchain_out_path, "r") as f:
-                    for line in f:
-                        if "FINAL VECTOR" in line:
-                            inInit = False
-                            split = line.split()
-                            # final += fidelity[:, int(split[4])]
-                            finalIndexes.append(int(split[4]))
-                            numF += 1
-                        elif "INITIAL INJECTED" in line:
-                            split = line.split()
-                            # init += fidelity[:, int(split[5])]
-                            initialIndexes.append(int(split[5]))
-                            numI += 1
-                        elif "WITH COEFFICIENT" in line:
-                            split = line.split()
-                            realVal = float(split[4][:-1])
-                            imagVal = float(split[5][:-1])
-                            if inInit:
-                                initialCoeffs.append(complex(realVal, imagVal))
-                            else:
-                                finalCoeffs.append(complex(realVal, imagVal))
-                        elif "FOR MODE 2" in line:
-                            break
-
-                # Construct the vectors
-                for i in range(numI):
-                    init = init + np.conj(initialCoeffs[i]) * fidelity[:, initialIndexes[i]]
-                for i in range(numF):
-                    final = final + np.conj(finalCoeffs[i]) * fidelity[:, finalIndexes[i]]
-
-                #PLOT FIDELITY AGAINST INITIAL STATE AND TARGET STATE (CHANGE WHENEVER)
-                y1 = (np.absolute(init))**2
-                y2 = (np.absolute(final))**2
-
-                fidelities.append(y2)
-                if timesteps is None:
-                    timesteps = fidelity[:,0]
+# def fidelities(output_dirs):
     
-    # Convert list of arrays to a 2D array with # rows = # timesteps and fidelities in the columns
-    fidelities_arr = np.stack(fidelities, axis=1)
-    # print(fidelities_arr)
+#     # Initialise fidelity list
+#     fidelities = [] 
 
-    # Stack time and fidelity arrays together
-    fidelity_time_arr = np.hstack((timesteps.reshape(-1, 1), fidelities_arr))
+#     timesteps = None
 
-    # print(fidelity_time_arr)
+#     # Iterate over the output- directories and obtain fidelity values
+#     for output_dir in output_dirs:
 
-    return fidelity_time_arr
+#         # Specify relevant paths
+#         data_path = os.path.join(quant_cont_path, output_dir, "data")
+#         spinchain_out_path = os.path.join(quant_cont_path, output_dir, "spinchain.out") 
+        
+#         # List data_sets in output-folder
+#         data_sets = os.listdir(data_path)
+
+#         for data_set in data_sets:
+#             if data_set == 'dynamics_formatted.data':
+                
+#                 # Load text from dynamics_formatted.data file
+#                 fidelity = np.loadtxt(os.path.join(data_path, 'dynamics_formatted.data'), dtype=complex, comments='#')
+
+#                 # Obtain timesteps from dynamics_formatted.data file
+#                 timesteps = np.absolute(fidelity[:,0])
+
+#                 # TAKEN FROM DYNAMICS.PY
+#                 # Obtains an array of fidelities for each output- file
+#                 init = fidelity[:, 1]*0.0
+#                 final = fidelity[:, 1]*0.0
+#                 numI = 0
+#                 numF = 0
+#                 initialIndexes = []
+#                 initialCoeffs = []
+#                 finalIndexes = []
+#                 finalCoeffs = []
+#                 inInit = True
+
+#                 with open(spinchain_out_path, "r") as f:
+#                     for line in f:
+#                         if "FINAL VECTOR" in line:
+#                             inInit = False
+#                             split = line.split()
+#                             # final += fidelity[:, int(split[4])]
+#                             finalIndexes.append(int(split[4]))
+#                             numF += 1
+#                         elif "INITIAL INJECTED" in line:
+#                             split = line.split()
+#                             # init += fidelity[:, int(split[5])]
+#                             initialIndexes.append(int(split[5]))
+#                             numI += 1
+#                         elif "WITH COEFFICIENT" in line:
+#                             split = line.split()
+#                             realVal = float(split[4][:-1])
+#                             imagVal = float(split[5][:-1])
+#                             if inInit:
+#                                 initialCoeffs.append(complex(realVal, imagVal))
+#                             else:
+#                                 finalCoeffs.append(complex(realVal, imagVal))
+#                         elif "FOR MODE 2" in line:
+#                             break
+
+#                 # Construct the vectors
+#                 for i in range(numI):
+#                     init = init + np.conj(initialCoeffs[i]) * fidelity[:, initialIndexes[i]]
+#                 for i in range(numF):
+#                     final = final + np.conj(finalCoeffs[i]) * fidelity[:, finalIndexes[i]]
+
+#                 #PLOT FIDELITY AGAINST INITIAL STATE AND TARGET STATE (CHANGE WHENEVER)
+#                 y1 = (np.absolute(init))**2
+#                 y2 = (np.absolute(final))**2
+
+#                 fidelities.append(y2)
+#                 if timesteps is None:
+#                     timesteps = fidelity[:,0]
+    
+#     # Convert list of arrays to a 2D array with # rows = # timesteps and fidelities in the columns
+#     fidelities_arr = np.stack(fidelities, axis=1)
+#     # print(fidelities_arr)
+
+#     # Stack time and fidelity arrays together
+#     fidelity_time_arr = np.hstack((timesteps.reshape(-1, 1), fidelities_arr))
+
+#     # print(fidelity_time_arr)
+
+#     return fidelity_time_arr
 
 # Function which returns the fidelities of each adjusted genome at the specified time
-def fidelities_at_time(fidelity_time_arr):
+# def fidelities_at_time(fidelity_time_arr):
 
-    # # Open max_fidelity_time.txt to get the specified time
-    # with open('/home/hgjones9/quantum_control/max_fidelity_time.txt') as file:
-    #     lines = file.readlines()
-    #     if len(lines) >= 2:
-    #         specified_time = lines[1].strip()
-    #         # print(specified_time)
+#     # # Open max_fidelity_time.txt to get the specified time
+#     # with open('/home/hgjones9/quantum_control/max_fidelity_time.txt') as file:
+#     #     lines = file.readlines()
+#     #     if len(lines) >= 2:
+#     #         specified_time = lines[1].strip()
+#     #         # print(specified_time)
 
-    # Specify time to find fidelities
-    specified_time = round(float(sys.argv[1]), 2)
+#     # Specify time to find fidelities
+#     specified_time = round(float(sys.argv[1]), 2)
 
-    # Format fidelity_time_arr such that the time column are all of the form e.g. '2.40' not '2.40000000e+00'
-    formatted_times = [round(float(time), 2) for time in fidelity_time_arr[:,0]]
+#     # Format fidelity_time_arr such that the time column are all of the form e.g. '2.40' not '2.40000000e+00'
+#     formatted_times = [round(float(time), 2) for time in fidelity_time_arr[:,0]]
    
-    # Check if the specified time exists in the array
-    if specified_time in formatted_times:
+#     # Check if the specified time exists in the array
+#     if specified_time in formatted_times:
 
-        # Find the index of the specified time
-        row_index = formatted_times.index(specified_time)
+#         # Find the index of the specified time
+#         row_index = formatted_times.index(specified_time)
 
-        # Extract fidelities at the specified time
-        fidelities_at_time_arr = fidelity_time_arr[row_index, 1:]
-        # print(f"Fidelities at time {specified_time} : {fidelities_at_time_arr}")
+#         # Extract fidelities at the specified time
+#         fidelities_at_time_arr = fidelity_time_arr[row_index, 1:]
+#         # print(f"Fidelities at time {specified_time} : {fidelities_at_time_arr}")
 
-    else:
-        print("Specified time not found in the array")
+#     else:
+#         print("Specified time not found in the array")
 
-    return fidelities_at_time_arr
+#     return fidelities_at_time_arr
 
 # Function which calculates the gradient through central difference of each pair of fidelities
 def calculate_gradient(fidelities, couplings, h=0.1):
@@ -190,8 +209,6 @@ def calculate_gradient(fidelities, couplings, h=0.1):
     # gradient_arr = np.array(gradient)
 
     return gradient_lst
-
-
 
 ###############
 # RUN PROGRAMME 
@@ -227,14 +244,13 @@ sorted_output_dirs = filter(dirs, N)
 # print(f"Sorted output directories: {sorted_output_dirs}")
 
 # Call fidelities function to get an array of updated fidelities
-updated_fidelities = fidelities(sorted_output_dirs)
-# print(f"Fidelities of adjusted genomes: {updated_fidelities}")
-# print((updated_fidelities[:,0] - updated_fidelities[:,1]) / (2))
+fidelity_vals = fidelities(sorted_output_dirs)
+# print(f"Fidelities of adjusted genomes: {fidelity_vals}")
 
-# Obtain fidelities at the time of max fidelity provided by the initial genome.out file
-fidelity_vals = fidelities_at_time(updated_fidelities)
-fidelity_vals = fidelity_vals * 100
-# print(f'Fidelity values at specified time: {fidelity_vals}')
+# # Obtain fidelities at the time of max fidelity provided by the initial genome.out file
+# fidelity_vals = fidelities_at_time(updated_fidelities)
+# fidelity_vals = fidelity_vals * 100
+# # print(f'Fidelity values at specified time: {fidelity_vals}')
 
 # Call calculate_gradient to obtain the gradient vector
 gradient = calculate_gradient(fidelity_vals, couplings_lst)

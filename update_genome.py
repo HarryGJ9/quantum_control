@@ -82,18 +82,6 @@ def normalise_couplings(couplings):
 
 # Updates couplings using gradient ascent
 def grad_ascent(gradient_arr, old_couplings_arr, stepsize):
-
-    # # Convert the change list to an array if it isn't already an array
-    # if type(change) is not np.ndarray:
-    #     change = np.array(change, dtype=float)
-    # else:
-    #     change = change.astype(float) 
-
-    # # Change in the couplings
-    # change = stepsize * gradient_arr
-
-    #  # Calculate new couplings using momentum gradient ascent
-    # new_couplings_arr = old_couplings_arr + change
     
     # Calculate new couplings by ascending gradient
     new_couplings_arr = old_couplings_arr + stepsize * gradient_arr
@@ -109,34 +97,6 @@ def grad_ascent(gradient_arr, old_couplings_arr, stepsize):
     # print(f'New couplings list normalised: {new_couplings_lst}')
 
     return new_couplings_lst
-
-# # Update couplings using momentum gradient ascent
-# def mom_grad_ascent(gradient_arr, old_couplings_arr, stepsize, change):
-
-#     print(f"Change input: {change}")
-
-#     # Convert the change list to an array if it isn't already an array
-#     if type(change) is not np.ndarray:
-#         change = np.array(change, dtype=float)
-#     else:
-#         change = change.astype(float) 
-
-#     # Define momentum
-#     momentum = 0.8
-
-#     # Change in the couplings
-#     change = stepsize * gradient_arr + momentum * change
-
-#     # Calculate new couplings using momentum gradient ascent
-#     new_couplings_arr = old_couplings_arr + change
-
-#     # Convert array to list of integers
-#     new_couplings_lst = [round(float(coupling)) for coupling in new_couplings_arr]
-
-#     # Normalise all couplings to have same number of digits
-#     new_couplings_lst = normalise_couplings(new_couplings_lst)
-
-#     return new_couplings_lst, change
 
 # Reconstruct new genome based on new couplings
 def reconstruct_genome(new_couplings_lst):
@@ -192,42 +152,16 @@ print(f'Old couplings: {old_couplings_arr}')
 # print("Number of arguments:", len(sys.argv))
 # print("Arguments:", sys.argv)
 
-# # Input the change value from bash script
-# if len(sys.argv) > 1:
-#     change = np.array(sys.argv[1:-1], dtype=float)
-# else:
-#     change = np.zeros_like(gradient_arr)
-
-# # Check if stepsize argument is provided in bash_script.sh, if so adjust stepsize accordingly
-# if len(sys.argv) > 2:
-#     stepsize = int(sys.argv[-1])
-# else:
-#     stepsize = 1000000
-
 # Use stepsize argument provided in bash script
 stepsize = int(float(sys.argv[-1]))
 
-# # Update couplings using gradient ascent
-# new_couplings_lst, change = mom_grad_ascent(gradient_arr, old_couplings_arr, stepsize, change)
-# print(f"New couplings: {new_couplings_lst}")
-# print(f"Change array: {change}")
-
+# New couplings
 new_couplings_lst = grad_ascent(gradient_arr, old_couplings_arr, stepsize)
 print(f"New couplings: {new_couplings_lst}")
-
 
 # Overwrite old_couplings.txt with new_couplings_lst
 with open(os.path.join(quant_cont_path, 'old_couplings.txt'), 'w') as file:
     file.write(str(new_couplings_lst))
-
-# # Convert the NumPy array to a list
-# change_lst = change.tolist()
-
-# # Open the file for writing
-# with open('/home/hgjones9/quantum_control/change.txt', 'w') as file:
-#     # Write each element of the list to a separate line in the file
-#     for item in change_lst:
-#         file.write(str(item) + '\n')
 
 # Reconstruct new genome based on grad ascent updated couplings
 new_genome = reconstruct_genome(new_couplings_lst)

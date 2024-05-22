@@ -43,7 +43,8 @@ specified_time_old=$(tail -n +2 /home/hgjones9/quantum_control/max_fidelity_time
 echo "Time: $specified_time_old"
 
 epsilon=0.0 # Define threshold for stopping the loop
-stepsize=1000 # Define gradient ascent stepsize
+stepsize=500 # Define gradient ascent stepsize
+time_increment=0.02 # Define a time increment for temporal gradient
 max_iterations=50 # Specify maximum number of iterations before gradient ascent breaks
 iteration=0
 echo "Iteration: $iteration"
@@ -65,7 +66,7 @@ do
 
         # Search output.txt for the line containing the list of adjusted genomes and print them as a list
         adjusted_genomes=$(grep -oP "Adjusted genomes : \[\K.*(?=\])" "$output_file")
-        echo "Adjusted genomes: $adjusted_genomes"
+        # echo "Adjusted genomes: $adjusted_genomes"
 
         # Extract initial adjusted couplings, ready for gradient ascent
         python3 /home/hgjones9/quantum_control/extract_initial_couplings.py
@@ -80,13 +81,13 @@ do
             genome=$(echo "$string" | sed "s/'\([^']*\)'.*/\1/") # Remove the individual quotation marks from each genome
 
             # Call spinnet for each genome, generating a different output directory for each genome
-            /home/hgjones9/spinchain/bin/spinnet "$i_f$genome"
-            echo "$i_f$genome$pos_directive"
+            /home/hgjones9/spinchain/bin/spinnet "@$specified_time_old$i_f$genome"
+            echo "@$specified_time_old$i_f$genome$pos_directive"
         done
 
 
         # Calculate gradient vector of the fidelity wrt couplings
-        python3 /home/hgjones9/quantum_control/coupling_gradient.py "$specified_time_old"
+        python3 /home/hgjones9/quantum_control/coupling_gradient.py 
 
         echo "Stepsize: $stepsize"
 
@@ -100,11 +101,23 @@ do
         new_genome=$(<"$new_genome_output")
         echo "New genome: $new_genome"
 
-        # Run spinnet on the new genome
-        /home/hgjones9/spinchain/bin/spinnet "$i_f$new_genome$pos_directive"
+        # Run spinnet on the new genome at specified time.
+        /home/hgjones9/spinchain/bin/spinnet "@$specified_time_old$i_f$new_genome$pos_directive"
 
-        # Calculate temporal gradient of udpated genome
-        python3 /home/hgjones9/quantum_control/time_gradient.py "$specified_time_old"
+        # Calculate the times
+        time_minus=$(echo "$specified_time_old - $time_increment" | bc)
+        echo "$time_minus"
+        time_plus=$(echo "$specified_time_old + $time_increment" | bc)
+
+        # Run spinnet on new genome at minus a time increment and plus a time increment
+        /home/hgjones9/spinchain/bin/spinnet "@${time_minus}${i_f}${new_genome}${pos_directive}"
+        /home/hgjones9/spinchain/bin/spinnet "@${time_plus}${i_f}${new_genome}${pos_directive}"
+
+        # Perform temporal gradient and obtain new fidelity and specified time
+        python3 /home/hgjones9/quantum_control/fidelity_time_gradient.py 
+
+        # # Calculate temporal gradient of udpated genome
+        # python3 /home/hgjones9/quantum_control/time_gradient.py 
 
         # Retrieve fidelity value of most recent spinnet calculation and backup incase fidelity hasn't improved
         fidelity=$(head -n 1 /home/hgjones9/quantum_control/new_fidelity.txt) 
@@ -151,7 +164,7 @@ do
         
         # Search output.txt for the line containing the list of adjusted genomes and print them as a list
         adjusted_genomes=$(grep -oP "Adjusted genomes : \[\K.*(?=\])" "$adjusted_genomes_out")
-        echo "Adjusted genomes: $adjusted_genomes"
+        # echo "Adjusted genomes: $adjusted_genomes"
 
         # Loop over the list of adjusted genomes and run spinnet on each genome
         for string in $adjusted_genomes
@@ -159,26 +172,42 @@ do
             genome=$(echo "$string" | sed "s/'\([^']*\)'.*/\1/") # Remove the individual quotation marks from each genome
 
             # Call spinnet for each genome, generating a different output directory for each genome
-            /home/hgjones9/spinchain/bin/spinnet "$i_f$genome$pos_directive"
-            echo "$i_f$genome$pos_directive"
+            /home/hgjones9/spinchain/bin/spinnet "@$specified_time_old$i_f$genome$pos_directive"
+            echo "@$specified_time_old$i_f$genome$pos_directive"
         done
 
         # Calculate gradient vector of fidelity wrt couplings
-        python3 /home/hgjones9/quantum_control/coupling_gradient.py "$specified_time_old"
+        python3 /home/hgjones9/quantum_control/coupling_gradient.py 
 
         echo "Stepsize: $stepsize"
 
         # Calculate new couplings by gradient ascent
         python3 /home/hgjones9/quantum_control/update_genome.py "$stepsize" 
 
-        # Run spinnet on new genome
+        # Run spinnet on new genome at specified time
         new_genome_output='/home/hgjones9/quantum_control/new_genome.txt'   # Specify output file location of new genome
         new_genome=$(<"$new_genome_output")  # Extract new genome from new_genome.txt
         echo "New genome: $new_genome"
-        /home/hgjones9/spinchain/bin/spinnet "$i_f$new_genome$pos_directive"
 
-        # Calculate temporal gradient of udpated genome
-        python3 /home/hgjones9/quantum_control/time_gradient.py "$specified_time_old"
+        /home/hgjones9/spinchain/bin/spinnet "@$specified_time_old$i_f$new_genome$pos_directive"
+
+        # Run spinnet on the new genome at specified time.
+        /home/hgjones9/spinchain/bin/spinnet "@$specified_time_old$i_f$new_genome$pos_directive"
+
+        # Calculate the times
+        time_minus=$(echo "$specified_time_old - $time_increment" | bc)
+        time_plus=$(echo "$specified_time_old + $time_increment" | bc)
+
+
+        # Run spinnet on new genome at minus a time increment and plus a time increment
+        /home/hgjones9/spinchain/bin/spinnet "@${time_minus}${i_f}${new_genome}${pos_directive}"
+        /home/hgjones9/spinchain/bin/spinnet "@${time_plus}${i_f}${new_genome}${pos_directive}"
+
+        # Perform temporal gradient and obtain new fidelity and specified time
+        python3 /home/hgjones9/quantum_control/fidelity_time_gradient.py 
+
+        # # Calculate temporal gradient of udpated genome
+        # python3 /home/hgjones9/quantum_control/time_gradient.py "$specified_time_old"
 
         # Retrieve fidelity value of most recent spinnet calculation and backup incase fidelity not improved
         fidelity=$(head -n 1 /home/hgjones9/quantum_control/new_fidelity.txt) 
@@ -268,7 +297,7 @@ do
     elif [ "$(echo "$fidelity_diff > 0" | bc)" -eq 1 ]; then
 
         # Increase stepsize
-        stepsize=$(echo "$stepsize * 1.2" | bc) 
+        stepsize=$(echo "$stepsize * 1.5" | bc) 
 
         # Replace old fidelity with new fidelity
         old_fidelity="$fidelity"
