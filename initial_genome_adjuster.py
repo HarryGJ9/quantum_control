@@ -14,16 +14,24 @@ e.g. GA optimised genome: AB300BC400
 import re
 import os
 import datetime
+import sys
 
 # Obtains optimised genome from the GA
-def find_genome(output_path):
+def find_genome(output_path, GA):
 
     # Open genetic.out and find the genome
     with open(output_path, 'r') as file:
         for line in file:
-            if "best genome" in line:
-                genome_full = line.split(':')[1].strip()
-                # print(f'GA output genome: {genome_full}')
+            if GA == "y":
+                if "best genome" in line:
+                    genome_full = line.split(':')[1].strip()
+                    # print(f'GA output genome: {genome_full}')
+            elif GA == "n":
+                if "initial genome" in line:
+                    genome_full = line.split(':')[1].strip()
+    
+    if genome_full is None:
+        raise Exception("Genome not found.")
 
     return genome_full
 
@@ -155,12 +163,15 @@ def normalise_genome(genome):
 # Directory of the output genome
 output_path = r'/home/hgjones9/quantum_control/output-latest/genetic.out'
 
+# User chooses GA optimisation or not
+GA = str(sys.argv[1])
+
 # Extract full optimised genome (inclduing <i|f> directive) from the GA output
-genome_full = find_genome(output_path)
-print(f"Full genome: {genome_full}")
+genome = find_genome(output_path, GA)
+print(f"Full genome: {genome}")
 
 # Strip full genome and adjust the couplings in preparation of derivative calculation
-GA_genome, GA_couplings, couplings_plus_h, couplings_minus_h = adjust_couplings(genome_full)
+GA_genome, GA_couplings, couplings_plus_h, couplings_minus_h = adjust_couplings(genome)
 # print(f"Stripped genome: {GA_genome}")
 
 # Reconstruct genomes based on the adjusted couplings

@@ -27,7 +27,7 @@ def filter(dirs):
     sorted_dirs = [dir for dir in sorted_dirs if dir != 'output-latest']
 
     # Take the first 3 directories
-    output_dirs = sorted_dirs[:2]
+    output_dirs = sorted_dirs[:3]
 
     # Flip the list 
     output_dirs.reverse()
@@ -65,6 +65,7 @@ def stack(fidelity_vals, time_vals):
 
     # Stack so that column 0 = time and column 1 = fidelities
     fidelity_time_arr = np.column_stack((time_arr, fidelity_arr))
+    print(fidelity_time_arr)
 
     # Find index of maximum value
     max_index = np.argmax(fidelity_time_arr[:,1])
@@ -92,6 +93,7 @@ fidelity_vals, time_vals = fidelity_time(output_dirs)
 
 # Obtain maximum fidelity and corresponding time
 max_fidelity_time = stack(fidelity_vals, time_vals)
+# print(max_fidelity_time)
 
 # Save new fidelity
 new_fidelity = max_fidelity_time[1]

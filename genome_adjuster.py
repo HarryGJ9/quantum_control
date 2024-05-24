@@ -123,7 +123,7 @@ def normalise_genome(genome):
 
 # Extract most recent updated genome
 new_genome = find_new_genome()
-print(f'New genome: {new_genome}')
+# print(f'New genome: {new_genome}')
 
 # Adjust couplings in preparation for central diff calculation
 couplings_plus_h, couplings_minus_h = adjust_couplings(new_genome)

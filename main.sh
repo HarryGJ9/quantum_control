@@ -4,12 +4,22 @@
 echo "Please enter a genome to be optimised":
 read initial_genome
 
-# Run spinnet or spinnet -o 
-/home/hgjones9/spinchain/bin/spinnet -o -G 2 "$initial_genome"
-# /home/hgjones9/spinchain/bin/spinnet "$initial_genome"
+# User specifies whether they want initial GA optimisation or straight into gradient optimisation.
+read -p "GA Optimisation? (y/n): " user_input
+
+if [[ "$user_input" == "y" ]]; then
+
+    # Run GA optimisation on user input genome
+    /home/hgjones9/spinchain/bin/spinnet -o -G 2 "$initial_genome"
+
+elif [[ "$user_input" == "n" ]]; then
+
+    # Run gradient descent without user input genome
+    /home/hgjones9/spinchain/bin/spinnet "$initial_genome"
+fi
 
 # Need to backup the new genome to a .txt file incase the first iteration doesn't improve
-python3 /home/hgjones9/quantum_control/GA_genome.py
+python3 /home/hgjones9/quantum_control/GA_genome.py "$user_input"
 cp new_genome.txt new_genome_backup.txt
 
 # Specify <i|f> directive
@@ -26,7 +36,7 @@ pos_directive=$(echo "$pos_directive_line" | sed 's/.*= *//') # Extract the stri
 echo "Position directive: $pos_directive"
 
 # Retrieve max fidelity of optimised genome and time at which it occurs
-python3 /home/hgjones9/quantum_control/max_fidelity_time.py
+python3 /home/hgjones9/quantum_control/max_fidelity_time.py "$user_input"
 
 ######################
 # Initialise variables
@@ -40,12 +50,12 @@ echo "Initial fidelity: $old_fidelity"
 
 # Obtain specified time for max fidelity
 specified_time_old=$(tail -n +2 /home/hgjones9/quantum_control/max_fidelity_time.txt | head -n 1) 
-echo "Time: $specified_time_old"
+echo "Initial time: $specified_time_old"
 
 epsilon=0.0 # Define threshold for stopping the loop
-stepsize=500 # Define gradient ascent stepsize
-time_increment=0.02 # Define a time increment for temporal gradient
-max_iterations=50 # Specify maximum number of iterations before gradient ascent breaks
+stepsize=100 # Define gradient ascent stepsize
+time_increment=0.1 # Define a time increment for temporal gradient
+max_iterations=200 # Specify maximum number of iterations before gradient ascent breaks
 iteration=0
 echo "Iteration: $iteration"
 
@@ -59,7 +69,7 @@ do
     if [ "$(echo "$iteration" == 0 | bc)" -eq 1 ]; then
 
         # Obtain the initial optimised output genome and make coupling adjustments
-        python3 /home/hgjones9/quantum_control/initial_genome_adjuster.py
+        python3 /home/hgjones9/quantum_control/initial_genome_adjuster.py "$user_input"
 
         # Specify output file of adjusted genomes
         output_file='/home/hgjones9/quantum_control/initial_adjusted_genomes.txt'
@@ -82,7 +92,7 @@ do
 
             # Call spinnet for each genome, generating a different output directory for each genome
             /home/hgjones9/spinchain/bin/spinnet "@$specified_time_old$i_f$genome"
-            echo "@$specified_time_old$i_f$genome$pos_directive"
+            # echo "@$specified_time_old$i_f$genome$pos_directive"
         done
 
 
@@ -106,7 +116,7 @@ do
 
         # Calculate the times
         time_minus=$(echo "$specified_time_old - $time_increment" | bc)
-        echo "$time_minus"
+        # echo "$time_minus"
         time_plus=$(echo "$specified_time_old + $time_increment" | bc)
 
         # Run spinnet on new genome at minus a time increment and plus a time increment
@@ -128,7 +138,6 @@ do
         infidelity=$(awk -v f="$fidelity" 'BEGIN {printf "%.2f", 100 - f}')
         # echo "Initial updated infidelity value: $infidelity"
         
-
         # Retrieve new specified time and backup incase fidelity doesn't improve
         specified_time=$(head -n 1 /home/hgjones9/quantum_control/new_time.txt) 
         cp new_time.txt new_time_backup.txt
@@ -172,8 +181,8 @@ do
             genome=$(echo "$string" | sed "s/'\([^']*\)'.*/\1/") # Remove the individual quotation marks from each genome
 
             # Call spinnet for each genome, generating a different output directory for each genome
-            /home/hgjones9/spinchain/bin/spinnet "@$specified_time_old$i_f$genome$pos_directive"
-            echo "@$specified_time_old$i_f$genome$pos_directive"
+            /home/hgjones9/spinchain/bin/spinnet "@$specified_time$i_f$genome$pos_directive"
+            # echo "@$specified_time_old$i_f$genome$pos_directive"
         done
 
         # Calculate gradient vector of fidelity wrt couplings
@@ -189,15 +198,14 @@ do
         new_genome=$(<"$new_genome_output")  # Extract new genome from new_genome.txt
         echo "New genome: $new_genome"
 
-        /home/hgjones9/spinchain/bin/spinnet "@$specified_time_old$i_f$new_genome$pos_directive"
+        /home/hgjones9/spinchain/bin/spinnet "@$specified_time$i_f$new_genome$pos_directive"
 
         # Run spinnet on the new genome at specified time.
-        /home/hgjones9/spinchain/bin/spinnet "@$specified_time_old$i_f$new_genome$pos_directive"
+        /home/hgjones9/spinchain/bin/spinnet "@$specified_time$i_f$new_genome$pos_directive"
 
         # Calculate the times
-        time_minus=$(echo "$specified_time_old - $time_increment" | bc)
-        time_plus=$(echo "$specified_time_old + $time_increment" | bc)
-
+        time_minus=$(echo "$specified_time - $time_increment" | bc)
+        time_plus=$(echo "$specified_time + $time_increment" | bc)
 
         # Run spinnet on new genome at minus a time increment and plus a time increment
         /home/hgjones9/spinchain/bin/spinnet "@${time_minus}${i_f}${new_genome}${pos_directive}"
@@ -216,7 +224,7 @@ do
 
         # Calculate infidelity using awk
         infidelity=$(awk -v f="$fidelity" 'BEGIN {printf "%.2f", 100 - f}')
-        echo "Updated infidelity = $infidelity"
+        # echo "Updated infidelity = $infidelity"
 
         # Retrieve new specified time and backup incase fidelity not improved
         specified_time=$(head -n 1 /home/hgjones9/quantum_control/new_time.txt) 
@@ -282,16 +290,18 @@ do
         cp new_genome_backup.txt new_genome.txt # Revert to previous genome
         cp old_couplings_backup.txt old_couplings.txt # Revert to previous couplings
         cp new_time_backup.txt new_time.txt
-        
-        echo "Fidelity not updated, sticking to previous value of: $fidelity"
-        echo "New stepsize: $stepsize"
 
+        echo "Fidelity not updated, sticking to previous value of: $fidelity"
+        echo "Sticking to previous time: $specified_time"
+        
         # Specify output file location of new genome
         genome_output='/home/hgjones9/quantum_control/new_genome.txt'
 
         # Extract new genome from new_genome.txt
         genome=$(<"$genome_output")
         echo "Genome not updated, sticking to previous genome: $genome"
+
+        echo "New stepsize: $stepsize"
 
     # If fidelity_diff > 0, increment the stepsize slowly to still maintain growth
     elif [ "$(echo "$fidelity_diff > 0" | bc)" -eq 1 ]; then
@@ -314,7 +324,6 @@ do
 
     fi
 done
-
 
 # Return the minimised infidelity
 echo "Optimised infidelity : $infidelity"
