@@ -6,6 +6,9 @@ import ast
 import re
 import sys
 
+# Genome number
+genome_num = str(sys.argv[2])
+
 # List all folders under a specific path
 def list_dirs(path):
     dirs = os.listdir(path)
@@ -15,7 +18,7 @@ def list_dirs(path):
 def get_gradient_file(dirs):
 
     for file in dirs:
-        if file.startswith('gradient_latest'):
+        if file.startswith('gradient_latest_' + genome_num):
             gradient_output_file = file
 
 
@@ -37,7 +40,7 @@ def open_gradient(gradient_output_file):
 # Obtain old couplings ready to be updated
 def extract_old_couplings():
 
-    with open(os.path.join(quant_cont_path, 'old_couplings.txt'), 'r') as file:
+    with open(os.path.join(quant_cont_path, 'old_couplings_' + genome_num + '.txt'), 'r') as file:
         old_couplings_str = file.read()
         
     # Convert literal string from file into a python list
@@ -102,7 +105,7 @@ def grad_ascent(gradient_arr, old_couplings_arr, stepsize):
 def reconstruct_genome(new_couplings_lst):
 
     # Open initial_adjusted_genomes.txt and find the GA optimised genome
-    with open(os.path.join(quant_cont_path, 'initial_adjusted_genomes.txt'), 'r') as file:
+    with open(os.path.join(quant_cont_path, 'initial_adjusted_genomes_' + genome_num + '.txt'), 'r') as file:
         for line in file:
             if line.startswith('GA optimised genome'):
                 # Split line to obtain just the genome
@@ -147,28 +150,28 @@ gradient_arr = open_gradient(gradient_output_file)
 
 # Extract old couplings ready to be updated
 old_couplings_lst, old_couplings_arr = extract_old_couplings()
-print(f'Old couplings: {old_couplings_arr}')
+print(f'Old couplings (Py): {old_couplings_arr}')
 
 # print("Number of arguments:", len(sys.argv))
 # print("Arguments:", sys.argv)
 
 # Use stepsize argument provided in bash script
-stepsize = int(float(sys.argv[-1]))
+stepsize = int(float(sys.argv[1]))
 
 # New couplings
 new_couplings_lst = grad_ascent(gradient_arr, old_couplings_arr, stepsize)
-print(f"New couplings: {new_couplings_lst}")
+print(f"New couplings (Py): {new_couplings_lst}")
 
 # Overwrite old_couplings.txt with new_couplings_lst
-with open(os.path.join(quant_cont_path, 'old_couplings.txt'), 'w') as file:
+with open(os.path.join(quant_cont_path, 'old_couplings_' + genome_num + '.txt'), 'w') as file:
     file.write(str(new_couplings_lst))
 
 # Reconstruct new genome based on grad ascent updated couplings
 new_genome = reconstruct_genome(new_couplings_lst)
-# print(f'New genome: {new_genome}')
+print(f'New genome (Py): {new_genome}')
 
 # Write new genome to an output .txt file
-with open('/home/hgjones9/quantum_control/new_genome.txt', 'w') as file:
+with open('/home/hgjones9/quantum_control/new_genome_' + genome_num + '.txt', 'w') as file:
     file.write(new_genome)
 
 

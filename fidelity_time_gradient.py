@@ -8,6 +8,10 @@ import datetime
 import time
 import numpy as np
 import re
+import sys
+
+# Genome number
+genome_num = str(sys.argv[1])
 
 # List all folders under a specific path
 def list_dirs(path):
@@ -65,7 +69,7 @@ def stack(fidelity_vals, time_vals):
 
     # Stack so that column 0 = time and column 1 = fidelities
     fidelity_time_arr = np.column_stack((time_arr, fidelity_arr))
-    print(fidelity_time_arr)
+    # print(fidelity_time_arr)
 
     # Find index of maximum value
     max_index = np.argmax(fidelity_time_arr[:,1])
@@ -99,14 +103,14 @@ max_fidelity_time = stack(fidelity_vals, time_vals)
 new_fidelity = max_fidelity_time[1]
 
 # Write new fidelity to .txt file
-with open('/home/hgjones9/quantum_control/new_fidelity.txt', 'w') as file:
+with open('/home/hgjones9/quantum_control/new_fidelity_' + genome_num + '.txt', 'w') as file:
     file.write(str(new_fidelity))
 
 # Save new time
 new_time = max_fidelity_time[0]
 
 # Write updated time to a file
-with open('/home/hgjones9/quantum_control/new_time.txt', 'w') as file:
+with open('/home/hgjones9/quantum_control/new_time_' + genome_num + '.txt', 'w') as file:
     file.write(str(new_time))
 
 

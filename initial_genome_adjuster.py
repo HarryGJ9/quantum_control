@@ -17,16 +17,16 @@ import datetime
 import sys
 
 # Obtains optimised genome from the GA
-def find_genome(output_path, GA):
+def find_genome(output_path, gen_alg):
 
     # Open genetic.out and find the genome
     with open(output_path, 'r') as file:
         for line in file:
-            if GA == "y":
+            if gen_alg == "y":
                 if "best genome" in line:
                     genome_full = line.split(':')[1].strip()
                     # print(f'GA output genome: {genome_full}')
-            elif GA == "n":
+            elif gen_alg == "n":
                 if "initial genome" in line:
                     genome_full = line.split(':')[1].strip()
     
@@ -160,14 +160,17 @@ def normalise_genome(genome):
 # RUN PROGRAMME
 ###############
 
-# Directory of the output genome
-output_path = r'/home/hgjones9/quantum_control/output-latest/genetic.out'
+# User chooses gen alg optimisation or not
+gen_alg = str(sys.argv[1])
 
-# User chooses GA optimisation or not
-GA = str(sys.argv[1])
+# Genome number
+genome_num = str(sys.argv[2])
+
+# Directory of the output genome
+output_path = r'/home/hgjones9/quantum_control/output_genome_' + genome_num + '/genetic.out'
 
 # Extract full optimised genome (inclduing <i|f> directive) from the GA output
-genome = find_genome(output_path, GA)
+genome = find_genome(output_path, gen_alg)
 print(f"Full genome: {genome}")
 
 # Strip full genome and adjust the couplings in preparation of derivative calculation
@@ -187,7 +190,7 @@ for genome in adjusted_genomes:
 # print(f'Adjusted genomes: {adjusted_genomes_norm}')
 
 # Write the original optimised genome and adjusted couplings to a .txt file
-with open(f'/home/hgjones9/quantum_control/initial_adjusted_genomes.txt', 'w') as file:
+with open(f'/home/hgjones9/quantum_control/initial_adjusted_genomes_' + genome_num + '.txt', 'w') as file:
     # Write content to the file
     file.write(f"GA optimised genome : {GA_genome}\n")
     file.write(f"Isolated couplings : {GA_couplings}\n")

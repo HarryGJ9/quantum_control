@@ -7,16 +7,20 @@ This script obtains the maximum fidelity of the GA optimised* genome and the cor
 import os
 import sys
 
+# Specify if whether GA optimisation or not
+gen_alg = str(sys.argv[1])
+
+# Obtain genome number
+genome_num = str(sys.argv[2])
+
 # genetic.out path
-genetic_out_path = '/home/hgjones9/quantum_control/output-latest/genetic.out'
+genetic_out_path = '/home/hgjones9/quantum_control/output_genome_' + genome_num + '/genetic.out'
 
 # spinchain genetic.out path (FOR TESTING)
 spinchain_out_path = '/home/hgjones9/spinchain/output-latest/genetic.out'
 
-# Specify if whether GA optimisation or not
-GA = str(sys.argv[1])
 
-if GA == "y": 
+if gen_alg == "y": 
 
     # Open the genetic.out file to obtain the max fidelity and time of max fidelity
     with open(genetic_out_path, 'r') as file:
@@ -47,7 +51,7 @@ if GA == "y":
                     fidelity_val = fidelity_val.replace('(', '').replace('%', '')
                     time_val = time_val.replace(')', '')
 
-elif GA == "n":
+elif gen_alg == "n":
 
     # Open spinchain genetic.out file
     with open(genetic_out_path, 'r') as file: 
@@ -77,7 +81,7 @@ elif GA == "n":
 # print(f'Time at maximum fidelity: {time_val}')
 
 # Save to new files to be read in other scripts
-with open('/home/hgjones9/quantum_control/max_fidelity_time.txt', 'w') as file:
+with open('/home/hgjones9/quantum_control/max_fidelity_time_' + genome_num + '.txt', 'w') as file:
     file.write(fidelity_val + '\n')
     file.write(time_val + '\n')
 

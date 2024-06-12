@@ -1,5 +1,9 @@
 import os
 import re
+import sys
+
+# Genome number
+genome_num = str(sys.argv[1])
 
 # Specify quantum_control path
 quant_cont_path = '/home/hgjones9/quantum_control'
@@ -8,7 +12,7 @@ quant_cont_path = '/home/hgjones9/quantum_control'
 def find_new_genome():
     
     # Open latest new_genome.txt file
-    with open(os.path.join(quant_cont_path, 'new_genome.txt'), 'r') as file:
+    with open(os.path.join(quant_cont_path, 'new_genome_' + genome_num + '.txt'), 'r') as file:
         new_genome_str = file.read()
     
     return new_genome_str
@@ -54,7 +58,6 @@ def normalise_couplings(couplings):
     
     
     return couplings
-
 
 # Construct new genomes based on adjusted couplings
 def construct_new_genomes(genome_str, couplings_plus_h, couplings_minus_h):
@@ -142,5 +145,5 @@ for genome in adjusted_genomes:
 # print(f'Normalised adjusted genomes: {adjusted_genomes_norm}')
 
 # Write adjusted genomes to a file 
-with open(os.path.join(quant_cont_path, 'adjusted_genomes.txt'), 'w') as file:
+with open(os.path.join(quant_cont_path, 'adjusted_genomes_' + genome_num + '.txt'), 'w') as file:
     file.write(f"Adjusted genomes : {adjusted_genomes_norm}")

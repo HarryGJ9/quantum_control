@@ -214,6 +214,9 @@ def calculate_gradient(fidelities, couplings, h=0.1):
 # RUN PROGRAMME 
 ###############
 
+# Genome number
+genome_num = str(sys.argv[1])
+
 # Specify quantum_control directory path
 quant_cont_path = r'/home/hgjones9/quantum_control'
 
@@ -224,7 +227,7 @@ dirs = list_dirs(quant_cont_path)
 # Obtain number of adjusted couplings
 
 # Specify path to the updated genome
-genome_path = os.path.join(quant_cont_path, 'old_couplings.txt')
+genome_path = os.path.join(quant_cont_path, 'old_couplings_' + genome_num + '.txt')
 
 # Open file old_couplings.txt and count couplings
 with open(genome_path, 'r') as file:
@@ -256,7 +259,7 @@ fidelity_vals = fidelities(sorted_output_dirs)
 gradient = calculate_gradient(fidelity_vals, couplings_lst)
 # print(f"Gradient vector: {gradient}")
 
-with open('/home/hgjones9/quantum_control/gradient_latest.txt', 'w') as file:
+with open('/home/hgjones9/quantum_control/gradient_latest_' + genome_num + '.txt', 'w') as file:
     file.write(str(gradient))
 
 
