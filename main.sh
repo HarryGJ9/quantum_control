@@ -11,7 +11,7 @@ read -p "GA Optimisation? (y/n): " user_input
 if [[ "$user_input" == "y" ]]; then
 
     # Execute genetic algorithm N times to generate N different partially optimised genomes
-    for ((i=1; i<=2; i++))
+    for ((i=1; i<=5; i++))
     do
         # Run GA optimisation on user input genome
         /home/hgjones9/spinchain/bin/spinnet -o -G 2 "$initial_genome"
@@ -45,7 +45,7 @@ if [[ "$user_input" == "y" ]]; then
 
     echo "Position directive: $pos_directive"
 
-    for ((i=1; i<=2; i++))
+    for ((i=1; i<=5; i++))
     do
 
         # Do grad ascent N times for the N different genomes (inefficient but all we can do right now)
@@ -65,7 +65,7 @@ if [[ "$user_input" == "y" ]]; then
         epsilon=0.0 # Define threshold for stopping the loop
         stepsize=100 # Define gradient ascent stepsize
         time_increment=0.1 # Define a time increment for temporal gradient
-        max_iterations=1 # Specify maximum number of iterations before gradient ascent breaks
+        max_iterations=50 # Specify maximum number of iterations before gradient ascent breaks
         iteration=0
         echo "Iteration: $iteration"
 
