@@ -312,7 +312,7 @@ def perturbed_coupling_combs(couplings, perturbed_couplings):
 
     return coupling_perms
 
-def calculate_gradient(fidelities, couplings, h=0.1):
+def calculate_coupling_gradient(fidelities, couplings, h=0.1):
 
     """
     Calculates the gradient vector wrt couplings and returns as an array.
@@ -343,6 +343,25 @@ def calculate_gradient(fidelities, couplings, h=0.1):
     gradient_arr = np.array(gradient_lst)
 
     return gradient_arr
+
+def calculate_time_gradient(fidelity, genome, eval_time, iteration, h=0.5):
+
+    # Evaluate fidelity of eval_time +/- h and extract fidelities at each time
+    run_spinnet(['@' + str(eval_time + h) + genome])
+    f_plus_h = new_fidelity = extract_fidelity_time(os.path.join(out_latest_path, 'genetic.out'), iteration)[0]
+
+    run_spinnet(['@' + str(eval_time - h) + genome])
+    f_minus_h = new_fidelity = extract_fidelity_time(os.path.join(out_latest_path, 'genetic.out'), iteration)[0]
+
+    # Calculate central difference to get time gradient
+    central_diff = (f_plus_h - f_minus_h) / (2 * h)
+
+    # Convert central difference to a numpy array as our time gradient element
+    time_grad = np.array(central_diff)
+
+    return time_grad
+
+
 
 def update_couplings(couplings, gradient, stepsize):
     """
@@ -402,10 +421,10 @@ def gradient_ascent(origin_genome, best_genomes, init_fidelities, eval_times, ma
     for index, genome in enumerate(optimized_genomes):
         print(f"Optimizing genome {index + 1}/{len(optimized_genomes)}")
         current_eval_time = eval_times[index]
-        # print(f"Evaluation time: {current_eval_time}")
+        print(f"Evaluation time: {current_eval_time}")
 
         # Initialize step size for this genome
-        stepsize = 1000
+        stepsize = 20000 
 
         for iteration in range(1, max_iterations + 1):  # Start from 1
             print(f"Iteration: {iteration}")
@@ -413,7 +432,7 @@ def gradient_ascent(origin_genome, best_genomes, init_fidelities, eval_times, ma
             # Extract couplings and perturb them
             init_couplings = extract_couplings(genome)
             # print(f"Initial couplings: {init_couplings}")
-            perturbed_couplings = perturb_couplings(init_couplings, h=0.1)
+            perturbed_couplings = perturb_couplings(init_couplings)
             perturbed_couplings_combs = perturbed_coupling_combs(init_couplings, perturbed_couplings)
             # norm_perturbed_couplings = normalise_couplings(perturbed_coupling_combs)
             norm_perturbed_couplings = [normalise_couplings(comb) for comb in perturbed_couplings_combs]
@@ -427,14 +446,46 @@ def gradient_ascent(origin_genome, best_genomes, init_fidelities, eval_times, ma
             # Evaluate the fidelities of perturbed genomes
             fidelities = []
             for pert_genome in perturbed_genomes:
-                run_spinnet([f'@{current_eval_time}', pert_genome])
+                # print(f"Perturbed Genome Type: {type(pert_genome)}")
+                # print(f"Perturbed Genome: {pert_genome}")
+                
+                # Track the modification time of the specific file before running spinnet
+                genetic_out_path = os.path.join(out_latest_path, 'genetic.out')
+                if os.path.exists(genetic_out_path):
+                    prev_mod_time = os.path.getmtime(genetic_out_path)
+                    # print(f"Previous Modification Time: {prev_mod_time}")
+                else:
+                    print(f"{genetic_out_path} does not exist yet.")
+                    prev_mod_time = None  # If file doesn't exist, set to None
+
+                # Run spinnet
+                run_spinnet(['@' + str(current_eval_time) + pert_genome])
+                # print(f"Ran spinnet with genome: {pert_genome} and eval time: {current_eval_time}")
+
+                # Wait for the 'genetic.out' file to be updated or newly created
+                timeout = 30  # Maximum wait time in seconds
+                start_time = time.time()
+
+                while True:
+                    if os.path.exists(genetic_out_path):
+                        new_mod_time = os.path.getmtime(genetic_out_path)
+                        # print(f"New Modification Time: {new_mod_time}")
+                        if prev_mod_time is None or new_mod_time > prev_mod_time:
+                            # print("File has been updated.")
+                            break  # New file created or updated
+                    if time.time() - start_time >= timeout:
+                        print(f"Timeout: File {genetic_out_path} was not updated within {timeout} seconds.")
+                        # Instead of returning, handle the timeout gracefully by skipping this genome
+                        fidelity_history[index].append(None)  # Mark this as None for this iteration
+                        break  # Exit the waiting loop and continue
+                    time.sleep(1)  # Wait 1 second before checking again
                 fidelity = extract_fidelity_time(os.path.join(out_latest_path, 'genetic.out'), iteration)[0]
                 fidelities.append(fidelity)
-                # print(f"Fidelities of perturbed genomes: {fidelities}")
+            print(f"Fidelities of perturbed genomes: {fidelities}")
 
             # Calculate gradient
-            gradient = calculate_gradient(fidelities, init_couplings, h=0.1)
-            # print(f"Gradient: {gradient}")
+            gradient = calculate_coupling_gradient(fidelities, init_couplings)
+            print(f"Gradient: {gradient}")
 
             # Update couplings
             new_couplings = update_couplings(init_couplings, gradient, stepsize=stepsize)
@@ -443,9 +494,32 @@ def gradient_ascent(origin_genome, best_genomes, init_fidelities, eval_times, ma
             # Construct the new optimized genome
             new_optimized_genome = construct_genome(init_dir, final_dir, nodes, new_couplings, orientation)
             print(f"New optimised genome: {new_optimized_genome}")
-            run_spinnet([f'@{current_eval_time}', new_optimized_genome])
-            new_fidelity = extract_fidelity_time(os.path.join(out_latest_path, 'genetic.out'), iteration)[0]
-            print(f"Updated fidelity: {new_fidelity}")
+            run_spinnet(['@' + str(current_eval_time) + new_optimized_genome])
+            new_fidelity_1 = extract_fidelity_time(os.path.join(out_latest_path, 'genetic.out'), iteration)[0]
+            print(f"Updated fidelity: {new_fidelity_1}")
+
+            # Obtain time gradient element
+            time_grad = calculate_time_gradient(new_optimized_genome, current_eval_time, iteration)
+            print(f"Time gradient: {time_grad}")
+
+            # Obtain new evaluation time based on time gradient
+            new_eval_time = current_eval_time + time_grad
+            print(f"New evaluation time: {new_eval_time}")
+
+            # Obtain fidelity of new genome with new eval time
+            run_spinnet(['@' + str(new_eval_time) + new_optimized_genome])
+            new_fidelity_2 = new_fidelity = extract_fidelity_time(os.path.join(out_latest_path, 'genetic.out'), iteration)[0]
+            print(f"Fidelity with new eval time: {new_fidelity_2}")
+
+            if new_fidelity_2 > new_fidelity_1:
+                print(f"Fidelity improved with updated eval time.")
+                current_eval_time = new_eval_time
+                new_fidelity = new_fidelity_2
+                print(current_eval_time)
+            elif new_fidelity_2 <= new_fidelity_1:
+                print(f"Fidelity unchanged by updated eval time. Stick to {current_eval_time}")
+                current_eval_time = current_eval_time
+                new_fidelity = new_fidelity_1
 
             # Record the fidelity
             fidelity_history[index].append(new_fidelity)
@@ -454,18 +528,28 @@ def gradient_ascent(origin_genome, best_genomes, init_fidelities, eval_times, ma
             if new_fidelity == 100:
                 print("Fidelity = 100. Stopping optimization for this genome.")
                 break
+            elif new_fidelity == fidelity_history[index - 1] and fidelity_history[index - 2]:
+                print("Fidelities have remained constant three times in a row. Break")
+                break
             elif new_fidelity > optimized_fidelities[index]:
+                print("Fidelity improved.")
                 optimized_genomes[index] = new_optimized_genome  # Update the genome
                 optimized_fidelities[index] = new_fidelity  # Update the fidelity
                 genome = new_optimized_genome
-                stepsize *= 1.5  # Increase step size if the fidelity improved
+                stepsize *= 1.2  # Increase step size if the fidelity improved
+                print(stepsize)
             elif new_fidelity < optimized_fidelities[index]:
                 # If not better, retain the previous genome and fidelity
-                print(f"Fidelity not improved. Resorting to {genome}")
+                print(f"Fidelity not improved. Reverting to {genome}")
                 genome = genome
-                stepsize *= 0.5  # Halve the step size if fidelity goes down
-            else:
-                print("Fidelities aren't chaning, break.")
+                stepsize *= 0.5  # Reduce step size if fidelity goes down
+                print(stepsize)
+            
+
+            # If the stepsize decreases below 10, break.
+            if stepsize <= 10:
+                print("Stepsize too low. Break.")
+                optimized_genomes[index] = new_optimized_genome
                 break
 
     return optimized_genomes, optimized_fidelities, fidelity_history
@@ -487,9 +571,8 @@ def plot_fidelity_history(fidelity_history, max_iterations):
     plt.title('Fidelity of Each Genome Over Iterations')
     plt.xlabel('Iteration')
     plt.ylabel('Fidelity')
-    plt.ylim(0, 100)  # Assuming fidelity is between 0 and 100
+    plt.ylim(np.min(fidelities), 100)  # Assuming fidelity is between 0 and 100
     plt.xlim(1, max_iterations)  # Based on the number of iterations
-    plt.axhline(y=100, color='r', linestyle='--', label='Fidelity = 100')
     plt.legend()
     plt.grid()
     plt.show()
@@ -529,29 +612,29 @@ def gradient_ascent_parallel(origin_genome, best_genomes, init_fidelities, eval_
     # Assuming results is structured correctly
     return list(zip(*results))  # Adjust this if results are structured differently
 
-def plot_fidelity_history(fidelity_history, max_iterations):
-    """
-    Plot the fidelity history for each genome.
+# def plot_fidelity_history(fidelity_history, max_iterations):
+#     """
+#     Plot the fidelity history for each genome.
 
-    Parameters:
-        fidelity_history (list): A list of lists containing the fidelity history for each genome.
-        max_iterations (int): The maximum number of iterations for the ascent.
-    """
-    plt.figure(figsize=(10, 6))
+#     Parameters:
+#         fidelity_history (list): A list of lists containing the fidelity history for each genome.
+#         max_iterations (int): The maximum number of iterations for the ascent.
+#     """
+#     plt.figure(figsize=(10, 6))
 
-    # Create a line for each genome's fidelity history
-    for index, fidelities in enumerate(fidelity_history):
-        plt.plot(range(1, len(fidelities) + 1), fidelities, label=f'Genome {index + 1}', marker='o')
+#     # Create a line for each genome's fidelity history
+#     for index, fidelities in enumerate(fidelity_history):
+#         plt.plot(range(1, len(fidelities) + 1), fidelities, label=f'Genome {index + 1}', marker='o')
 
-    plt.title('Fidelity of Each Genome Over Iterations')
-    plt.xlabel('Iteration')
-    plt.ylabel('Fidelity')
-    plt.ylim(0, 100)  # Assuming fidelity is between 0 and 100
-    plt.xlim(1, max_iterations)  # Based on the number of iterations
-    plt.axhline(y=100, color='r', linestyle='--', label='Fidelity = 100')
-    plt.legend()
-    plt.grid()
-    plt.show()
+#     plt.title('Fidelity of Each Genome Over Iterations')
+#     plt.xlabel('Iteration')
+#     plt.ylabel('Fidelity')
+#     plt.ylim(0, 100)  # Assuming fidelity is between 0 and 100
+#     plt.xlim(1, max_iterations)  # Based on the number of iterations
+#     plt.axhline(y=100, color='r', linestyle='--', label='Fidelity = 100')
+#     plt.legend()
+#     plt.grid()
+#     plt.show()
 
 
 #########
@@ -559,10 +642,11 @@ def plot_fidelity_history(fidelity_history, max_iterations):
 #########
 
 # Test genome
-genome_full = "<A|D>AB001BC999CD001"
+genome_full = "<A|G>AB5000BC5000CD5000DE5000EF5000FG5000#000000"
+
 
 # Run spinnet with optimisation PASSED
-run_spinnet(['-o', '-G', '1', genome_full])
+run_spinnet(['-o', '-G', '2', genome_full])
 
 # Extract top 5 genomes, fidelities and evaluation times
 best_genome_info = extract_fidelity_time(os.path.join(out_latest_path, 'genetic.out'), 0)
