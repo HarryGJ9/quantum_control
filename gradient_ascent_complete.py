@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import multiprocessing
 import time
+from collections import deque
 
 
 # PATHS
@@ -27,18 +28,57 @@ def run_spinnet(args):
     # Run spinnet code on a genome
     result = subprocess.run([spinnet_path] + args, capture_output=True, text=True)
 
-def parse_genome(genome):
+# def parse_genome(genome):
+#     """
+#     Parse the genome string into its components: nodes, couplings, directives, and orientation.
+    
+#     Parameters:
+#         genome (str): The genome string to be parsed.
+    
+#     Returns:
+#         dict: A dictionary containing lists of nodes, couplings, directives, and orientation.
+#     """
+
+#      # Extract orientation including the '#'
+#     if '#' in genome:
+#         orientation = '#' + genome.split('#')[-1]  # Get the part after # and include '#'
+#     else:
+#         orientation = ''  # Default to empty if no orientation is found
+    
+#     # Extract initial and final nodes
+#     initial_final_pattern = re.search(r'<([^|]+)\|([^>]+)>', genome)
+#     if initial_final_pattern:
+#         initial_node, final_node = initial_final_pattern.groups()
+#     else:
+#         raise ValueError("Invalid genome format: Initial and final nodes not found.")
+    
+#     # Extract nodes and couplings
+#     coupling_pattern = re.findall(r'([A-Z])(\d+)', genome)  # Find pairs of (Node, Coupling)
+    
+#     nodes = [initial_node] + [node for node, _ in coupling_pattern]
+#     couplings = [int(coupling) for _, coupling in coupling_pattern]
+    
+#     # Define directives
+#     directives = [initial_node, final_node]
+    
+#     return {
+#         'nodes': nodes,
+#         'couplings': couplings,
+#         'directives': directives,
+#         'orientation': orientation
+#     }
+
+def parse_genome(genome): 
     """
-    Parse the genome string into its components: nodes, couplings, directives, and orientation.
+    Parse the genome string into its components: node pairs, couplings, directives, and orientation.
     
     Parameters:
         genome (str): The genome string to be parsed.
     
     Returns:
-        dict: A dictionary containing lists of nodes, couplings, directives, and orientation.
+        dict: A dictionary containing lists of node pairs, couplings, directives, and orientation.
     """
-
-     # Extract orientation including the '#'
+    # Extract orientation including the '#'
     if '#' in genome:
         orientation = '#' + genome.split('#')[-1]  # Get the part after # and include '#'
     else:
@@ -51,42 +91,74 @@ def parse_genome(genome):
     else:
         raise ValueError("Invalid genome format: Initial and final nodes not found.")
     
-    # Extract nodes and couplings
-    coupling_pattern = re.findall(r'([A-Z])(\d+)', genome)  # Find pairs of (Node, Coupling)
+    # Extract node pairs and couplings
+    node_coupling_pattern = re.findall(r'([A-Z]{2})(\d+)', genome)  # Find pairs of (NodePair, Coupling)
     
-    nodes = [initial_node] + [node for node, _ in coupling_pattern]
-    couplings = [int(coupling) for _, coupling in coupling_pattern]
+    node_pairs = [pair for pair, _ in node_coupling_pattern]
+    couplings = [int(coupling) for _, coupling in node_coupling_pattern]
     
     # Define directives
     directives = [initial_node, final_node]
     
     return {
-        'nodes': nodes,
+        'node_pairs': node_pairs,
         'couplings': couplings,
         'directives': directives,
         'orientation': orientation
     }
 
-def construct_genome(init_dir, final_dir, nodes, couplings, orientation):
-    """
-    Reconstructs a genome based on the <initial|final> directives, nodes (A, B, C ...), couplings (100, 200, ...) and orientation (e.g. #00F)
+# def construct_genome(init_dir, final_dir, nodes, couplings, orientation):
+#     """
+#     Reconstructs a genome based on the <initial|final> directives, nodes (A, B, C ...), couplings (100, 200, ...) and orientation (e.g. #00F)
 
+#     Parameters:
+#         init_dir (str): initial directive
+#         final_dir (str): final directive
+#         nodes (lst): list of all the nodes in the network
+#         couplings (lst): list of all the couplings between nodes in the network
+#         orientation (str): orientation directive which sets the shape of the network
+
+#     Returns: 
+#         genome_str (str): full reconstructed genome e.g. "<A|C>AB100BC900#00"
+#     """
+#     # Initialize the genome string with the initial and final states
+#     genome_parts = []
+    
+#     # Combine nodes and couplings correctly
+#     for i in range(len(nodes) - 1):
+#         genome_parts.append(nodes[i] + nodes[i+1])  # Add the current node
+#         if i < len(couplings):  # Check if there is a coupling
+#             genome_parts.append(str(couplings[i]))  # Add coupling
+
+#     # Form the complete genome string
+#     genome_str = f"<{init_dir}|{final_dir}>{''.join(genome_parts)}"
+    
+#     # Append orientation if provided
+#     if orientation:
+#         genome_str += orientation
+    
+#     return genome_str
+
+def construct_genome(init_dir, final_dir, node_pairs, couplings, orientation):
+    """
+    Reconstructs a genome based on the <initial|final> directives, node pairs (e.g., 'AB', 'BC'), couplings (e.g., 5000), and orientation.
+    
     Parameters:
         init_dir (str): initial directive
         final_dir (str): final directive
-        nodes (lst): list of all the nodes in the network
-        couplings (lst): list of all the couplings between nodes in the network
+        node_pairs (list): list of all node pairs in the network
+        couplings (list): list of all couplings between node pairs in the network
         orientation (str): orientation directive which sets the shape of the network
-
+    
     Returns: 
-        genome_str (str): full reconstructed genome e.g. "<A|C>AB100BC900#00"
+        genome_str (str): full reconstructed genome e.g. "<A|G>AB5000BC5000#0E2E206262"
     """
     # Initialize the genome string with the initial and final states
     genome_parts = []
     
-    # Combine nodes and couplings correctly
-    for i in range(len(nodes) - 1):
-        genome_parts.append(nodes[i] + nodes[i+1])  # Add the current node
+    # Combine node pairs and couplings correctly
+    for i in range(len(node_pairs)):
+        genome_parts.append(node_pairs[i])  # Add the current node pair
         if i < len(couplings):  # Check if there is a coupling
             genome_parts.append(str(couplings[i]))  # Add coupling
 
@@ -98,6 +170,7 @@ def construct_genome(init_dir, final_dir, nodes, couplings, orientation):
         genome_str += orientation
     
     return genome_str
+
 
 def extract_fidelity_time(file_path, iteration):
     """
@@ -344,24 +417,30 @@ def calculate_coupling_gradient(fidelities, couplings, h=0.1):
 
     return gradient_arr
 
-def calculate_time_gradient(fidelity, genome, eval_time, iteration, h=0.5):
+def calculate_time_gradient(genome, eval_time, iteration, h=0.5):
 
     # Evaluate fidelity of eval_time +/- h and extract fidelities at each time
-    run_spinnet(['@' + str(eval_time + h) + genome])
-    f_plus_h = new_fidelity = extract_fidelity_time(os.path.join(out_latest_path, 'genetic.out'), iteration)[0]
+    run_spinnet(['@' + str(np.round(eval_time + h, decimals=2)) + str(genome)])
+    print(str(eval_time + h))
+    f_plus_h = extract_fidelity_time(os.path.join(out_latest_path, 'genetic.out'), iteration)[0]
+    # print(f_plus_h)
 
-    run_spinnet(['@' + str(eval_time - h) + genome])
-    f_minus_h = new_fidelity = extract_fidelity_time(os.path.join(out_latest_path, 'genetic.out'), iteration)[0]
+    run_spinnet(['@' + str(np.round(eval_time - h, decimals=2)) + str(genome)])
+    f_minus_h = extract_fidelity_time(os.path.join(out_latest_path, 'genetic.out'), iteration)[0]
+    # print(f_minus_h)
 
-    # Calculate central difference to get time gradient
-    central_diff = (f_plus_h - f_minus_h) / (2 * h)
+    # # Calculate central difference to get time gradient
+    # central_diff = (f_plus_h - f_minus_h) / (2 * h)
+    # central_diff = np.round(central_diff, decimals=2)
 
-    # Convert central difference to a numpy array as our time gradient element
-    time_grad = np.array(central_diff)
+    if f_plus_h > f_minus_h:
+        new_eval_time = eval_time + h
+    elif f_plus_h < f_minus_h:
+        new_eval_time = eval_time - h
+    else:
+        new_eval_time = eval_time
 
-    return time_grad
-
-
+    return new_eval_time
 
 def update_couplings(couplings, gradient, stepsize):
     """
@@ -406,7 +485,7 @@ def gradient_ascent(origin_genome, best_genomes, init_fidelities, eval_times, ma
     parsed_genome = parse_genome(origin_genome)
     init_dir = parsed_genome['directives'][0]
     final_dir = parsed_genome['directives'][1]
-    nodes = parsed_genome['nodes']
+    node_pairs = parsed_genome['node_pairs']
     origin_couplings = parsed_genome['couplings']
     orientation = parsed_genome['orientation']
 
@@ -419,28 +498,38 @@ def gradient_ascent(origin_genome, best_genomes, init_fidelities, eval_times, ma
 
     # Perform gradient ascent for each genome
     for index, genome in enumerate(optimized_genomes):
+        fidelity_history[index].append
         print(f"Optimizing genome {index + 1}/{len(optimized_genomes)}")
-        current_eval_time = eval_times[index]
+        current_eval_time = eval_times[index] - 0.2
         print(f"Evaluation time: {current_eval_time}")
 
-        # Initialize step size for this genome
-        stepsize = 20000 
+        # # PST EVAL TIME
+        # pst_eval_time = 2.2
+
+        # Initialise step size for this genome
+        stepsize = 10000
+
+         # Note previous fidelity (initial fidelity if starting) for fidelity tracking
+        prev_fidelity = optimized_fidelities[index]
+
+        # Append the first fidelity to the list of previous fidelities.
+        fidelity_history[index].append(prev_fidelity)
 
         for iteration in range(1, max_iterations + 1):  # Start from 1
             print(f"Iteration: {iteration}")
 
             # Extract couplings and perturb them
-            init_couplings = extract_couplings(genome)
+            prev_couplings = extract_couplings(genome)
             # print(f"Initial couplings: {init_couplings}")
-            perturbed_couplings = perturb_couplings(init_couplings)
-            perturbed_couplings_combs = perturbed_coupling_combs(init_couplings, perturbed_couplings)
+            perturbed_couplings = perturb_couplings(prev_couplings)
+            perturbed_couplings_combs = perturbed_coupling_combs(prev_couplings, perturbed_couplings)
             # norm_perturbed_couplings = normalise_couplings(perturbed_coupling_combs)
             norm_perturbed_couplings = [normalise_couplings(comb) for comb in perturbed_couplings_combs]
             # print(f"Perturbed Couplings: {norm_perturbed_couplings}")
 
             # Construct perturbed genomes
             # perturbed_genomes = construct_genome(init_dir,final_dir, nodes, norm_perturbed_couplings, orientation)
-            perturbed_genomes = [construct_genome(init_dir, final_dir, nodes, nc, orientation) for nc in norm_perturbed_couplings]
+            perturbed_genomes = [construct_genome(init_dir, final_dir, node_pairs, nc, orientation) for nc in norm_perturbed_couplings]
             # print(f"Perturbed Genomes: {perturbed_genomes}")
 
             # Evaluate the fidelities of perturbed genomes
@@ -484,57 +573,60 @@ def gradient_ascent(origin_genome, best_genomes, init_fidelities, eval_times, ma
             print(f"Fidelities of perturbed genomes: {fidelities}")
 
             # Calculate gradient
-            gradient = calculate_coupling_gradient(fidelities, init_couplings)
+            gradient = calculate_coupling_gradient(fidelities, prev_couplings)
             print(f"Gradient: {gradient}")
 
             # Update couplings
-            new_couplings = update_couplings(init_couplings, gradient, stepsize=stepsize)
+            new_couplings = update_couplings(prev_couplings, gradient, stepsize=stepsize)
             # print(f"Updated couplings: {new_couplings}")
 
             # Construct the new optimized genome
-            new_optimized_genome = construct_genome(init_dir, final_dir, nodes, new_couplings, orientation)
+            new_optimized_genome = construct_genome(init_dir, final_dir, node_pairs, new_couplings, orientation)
             print(f"New optimised genome: {new_optimized_genome}")
             run_spinnet(['@' + str(current_eval_time) + new_optimized_genome])
-            new_fidelity_1 = extract_fidelity_time(os.path.join(out_latest_path, 'genetic.out'), iteration)[0]
-            print(f"Updated fidelity: {new_fidelity_1}")
+            new_fidelity = extract_fidelity_time(os.path.join(out_latest_path, 'genetic.out'), iteration)[0]
+            print(f"Updated fidelity: {new_fidelity}")
 
-            # Obtain time gradient element
-            time_grad = calculate_time_gradient(new_optimized_genome, current_eval_time, iteration)
-            print(f"Time gradient: {time_grad}")
+            # # # Obtain time gradient element
+            # time_grad = calculate_time_gradient(new_optimized_genome, current_eval_time, iteration)
+            # print(f"Time gradient: {time_grad}")
 
-            # Obtain new evaluation time based on time gradient
-            new_eval_time = current_eval_time + time_grad
-            print(f"New evaluation time: {new_eval_time}")
+            # # Obtain new evaluation time based on time gradient
+            # new_eval_time = calculate_time_gradient(new_optimized_genome, current_eval_time, iteration)
+            # new_eval_time = np.round(new_eval_time, decimals=2)
+            # print(f"New evaluation time: {new_eval_time}")
 
-            # Obtain fidelity of new genome with new eval time
-            run_spinnet(['@' + str(new_eval_time) + new_optimized_genome])
-            new_fidelity_2 = new_fidelity = extract_fidelity_time(os.path.join(out_latest_path, 'genetic.out'), iteration)[0]
-            print(f"Fidelity with new eval time: {new_fidelity_2}")
+            # # Obtain fidelity of new genome with new eval time
+            # run_spinnet(['@' + str(new_eval_time) + new_optimized_genome])
+            # new_fidelity_2 = extract_fidelity_time(os.path.join(out_latest_path, 'genetic.out'), iteration)[0]
+            # print(f"Fidelity with new eval time: {new_fidelity_2}")
 
-            if new_fidelity_2 > new_fidelity_1:
-                print(f"Fidelity improved with updated eval time.")
-                current_eval_time = new_eval_time
-                new_fidelity = new_fidelity_2
-                print(current_eval_time)
-            elif new_fidelity_2 <= new_fidelity_1:
-                print(f"Fidelity unchanged by updated eval time. Stick to {current_eval_time}")
-                current_eval_time = current_eval_time
-                new_fidelity = new_fidelity_1
+            # if new_fidelity_2 > new_fidelity_1:
+            #     print(f"Fidelity improved with updated eval time.")
+            #     current_eval_time = new_eval_time
+            #     new_fidelity = new_fidelity_2
+            #     print(current_eval_time)
+            # elif new_fidelity_2 <= new_fidelity_1:
+            #     print(f"Fidelity not improved by updating eval time. Stick to {current_eval_time}")
+            #     current_eval_time = current_eval_time
+            #     new_fidelity = new_fidelity_1
 
-            # Record the fidelity
-            fidelity_history[index].append(new_fidelity)
 
             # Check if the new fidelity is 100
             if new_fidelity == 100:
                 print("Fidelity = 100. Stopping optimization for this genome.")
                 break
-            elif new_fidelity == fidelity_history[index - 1] and fidelity_history[index - 2]:
+            elif iteration >= 3 and new_fidelity == fidelity_history[index][-2] == fidelity_history[index][-3]:
+                print(new_fidelity)
+                print(fidelity_history[index][-2])
+                print(fidelity_history[index][-3])
                 print("Fidelities have remained constant three times in a row. Break")
                 break
             elif new_fidelity > optimized_fidelities[index]:
                 print("Fidelity improved.")
                 optimized_genomes[index] = new_optimized_genome  # Update the genome
                 optimized_fidelities[index] = new_fidelity  # Update the fidelity
+                prev_fidelity = new_fidelity
                 genome = new_optimized_genome
                 stepsize *= 1.2  # Increase step size if the fidelity improved
                 print(stepsize)
@@ -542,12 +634,16 @@ def gradient_ascent(origin_genome, best_genomes, init_fidelities, eval_times, ma
                 # If not better, retain the previous genome and fidelity
                 print(f"Fidelity not improved. Reverting to {genome}")
                 genome = genome
-                stepsize *= 0.5  # Reduce step size if fidelity goes down
+                new_fidelity = prev_fidelity
+                stepsize *= 0.8  # Reduce step size if fidelity goes down
                 print(stepsize)
             
-
+            # Record the fidelity
+            fidelity_history[index].append(new_fidelity)
+            print(f"Fidelity history: {fidelity_history}")
+            
             # If the stepsize decreases below 10, break.
-            if stepsize <= 10:
+            if stepsize <= 0.5:
                 print("Stepsize too low. Break.")
                 optimized_genomes[index] = new_optimized_genome
                 break
@@ -568,10 +664,14 @@ def plot_fidelity_history(fidelity_history, max_iterations):
     for index, fidelities in enumerate(fidelity_history):
         plt.plot(range(1, len(fidelities) + 1), fidelities, label=f'Genome {index + 1}', marker='o')
 
+    # Find the minimum fidelity value to set y axis scaling
+    all_fidelities = [item for sublist in fidelity_history for item in sublist]
+    min_fidelity = min(all_fidelities)
+
     plt.title('Fidelity of Each Genome Over Iterations')
     plt.xlabel('Iteration')
     plt.ylabel('Fidelity')
-    plt.ylim(np.min(fidelities), 100)  # Assuming fidelity is between 0 and 100
+    plt.ylim(min_fidelity, 100)  # Assuming fidelity is between 0 and 100
     plt.xlim(1, max_iterations)  # Based on the number of iterations
     plt.legend()
     plt.grid()
@@ -642,15 +742,39 @@ def gradient_ascent_parallel(origin_genome, best_genomes, init_fidelities, eval_
 #########
 
 # Test genome
-genome_full = "<A|G>AB5000BC5000CD5000DE5000EF5000FG5000#000000"
+genome_full = "<A|G>AB5000BC5000CD5000DE5000EF5000FG5000FH5000DH5000DI5000BI5000#0E2E206262"
+
+# parsed_output = parse_genome(genome_full)
+# print(parsed_output)
+# print(parsed_output['directives'][0])
+# print(parsed_output.get('orientation'))
+
+# directives = parsed_output['directives']       # ['A', 'G']
+# node_pairs = parsed_output['node_pairs']             # Only the network connections
+# orientation = parsed_output['orientation'] # '#0E2E206262'
+# couplings = parsed_output['couplings']
+
+
+# # Corrected function call
+# reconstructed_genome = construct_genome(directives[0], directives[1], node_pairs, couplings, orientation)
+# print(reconstructed_genome)
+
+# # Run spinnet without optimisation
+# run_spinnet([genome_full])
+            
+# # Extract fidelity, eval time etc
+# genome_info = extract_fidelity_time(os.path.join(out_latest_path, 'genetic.out'), 1)
+# print(genome_info)
+# part_opt_genomes = [genome_full]
+# init_fidelities = [genome_info[0]]
+# eval_times = [genome_info[1]]
 
 
 # Run spinnet with optimisation PASSED
-run_spinnet(['-o', '-G', '2', genome_full])
+run_spinnet(['-o', '-G', '2', '-g', '20', genome_full])
 
 # Extract top 5 genomes, fidelities and evaluation times
 best_genome_info = extract_fidelity_time(os.path.join(out_latest_path, 'genetic.out'), 0)
-
 
 # Extract genomes, fidelities, and times into separate lists
 part_opt_genomes = [entry['genome'] for entry in best_genome_info]
@@ -660,11 +784,11 @@ print(f"Top 5 genome fidelities: {init_fidelities}")
 eval_times = [entry['time'] for entry in best_genome_info]
 print(f"Top 5 genome evaluation times: {eval_times}")
 
-max_iterations = 10
+max_iterations = 25
 optimised_genomes, optimised_fidelities, fidelity_history = gradient_ascent(genome_full, part_opt_genomes, init_fidelities, eval_times, max_iterations)
 print(f"Optimised genomes and fidelities: {optimised_genomes}, {optimised_fidelities}")
 
-plot_fidelity_history(fidelity_history, max_iterations)
+# plot_fidelity_history(fidelity_history, max_iterations)
 
 
 # # Usage
